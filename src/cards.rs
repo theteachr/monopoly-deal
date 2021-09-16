@@ -22,12 +22,12 @@ pub struct ActionCard {
 #[derive(Debug)]
 pub struct PropertyCard {
     title: String,
-    color_set: color::ColorSet,
+    color: color::Color,
 }
 
 impl PropertyCard {
-    pub fn new(title: String, color_set: color::ColorSet) -> Self {
-        PropertyCard { title, color_set }
+    pub fn new(title: String, color: color::Color) -> Self {
+        PropertyCard { title, color }
     }
 }
 
