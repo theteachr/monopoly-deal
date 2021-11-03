@@ -4,9 +4,9 @@ mod deck;
 mod player;
 
 fn main() {
-    let teachr = player::Player::new("theteachr".into());
+    let deck = deck::Deck::new();
+    let theteachr = player::Player::new(String::from("theteachr"));
 
-    deck::initialize_deck();
-
-    println!("{:?}", teachr);
+    println!("{}", deck.len());
+    println!("{:?}", theteachr);
 }

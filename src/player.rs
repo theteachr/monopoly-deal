@@ -9,7 +9,7 @@ pub struct Player {
 
 #[derive(Debug)]
 pub struct PlayerBank {
-    pub on_top: Option<MoneyCard>,
+    pub on_top: Option<Card>,
     pub rest: Vec<Card>,
 }
 
