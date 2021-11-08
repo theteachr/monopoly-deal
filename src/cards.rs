@@ -2,8 +2,8 @@ use crate::color;
 
 #[derive(Debug)]
 pub enum CardType {
-	PropertyCard(PropertyCard),
-	MoneyCard(MoneyCard),
+	Property(PropertyCard),
+	Money(MoneyCard),
 }
 
 #[derive(Debug)]
