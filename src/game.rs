@@ -9,6 +9,9 @@ pub struct Game<'a> {
 
 impl Game<'_> {
     pub fn new(num_players: u8) -> Self {
-        Game { table: vec![(Vec::new(), Vec::new()); num_players as usize], draw_pile: Deck::new() }
+        Game {
+            draw_pile: Deck::new(),
+            table: vec![(Vec::new(), Vec::new()); num_players as usize],
+        }
     }
 }
