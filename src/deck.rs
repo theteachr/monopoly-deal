@@ -13,34 +13,34 @@ impl Deck {
 
 		// propery cards
 
-		let baltic_avenue = Card::new(1, Property(PropertyCard::new(String::from("Baltic Avenue"), Color::Brown)));
-		let mediterranean_avenue = Card::new(1, Property(PropertyCard::new(String::from("Mediterranean Avenue"), Color::Brown)));
-		let broadwalk = Card::new(1, Property(PropertyCard::new(String::from("Broadwalk"), Color::Blue)));
-		let park_place = Card::new(1, Property(PropertyCard::new(String::from("Park Place"), Color::Blue)));
-		let north_carolina_avenue = Card::new(1, Property(PropertyCard::new(String::from("North Carolina Avenue"), Color::Green)));
-		let pacific_avenue = Card::new(1, Property(PropertyCard::new(String::from("Pacific Avenue"), Color::Green)));
-		let pennsylvania_avenue = Card::new(1, Property(PropertyCard::new(String::from("Pennsylvania Avenue"), Color::Green)));
-		let connecticut_avenue = Card::new(1, Property(PropertyCard::new(String::from("Connecticut Avenue"), Color::LightBlue)));
-		let oriental_avenue = Card::new(1, Property(PropertyCard::new(String::from("Oriental Avenue"), Color::LightBlue)));
-		let vermont_avenue = Card::new(1, Property(PropertyCard::new(String::from("Vermont Avenue"), Color::LightBlue)));
-		let new_york_avenue = Card::new(1, Property(PropertyCard::new(String::from("New York Avenue"), Color::Orange)));
-		let st_james_place = Card::new(1, Property(PropertyCard::new(String::from("St. James Place"), Color::Orange)));
-		let tennesse_avenue = Card::new(1, Property(PropertyCard::new(String::from("Tennesse Avenue"), Color::Orange)));
-		let st_charles_place = Card::new(1, Property(PropertyCard::new(String::from("St. Charles Place"), Color::Pink)));
-		let virginia_avenue = Card::new(1, Property(PropertyCard::new(String::from("Virginia Avenue"), Color::Pink)));
-		let states_avenue = Card::new(1, Property(PropertyCard::new(String::from("States Avenue"), Color::Pink)));
-		let short_line = Card::new(1, Property(PropertyCard::new(String::from("Short Line"), Color::Black)));
-		let b_and_o_railroad = Card::new(1, Property(PropertyCard::new(String::from("B. & O. Railroad"), Color::Black)));
-		let reading_railroad = Card::new(1, Property(PropertyCard::new(String::from("Reading Railroad"), Color::Black)));
-		let pennsylvania_railroad = Card::new(1, Property(PropertyCard::new(String::from("Pennsylvania Railroad"), Color::Black)));
-		let kentucky_avenue = Card::new(1, Property(PropertyCard::new(String::from("Kentucky Avenue"), Color::Red)));
-		let indiana_avenue = Card::new(1, Property(PropertyCard::new(String::from("Indiana Avenue"), Color::Red)));
-		let illinois = Card::new(1, Property(PropertyCard::new(String::from("Illinois"), Color::Red)));
-		let water_works = Card::new(1, Property(PropertyCard::new(String::from("Water Works"), Color::LightGreen)));
-		let electric_company = Card::new(1, Property(PropertyCard::new(String::from("Electric Company"), Color::LightGreen)));
-		let ventor_avenue = Card::new(1, Property(PropertyCard::new(String::from("Ventor Avenue"), Color::Yellow)));
-		let marvin_gardens = Card::new(1, Property(PropertyCard::new(String::from("Marvin Gardens"), Color::Yellow)));
-		let atlantic_avenue = Card::new(1, Property(PropertyCard::new(String::from("Atlantic Avenue"), Color::Yellow)));
+		let baltic_avenue = Card::new(1, Property(PropertyCard::new("Baltic Avenue", Color::Brown)));
+		let mediterranean_avenue = Card::new(1, Property(PropertyCard::new("Mediterranean Avenue", Color::Brown)));
+		let broadwalk = Card::new(1, Property(PropertyCard::new("Broadwalk", Color::Blue)));
+		let park_place = Card::new(1, Property(PropertyCard::new("Park Place", Color::Blue)));
+		let north_carolina_avenue = Card::new(1, Property(PropertyCard::new("North Carolina Avenue", Color::Green)));
+		let pacific_avenue = Card::new(1, Property(PropertyCard::new("Pacific Avenue", Color::Green)));
+		let pennsylvania_avenue = Card::new(1, Property(PropertyCard::new("Pennsylvania Avenue", Color::Green)));
+		let connecticut_avenue = Card::new(1, Property(PropertyCard::new("Connecticut Avenue", Color::LightBlue)));
+		let oriental_avenue = Card::new(1, Property(PropertyCard::new("Oriental Avenue", Color::LightBlue)));
+		let vermont_avenue = Card::new(1, Property(PropertyCard::new("Vermont Avenue", Color::LightBlue)));
+		let new_york_avenue = Card::new(1, Property(PropertyCard::new("New York Avenue", Color::Orange)));
+		let st_james_place = Card::new(1, Property(PropertyCard::new("St. James Place", Color::Orange)));
+		let tennesse_avenue = Card::new(1, Property(PropertyCard::new("Tennesse Avenue", Color::Orange)));
+		let st_charles_place = Card::new(1, Property(PropertyCard::new("St. Charles Place", Color::Pink)));
+		let virginia_avenue = Card::new(1, Property(PropertyCard::new("Virginia Avenue", Color::Pink)));
+		let states_avenue = Card::new(1, Property(PropertyCard::new("States Avenue", Color::Pink)));
+		let short_line = Card::new(1, Property(PropertyCard::new("Short Line", Color::Black)));
+		let b_and_o_railroad = Card::new(1, Property(PropertyCard::new("B. & O. Railroad", Color::Black)));
+		let reading_railroad = Card::new(1, Property(PropertyCard::new("Reading Railroad", Color::Black)));
+		let pennsylvania_railroad = Card::new(1, Property(PropertyCard::new("Pennsylvania Railroad", Color::Black)));
+		let kentucky_avenue = Card::new(1, Property(PropertyCard::new("Kentucky Avenue", Color::Red)));
+		let indiana_avenue = Card::new(1, Property(PropertyCard::new("Indiana Avenue", Color::Red)));
+		let illinois = Card::new(1, Property(PropertyCard::new("Illinois", Color::Red)));
+		let water_works = Card::new(1, Property(PropertyCard::new("Water Works", Color::LightGreen)));
+		let electric_company = Card::new(1, Property(PropertyCard::new("Electric Company", Color::LightGreen)));
+		let ventor_avenue = Card::new(1, Property(PropertyCard::new("Ventor Avenue", Color::Yellow)));
+		let marvin_gardens = Card::new(1, Property(PropertyCard::new("Marvin Gardens", Color::Yellow)));
+		let atlantic_avenue = Card::new(1, Property(PropertyCard::new("Atlantic Avenue", Color::Yellow)));
 
 		// actions cards
 

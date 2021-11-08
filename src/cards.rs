@@ -14,7 +14,7 @@ pub struct Card {
 
 #[derive(Debug)]
 pub struct PropertyCard {
-	title: String,
+	title: &'static str,
 	color: color::Color,
 }
 
@@ -28,7 +28,7 @@ impl Card {
 }
 
 impl PropertyCard {
-	pub fn new(title: String, color: color::Color) -> Self {
+	pub fn new(title: &'static str, color: color::Color) -> Self {
 		PropertyCard { title, color }
 	}
 }
