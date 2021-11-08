@@ -3,8 +3,8 @@ use crate::cards::{MoneyCard, PropertyCard};
 
 #[derive(Debug)]
 pub struct Game<'a> {
-    table: Vec<(Vec<&'a PropertyCard>, Vec<&'a MoneyCard>)>,
-    draw_pile: Deck,
+    pub table: Vec<(Vec<&'a PropertyCard>, Vec<&'a MoneyCard>)>,
+    pub draw_pile: Deck,
 }
 
 impl Game<'_> {
