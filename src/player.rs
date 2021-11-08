@@ -1,27 +1,19 @@
 use crate::cards::*;
+use crate::color::Color;
 
 #[derive(Debug)]
 pub struct Player {
-    pub id: String,
-    pub name: String,
-    pub bank: PlayerBank,
-}
-
-#[derive(Debug)]
-pub struct PlayerBank {
-    pub on_top: Option<Card>,
-    pub rest: Vec<Card>,
+    id: String,
+    name: String,
+    hand: Vec<Card>,
 }
 
 impl Player {
-    pub fn new(name: String) -> Self {
+    pub fn new(id: String, name: String) -> Self {
         Player {
-            id: String::from("0000"),
+            id,
             name,
-            bank: PlayerBank {
-                on_top: None,
-                rest: Vec::new(),
-            },
+            hand: Vec::new(),
         }
     }
 }
