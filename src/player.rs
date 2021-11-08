@@ -1,5 +1,4 @@
 use crate::cards::*;
-use crate::color::Color;
 
 #[derive(Debug)]
 pub struct Player {
