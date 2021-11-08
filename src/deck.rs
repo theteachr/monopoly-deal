@@ -2,6 +2,9 @@ use crate::cards::CardType::{Property, Money};
 use crate::cards::{Card, MoneyCard, PropertyCard};
 use crate::color::Color;
 
+use rand::thread_rng;
+use rand::seq::SliceRandom;
+
 #[derive(Debug)]
 pub struct Deck {
 	cards: Vec<Card>
@@ -36,13 +39,14 @@ impl Deck {
 
 		// money cards
 
-		let ten: Card = Card::new(10, Money(MoneyCard));
+		let _ten: Card = Card::new(10, Money(MoneyCard));
 
+        cards.shuffle(&mut thread_rng());
 
 		Deck { cards } 
 	}
 
-	pub fn len(&self) -> u8 {
+	pub fn _len(&self) -> u8 {
 		self.cards.len() as u8
 	}
 }
