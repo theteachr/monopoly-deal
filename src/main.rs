@@ -5,9 +5,15 @@ mod player;
 mod game;
 
 fn main() {
-    let theteachr = player::Player::new(String::from("8100"), String::from("theteachr"));
-    let game = game::Game::new(4);
+    let mut main_game = game::Game::new(4);
 
-    println!("{:#?}", theteachr);
-    println!("{:#?}", game);
+    println!("Shuffled {} cards", main_game.draw_pile.len());
+
+    let drawn_cards = main_game.draw_pile.draw(deck::DrawCount::Two);
+
+    println!("Drew two cards. Cards left: {}", main_game.draw_pile.len());
+    println!("{:#?}", drawn_cards);
+
+    main_game.draw_pile.draw(deck::DrawCount::Five);
+    println!("Drew five more cards. Cards left: {}", main_game.draw_pile.len());
 }
