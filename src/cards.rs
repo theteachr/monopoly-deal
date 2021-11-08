@@ -9,7 +9,7 @@ pub enum CardType {
 #[derive(Debug)]
 pub struct Card {
 	value: u8,
-	card_type: CardType
+	card_type: CardType,
 }
 
 #[derive(Debug)]
