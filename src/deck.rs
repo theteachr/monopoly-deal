@@ -18,15 +18,15 @@ impl Deck {
 
         let property_cards_data = [
             (1, Color::Brown, vec!["Baltic Avenue", "Mediterranean Avenue"]),
-            (1, Color::Blue, vec!["Broadwalk", "Park Place"]),
-            (1, Color::Green, vec!["North Carolina Avenue", "Pacific Avenue", "Pennsylvania Avenue"]),
+            (4, Color::Blue, vec!["Broadwalk", "Park Place"]),
+            (4, Color::Green, vec!["North Carolina Avenue", "Pacific Avenue", "Pennsylvania Avenue"]),
             (1, Color::LightBlue, vec!["Connecticut Avenue", "Oriental Avenue", "Vermont Avenue"]),
-            (1, Color::Orange, vec!["New York Avenue", "St. James Place", "Tennesse Avenue"]),
-            (1, Color::Pink, vec!["St. Charles Place", "Virginia Avenue", "States Avenue"]),
-            (1, Color::Black, vec!["Short Line", "B. & O. Railroad", "Reading Railroad", "Pennsylvania Railroad"]),
-            (1, Color::Red, vec!["Kentucky Avenue", "Indiana Avenue", "Illinois"]),
-            (1, Color::LightGreen, vec!["Water Works", "Electric Company"]),
-            (1, Color::Yellow, vec!["Ventor Avenue", "Marvin Gardens", "Atlantic Avenue"]),
+            (2, Color::Orange, vec!["New York Avenue", "St. James Place", "Tennesse Avenue"]),
+            (2, Color::Pink, vec!["St. Charles Place", "Virginia Avenue", "States Avenue"]),
+            (2, Color::Black, vec!["Short Line", "B. & O. Railroad", "Reading Railroad", "Pennsylvania Railroad"]),
+            (3, Color::Red, vec!["Kentucky Avenue", "Indiana Avenue", "Illinois"]),
+            (2, Color::LightGreen, vec!["Water Works", "Electric Company"]),
+            (3, Color::Yellow, vec!["Ventor Avenue", "Marvin Gardens", "Atlantic Avenue"]),
         ];
 
         for (value, color, titles) in property_cards_data.iter() {
@@ -39,7 +39,20 @@ impl Deck {
 
 		// money cards
 
-		let _ten: Card = Card::new(10, Money(MoneyCard));
+        let money_cards_data = [
+            (10, 1),
+            ( 1, 6),
+            ( 2, 5),
+            ( 3, 3),
+            ( 4, 3),
+            ( 5, 2),
+        ];
+
+        for (value, count) in money_cards_data.iter() {
+            for _ in 0..*count {
+                cards.push(Card::new(*value, Money(MoneyCard)))
+            }
+        }
 
         cards.shuffle(&mut thread_rng());
 
