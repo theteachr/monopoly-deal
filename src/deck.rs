@@ -10,6 +10,8 @@ pub struct Deck {
 	cards: Vec<Card>,
 }
 
+pub enum DrawCount { Two, Five }
+
 impl Deck {
 	pub fn new() -> Self {
 		let mut cards = Vec::new();
@@ -100,7 +102,22 @@ impl Deck {
 		Deck { cards }
 	}
 
-	pub fn _len(&self) -> u8 {
+	pub fn draw(&mut self, count: DrawCount) -> Vec<Card> {
+		let mut cards = Vec::new();
+
+		let count = match count {
+			DrawCount::Two => 2,
+			DrawCount::Five => 5,
+		};
+
+		for _ in 0..count {
+			cards.push(self.cards.pop().unwrap());
+		}
+
+		cards
+	}
+
+	pub fn len(&self) -> u8 {
 		self.cards.len() as u8
 	}
 }
