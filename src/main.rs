@@ -16,9 +16,9 @@ fn main() {
 
     let drawn_cards = main_game.draw_pile.draw(deck::DrawCount::Two);
 
-    println!("Drew two cards. Cards left: {}", main_game.draw_pile.len());
+    println!("Drew two cards. {} left in the pile.", main_game.draw_pile.len());
     println!("{:#?}", drawn_cards);
 
     main_game.draw_pile.draw(deck::DrawCount::Five);
-    println!("Drew five more cards. Cards left: {}", main_game.draw_pile.len());
+    println!("Drew five more cards. {} left in the pile.", main_game.draw_pile.len());
 }

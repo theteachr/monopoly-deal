@@ -1,5 +1,6 @@
 use crate::deck::Deck;
-use crate::cards::{MoneyCard, PropertyCard};
+use crate::cards::money_card::MoneyCard;
+use crate::cards::property_card::PropertyCard;
 
 #[derive(Debug)]
 pub struct Game<'a> {

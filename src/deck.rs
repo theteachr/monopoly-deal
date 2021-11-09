@@ -1,5 +1,7 @@
-use crate::cards::CardType::{Money, Property};
-use crate::cards::{Card, MoneyCard, PropertyCard};
+use crate::cards::card::Card;
+use crate::cards::card::CardType::{Money, Property};
+use crate::cards::property_card::PropertyCard;
+use crate::cards::money_card::MoneyCard;
 use crate::color::Color;
 
 use rand::seq::SliceRandom;

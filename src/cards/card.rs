@@ -1,4 +1,6 @@
 use crate::color;
+use crate::cards::money_card::MoneyCard;
+use crate::cards::property_card::PropertyCard;
 
 #[derive(Debug)]
 pub enum CardType {
@@ -12,23 +14,8 @@ pub struct Card {
 	card_type: CardType,
 }
 
-#[derive(Debug)]
-pub struct PropertyCard {
-	title: &'static str,
-	color: color::Color,
-}
-
-#[derive(Debug)]
-pub struct MoneyCard;
-
 impl Card {
 	pub fn new(value: u8, card_type: CardType) -> Self {
 		Card { value, card_type }
-	}
-}
-
-impl PropertyCard {
-	pub fn new(title: &'static str, color: color::Color) -> Self {
-		PropertyCard { title, color }
 	}
 }
