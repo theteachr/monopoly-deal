@@ -14,13 +14,13 @@ fn main() {
 
 	println!("Shuffled {} cards", main_game.draw_pile.len());
 
-	let drawn_cards = main_game.draw_pile.draw(deck::DrawCount::Five);
+	let mut drawn_cards = main_game.draw_pile.draw(deck::DrawCount::Five);
 
 	println!("Drew five cards. {} left in the pile.", main_game.draw_pile.len());
-	println!("{:#?}", drawn_cards);
 
-	let drawn_cards = main_game.draw_pile.draw(deck::DrawCount::Two);
+	drawn_cards.append(&mut main_game.draw_pile.draw(deck::DrawCount::Two));
 
 	println!("Drew two more cards. {} left in the pile.", main_game.draw_pile.len());
+
 	println!("{:#?}", drawn_cards);
 }
