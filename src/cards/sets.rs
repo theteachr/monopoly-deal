@@ -1,10 +1,41 @@
-pub const BROWN_SET      : [u8; 2] = [1, 2];
-pub const BLUE_SET       : [u8; 2] = [3, 8];
-pub const GREEN_SET      : [u8; 3] = [2, 4, 7];
-pub const LIGHTBLUE_SET  : [u8; 3] = [1, 2, 3];
-pub const ORANGE_SET     : [u8; 3] = [1, 3, 5];
-pub const PINK_SET       : [u8; 3] = [1, 2, 4];
-pub const BLACK_SET      : [u8; 4] = [1, 2, 3, 4];
-pub const RED_SET        : [u8; 3] = [2, 3, 6];
-pub const LIGHTGREEN_SET : [u8; 2] = [1, 2];
-pub const YELLOW_SET     : [u8; 3] = [2, 4, 6];
+use crate::color::Color;
+use std::fmt;
+
+const COLLECTIONS: [&[u8]; 10] = [
+	&[1, 2, 3, 4],
+	&[3, 8],
+	&[1, 2],
+	&[2, 4, 7],
+	&[1, 2, 3],
+	&[1, 2],
+	&[1, 3, 5],
+	&[1, 2, 4],
+	&[2, 3, 6],
+	&[2, 4, 6],
+];
+
+#[derive(Clone, Copy)]
+pub struct Set {
+	set: &'static [u8],
+}
+
+impl Set {
+	pub fn new(color: Color) -> Self {
+		Set {
+			set: COLLECTIONS[color as usize],
+		}
+	}
+}
+
+impl fmt::Debug for Set {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		let text = self
+			.set
+			.iter()
+			.map(|n| n.to_string())
+			.collect::<Vec<String>>()
+			.join(" ");
+
+		write!(f, "({})", text)
+	}
+}

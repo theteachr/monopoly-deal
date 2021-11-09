@@ -6,6 +6,7 @@ use crate::cards::{
 	money_card::MoneyCard,
 	property_card::PropertyCard,
 	data::{MONIES, PROPERTIES},
+    sets::Set,
 };
 
 use rand::seq::SliceRandom;
@@ -25,11 +26,11 @@ impl Deck {
 	pub fn new() -> Self {
 		let mut cards = Vec::new();
 
-		for (value, color, titles, set) in PROPERTIES.iter() {
+		for (value, color, titles) in PROPERTIES.iter() {
 			for title in *titles {
 				cards.push(Card::new(
 					*value,
-					Property(PropertyCard::new(title, *color, *set)),
+					Property(PropertyCard::new(title, *color, Set::new(*color))),
 				));
 			}
 		}
