@@ -25,13 +25,12 @@ impl fmt::Debug for Card {
 			"<{}>",
 			match &self.card_type {
 				CardType::Property(p) => format!(
-					"Property: ({}, '{}', {:?}, {} M)",
-					p.color.to_string(),
+					"Property: '{}', {:?}, {}",
 					p.title,
 					p.set,
 					self.value
 				),
-				CardType::Money(_) => format!("Money: ({} M)", self.value),
+				CardType::Money(_) => format!("Money: {}", self.value),
 			}
 		)
 	}
