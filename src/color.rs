@@ -2,29 +2,29 @@ use std::fmt;
 
 #[derive(Copy, Clone)]
 pub enum Color {
-	Brown,
+	Black,
 	Blue,
+	Brown,
 	Green,
 	LightBlue,
+	LightGreen,
 	Orange,
 	Pink,
-	Black,
 	Red,
-	LightGreen,
 	Yellow,
 }
 
 fn to_str(variant: Color) -> &'static str {
 	match variant {
-		Color::Brown => "Brown",
+		Color::Black => "Black",
 		Color::Blue => "Blue",
+		Color::Brown => "Brown",
 		Color::Green => "Green",
 		Color::LightBlue => "Light Blue",
+		Color::LightGreen => "Light Green",
 		Color::Orange => "Orange",
 		Color::Pink => "Pink",
-		Color::Black => "Black",
 		Color::Red => "Red",
-		Color::LightGreen => "Light Green",
 		Color::Yellow => "Yellow",
 	}
 }
