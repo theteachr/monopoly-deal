@@ -14,11 +14,8 @@ fn main() {
 
     println!("Shuffled {} cards", main_game.draw_pile.len());
 
-    let drawn_cards = main_game.draw_pile.draw(deck::DrawCount::Two);
+    let drawn_cards = main_game.draw_pile.draw(deck::DrawCount::Five);
 
-    println!("Drew two cards. {} left in the pile.", main_game.draw_pile.len());
+    println!("Drew five cards. {} left in the pile.", main_game.draw_pile.len());
     println!("{:#?}", drawn_cards);
-
-    main_game.draw_pile.draw(deck::DrawCount::Five);
-    println!("Drew five more cards. {} left in the pile.", main_game.draw_pile.len());
 }
