@@ -1,8 +1,12 @@
-use crate::cards::card::Card;
-use crate::cards::card::CardType::{Money, Property};
-use crate::cards::property_card::PropertyCard;
-use crate::cards::money_card::MoneyCard;
-use crate::color::Color;
+use crate::cards::{
+    card::{
+        Card,
+        CardType::{Money, Property},
+    },
+    property_card::PropertyCard,
+    money_card::MoneyCard,
+    data::{PROPERTIES, MONIES}
+};
 
 use rand::seq::SliceRandom;
 use rand::thread_rng;
@@ -18,68 +22,8 @@ impl Deck {
 	pub fn new() -> Self {
 		let mut cards = Vec::new();
 
-		// propery cards
-
-		let property_cards_data = [
-			(
-				1,
-				Color::Brown,
-				vec!["Baltic Avenue", "Mediterranean Avenue"],
-			),
-			(4, Color::Blue, vec!["Broadwalk", "Park Place"]),
-			(
-				4,
-				Color::Green,
-				vec![
-				"North Carolina Avenue",
-				"Pacific Avenue",
-				"Pennsylvania Avenue",
-				],
-			),
-			(
-				1,
-				Color::LightBlue,
-				vec!["Connecticut Avenue", "Oriental Avenue", "Vermont Avenue"],
-			),
-			(
-				2,
-				Color::Orange,
-				vec!["New York Avenue", "St. James Place", "Tennesse Avenue"],
-			),
-			(
-				2,
-				Color::Pink,
-				vec!["St. Charles Place", "Virginia Avenue", "States Avenue"],
-			),
-			(
-				2,
-				Color::Black,
-				vec![
-				"Short Line",
-				"B. & O. Railroad",
-				"Reading Railroad",
-				"Pennsylvania Railroad",
-				],
-			),
-			(
-				3,
-				Color::Red,
-				vec!["Kentucky Avenue", "Indiana Avenue", "Illinois"],
-			),
-			(
-				2,
-				Color::LightGreen,
-				vec!["Water Works", "Electric Company"],
-			),
-			(
-				3,
-				Color::Yellow,
-				vec!["Ventor Avenue", "Marvin Gardens", "Atlantic Avenue"],
-			),
-		];
-
-		for (value, color, titles) in property_cards_data.iter() {
-			for title in titles {
+		for (value, color, titles) in PROPERTIES.iter() {
+			for title in *titles {
 				cards.push(Card::new(
 						*value,
 						Property(PropertyCard::new(title, *color)),
@@ -87,13 +31,7 @@ impl Deck {
 			}
 		}
 
-		// actions cards
-
-		// money cards
-
-		let money_cards_data = [(10, 1), (1, 6), (2, 5), (3, 3), (4, 3), (5, 2)];
-
-		for (value, count) in money_cards_data.iter() {
+		for (value, count) in MONIES.iter() {
 			for _ in 0..*count {
 				cards.push(Card::new(*value, Money(MoneyCard)))
 			}
