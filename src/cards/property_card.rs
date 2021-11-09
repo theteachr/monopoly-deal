@@ -2,9 +2,9 @@ use crate::color;
 
 #[derive(Debug)]
 pub struct PropertyCard {
-	title: &'static str,
-	color: color::Color,
-    set: &'static [u8],
+	pub title: &'static str,
+	pub color: color::Color,
+	pub set: &'static [u8],
 }
 
 
