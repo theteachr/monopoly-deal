@@ -4,11 +4,12 @@ use crate::color;
 pub struct PropertyCard {
 	title: &'static str,
 	color: color::Color,
+    set: &'static [u8],
 }
 
 
 impl PropertyCard {
-	pub fn new(title: &'static str, color: color::Color) -> Self {
-		PropertyCard { title, color }
+	pub fn new(title: &'static str, color: color::Color, set: &'static [u8]) -> Self {
+		PropertyCard { title, color, set }
 	}
 }

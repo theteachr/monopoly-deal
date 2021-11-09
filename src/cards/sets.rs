@@ -1,0 +1,10 @@
+pub const BROWN_SET      : [u8; 2] = [1, 2];
+pub const BLUE_SET       : [u8; 2] = [3, 8];
+pub const GREEN_SET      : [u8; 3] = [2, 4, 7];
+pub const LIGHTBLUE_SET  : [u8; 3] = [1, 2, 3];
+pub const ORANGE_SET     : [u8; 3] = [1, 3, 5];
+pub const PINK_SET       : [u8; 3] = [1, 2, 4];
+pub const BLACK_SET      : [u8; 4] = [1, 2, 3, 4];
+pub const RED_SET        : [u8; 3] = [2, 3, 6];
+pub const LIGHTGREEN_SET : [u8; 2] = [1, 2];
+pub const YELLOW_SET     : [u8; 3] = [2, 4, 6];

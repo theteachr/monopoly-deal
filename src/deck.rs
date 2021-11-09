@@ -1,11 +1,11 @@
 use crate::cards::{
-    card::{
-        Card,
-        CardType::{Money, Property},
-    },
-    property_card::PropertyCard,
-    money_card::MoneyCard,
-    data::{PROPERTIES, MONIES}
+	card::{
+		Card,
+		CardType::{Money, Property},
+	},
+	money_card::MoneyCard,
+	property_card::PropertyCard,
+	data::{MONIES, PROPERTIES},
 };
 
 use rand::seq::SliceRandom;
@@ -16,17 +16,20 @@ pub struct Deck {
 	cards: Vec<Card>,
 }
 
-pub enum DrawCount { Two, Five }
+pub enum DrawCount {
+	Two,
+	Five,
+}
 
 impl Deck {
 	pub fn new() -> Self {
 		let mut cards = Vec::new();
 
-		for (value, color, titles) in PROPERTIES.iter() {
+		for (value, color, titles, set) in PROPERTIES.iter() {
 			for title in *titles {
 				cards.push(Card::new(
-						*value,
-						Property(PropertyCard::new(title, *color)),
+					*value,
+					Property(PropertyCard::new(title, *color, *set)),
 				));
 			}
 		}
