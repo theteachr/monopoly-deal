@@ -36,8 +36,8 @@ impl Deck {
 		}
 
 		for (value, count) in MONIES.iter() {
-			for _ in 0..*count {
-				cards.push(Card::new(*value, Money(MoneyCard)))
+			for i in 0..*count {
+				cards.push(Card::new(*value, Money(MoneyCard::new((count * 10 + i).to_string()))))
 			}
 		}
 

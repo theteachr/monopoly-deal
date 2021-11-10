@@ -1,12 +1,18 @@
 use crate::cards::money_card::MoneyCard;
 use crate::cards::property_card::PropertyCard;
-use std::fmt;
 
+use std::{
+	fmt::{Debug, Formatter, Result},
+	hash::{Hash, Hasher},
+};
+
+#[derive(Eq, PartialEq)]
 pub enum CardType {
 	Property(PropertyCard),
 	Money(MoneyCard),
 }
 
+#[derive(Eq, PartialEq)]
 pub struct Card {
 	value: u8,
 	card_type: CardType,
@@ -18,8 +24,8 @@ impl Card {
 	}
 }
 
-impl fmt::Debug for Card {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Debug for Card {
+	fn fmt(&self, f: &mut Formatter<'_>) -> Result {
 		write!(
 			f,
 			"<{}>",
@@ -34,5 +40,17 @@ impl fmt::Debug for Card {
 				CardType::Money(_) => format!("Money: {}", self.value),
 			}
 		)
+	}
+}
+
+impl Hash for Card {
+	fn hash<H: Hasher>(&self, state: &mut H) {
+		match &self.card_type {
+			CardType::Property(p) => p.hash(state),
+			CardType::Money(m) => {
+				m.id.hash(state);
+				self.value.hash(state);
+			}
+		}
 	}
 }
