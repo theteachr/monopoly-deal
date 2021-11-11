@@ -17,7 +17,7 @@ pub struct PropertyCard {
 
 impl PropertyCard {
 	pub fn new(title: &'static str, color: color::Color, set: Set) -> Self {
-		PropertyCard { title, color, set }
+		Self { title, color, set }
 	}
 }
 

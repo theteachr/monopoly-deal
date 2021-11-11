@@ -43,7 +43,7 @@ impl Deck {
 
 		cards.shuffle(&mut thread_rng());
 
-		Deck { cards }
+		Self { cards }
 	}
 
 	pub fn draw(&mut self, count: DrawCount) -> Vec<Card> {

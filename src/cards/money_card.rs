@@ -9,7 +9,7 @@ pub struct MoneyCard {
 
 impl MoneyCard {
 	pub fn new(id: String) -> Self {
-		MoneyCard { id }
+		Self { id }
 	}
 }
 

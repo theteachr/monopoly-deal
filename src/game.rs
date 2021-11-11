@@ -13,7 +13,7 @@ struct PlayerState<'a> {
 
 impl PlayerState<'_> {
 	fn new() -> Self {
-		PlayerState { properties: HashSet::new(), bank: HashSet::new() }
+		Self { properties: HashSet::new(), bank: HashSet::new() }
 	}
 }
 
@@ -46,7 +46,7 @@ impl Game<'_> {
 
 		println!("{:#?}", players);
 
-		Game {
+		Self {
 			draw_pile,
 			table: (0..num_players).map(|_| PlayerState::new()).collect(),
 			players,

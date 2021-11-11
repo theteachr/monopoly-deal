@@ -10,7 +10,7 @@ pub struct Player {
 
 impl Player {
 	pub fn new(id: usize, name: String) -> Self {
-		Player {
+		Self {
 			id,
 			name,
 			hand: HashSet::new(),

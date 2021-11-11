@@ -21,7 +21,7 @@ pub struct Set {
 
 impl Set {
 	pub fn new(color: Color) -> Self {
-		Set {
+		Self {
 			set: COLLECTIONS[color as usize],
 		}
 	}

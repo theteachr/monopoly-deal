@@ -20,7 +20,7 @@ pub struct Card {
 
 impl Card {
 	pub fn new(value: u8, card_type: CardType) -> Self {
-		Card { value, card_type }
+		Self { value, card_type }
 	}
 }
 
