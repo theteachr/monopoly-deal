@@ -9,16 +9,16 @@ pub struct Player {
 }
 
 impl Player {
-	pub fn new(id: usize, name: String, hand: HashSet<Card>) -> Self {
+	pub fn new(id: usize, name: String) -> Self {
 		Player {
 			id,
 			name,
-			hand,
+			hand: HashSet::new(),
 		}
 	}
 
 	pub fn read(id: usize) -> Player {
-		Player::new(id, String::from("Gen"), HashSet::new())
+		Player::new(id, String::from("Gen"))
 	}
 
 	pub fn update_hand(&mut self, cards: Vec<Card>) {

@@ -48,6 +48,6 @@ fn get_mock_players() -> Vec<Player> {
 	names
 		.iter()
 		.enumerate()
-		.map(|(i, name)| Player::new(i, String::from(*name), HashSet::new()))
+		.map(|(i, name)| Player::new(i, String::from(*name)))
 		.collect()
 }
