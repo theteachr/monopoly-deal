@@ -6,7 +6,7 @@ use crate::cards::{
 	money_card::MoneyCard,
 	property_card::PropertyCard,
 	data::{MONIES, PROPERTIES},
-    sets::Set,
+    rent_vec::RentVec,
 };
 
 use rand::seq::SliceRandom;
@@ -30,7 +30,7 @@ impl Deck {
 			for title in *titles {
 				cards.push(Card::new(
 					*value,
-					Property(PropertyCard::new(title, *color, Set::new(*color))),
+					Property(PropertyCard::new(title, *color, RentVec::new(*color))),
 				));
 			}
 		}

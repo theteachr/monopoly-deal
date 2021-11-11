@@ -15,22 +15,22 @@ const COLLECTIONS: [&[u8]; 10] = [
 ];
 
 #[derive(Clone, Copy)]
-pub struct Set {
-	set: &'static [u8],
+pub struct RentVec {
+	rents: &'static [u8],
 }
 
-impl Set {
+impl RentVec {
 	pub fn new(color: Color) -> Self {
 		Self {
-			set: COLLECTIONS[color as usize],
+			rents: COLLECTIONS[color as usize],
 		}
 	}
 }
 
-impl fmt::Debug for Set {
+impl fmt::Debug for RentVec {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		let text = self
-			.set
+			.rents
 			.iter()
 			.map(|n| n.to_string())
 			.collect::<Vec<String>>()

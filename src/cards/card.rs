@@ -34,7 +34,7 @@ impl Debug for Card {
 					"Property: '{}', {}, {:?}, {}",
 					p.title,
 					p.color,
-					p.set,
+					p.rents,
 					self.value
 				),
 				CardType::Money(_) => format!("Money: {}", self.value),

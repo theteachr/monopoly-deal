@@ -1,5 +1,5 @@
 use crate::color;
-use crate::cards::sets::Set;
+use crate::cards::rent_vec::RentVec;
 
 use std::{
 	hash::{Hash, Hasher},
@@ -11,13 +11,13 @@ use std::{
 pub struct PropertyCard {
 	pub title: &'static str,
 	pub color: color::Color,
-	pub set: Set,
+	pub rents: RentVec,
 }
 
 
 impl PropertyCard {
-	pub fn new(title: &'static str, color: color::Color, set: Set) -> Self {
-		Self { title, color, set }
+	pub fn new(title: &'static str, color: color::Color, rents: RentVec) -> Self {
+		Self { title, color, rents }
 	}
 }
 
