@@ -6,9 +6,21 @@ use crate::player::Player;
 use std::collections::HashSet;
 
 #[derive(Debug)]
+struct PlayerState<'a> {
+	properties: HashSet<&'a PropertyCard>,
+	bank: HashSet<&'a MoneyCard>,
+}
+
+impl PlayerState<'_> {
+	fn new() -> Self {
+		PlayerState { properties: HashSet::new(), bank: HashSet::new() }
+	}
+}
+
+#[derive(Debug)]
 pub struct Game<'a> {
-	pub table: Vec<(HashSet<&'a PropertyCard>, HashSet<&'a MoneyCard>)>,
-	pub draw_pile: Deck,
+	table: Vec<PlayerState<'a>>,
+	draw_pile: Deck,
 	players: Vec<Player>,
 }
 
@@ -36,7 +48,7 @@ impl Game<'_> {
 
 		Game {
 			draw_pile,
-			table: vec![(HashSet::new(), HashSet::new()); num_players as usize],
+			table: (0..num_players).map(|_| PlayerState::new()).collect(),
 			players,
 		}
 	}
