@@ -33,7 +33,7 @@ impl Debug for Card {
 				CardType::Property(p) => format!(
 					"Property: '{}', {}, {:?}, {}",
 					p.title,
-					p.color.to_string(),
+					p.color,
 					p.set,
 					self.value
 				),
