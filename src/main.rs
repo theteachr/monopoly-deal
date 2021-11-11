@@ -5,5 +5,7 @@ mod player;
 mod game;
 
 fn main() {
-	let mut main_game = game::Game::new(4);
+	let mut deal = game::Game::new(4);
+
+	deal.initiate();
 }

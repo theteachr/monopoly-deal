@@ -4,7 +4,7 @@ use std::collections::HashSet;
 #[derive(Debug)]
 pub struct Player {
 	id: usize,
-	name: String,
+	pub name: String,
 	hand: HashSet<Card>,
 }
 

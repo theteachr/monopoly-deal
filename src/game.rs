@@ -18,10 +18,36 @@ impl PlayerState<'_> {
 }
 
 #[derive(Debug)]
+struct PlayerQ {
+	players: Vec<Player>,
+	index: usize,
+	size: usize,
+}
+
+impl PlayerQ {
+	fn new(size: usize) -> Self {
+		Self { index: 0, players: Vec::with_capacity(size as usize), size }
+	}
+
+	fn next(&mut self) -> &Player {
+		let player = &self.players[self.index];
+		self.index = (self.index + 1) % self.size;
+
+		player
+	}
+}
+
+impl From<Vec<Player>> for PlayerQ {
+	fn from(players: Vec<Player>) -> Self {
+		Self { index: 0, size: players.len(), players }
+	}
+}
+
+#[derive(Debug)]
 pub struct Game<'a> {
 	table: Vec<PlayerState<'a>>,
 	draw_pile: Deck,
-	players: Vec<Player>,
+	players: PlayerQ,
 }
 
 impl Game<'_> {
@@ -49,17 +75,25 @@ impl Game<'_> {
 		Self {
 			draw_pile,
 			table: (0..num_players).map(|_| PlayerState::new()).collect(),
-			players,
+			players: PlayerQ::from(players),
 		}
+	}
+
+	pub fn initiate(&mut self) {
+		println!("The Deal has been initiated.");
+
+		println!("{}'s turn.", self.players.next().name);
+		println!("{}'s turn.", self.players.next().name);
+		println!("{}'s turn.", self.players.next().name);
+		println!("{}'s turn.", self.players.next().name);
+		println!("{}'s turn.", self.players.next().name);
 	}
 }
 
 fn get_mock_players() -> Vec<Player> {
-	let names = ["Red", "Matilda", "Bomb", "Henry"];
-
-	names
+	["Red", "Matilda", "Bomb", "Henry"]
 		.iter()
-		.enumerate()
-		.map(|(i, name)| Player::new(i, String::from(*name)))
-		.collect()
+			.enumerate()
+			.map(|(i, name)| Player::new(i, String::from(*name)))
+			.collect()
 }
