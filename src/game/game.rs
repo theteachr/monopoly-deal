@@ -1,6 +1,7 @@
-use crate::deck::{Deck, DrawCount};
-
-use crate::game::{player::Player, player_q::PlayerQ, player_state::PlayerState};
+use crate::{
+	deck::{Deck, DrawCount},
+	game::{player::Player, player_q::PlayerQ, player_state::PlayerState},
+};
 
 use std::io::{stdin, stdout, Write};
 
@@ -10,6 +11,8 @@ pub struct Game<'a> {
 	draw_pile: Deck,
 	players: PlayerQ,
 }
+
+// TODO define user actions
 
 impl Game<'_> {
 	pub fn new(num_players: u8) -> Self {
@@ -50,7 +53,6 @@ impl Game<'_> {
 
 		println!("The Deal has been initiated.");
 
-		// TODO display all of the player's cards (in hand, on the table)
 		// TODO take max three inputs
 
 		loop {
