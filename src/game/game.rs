@@ -64,8 +64,8 @@ impl Game<'_> {
 
 			player.update_hand(self.draw_pile.draw(DrawCount::Two));
 
-			println!("Cards in your hand: {:?}", player.hand);
-			println!("Cards on the table: {:?}", self.table);
+			println!("Cards in your hand: {:#?}", player.hand);
+			println!("Cards on the table: {:#?}", self.table);
 
 			print!("What do you want to do? ");
 			stdout().flush();
