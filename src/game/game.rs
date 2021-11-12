@@ -6,8 +6,6 @@ use crate::game::{
     player_state::PlayerState,
 };
 
-use std::collections::HashSet;
-
 #[derive(Debug)]
 pub struct Game<'a> {
 	table: Vec<PlayerState<'a>>,
