@@ -6,6 +6,8 @@ use crate::game::{
     player_state::PlayerState,
 };
 
+use std::io::{stdin, stdout, Write};
+
 #[derive(Debug)]
 pub struct Game<'a> {
 	table: Vec<PlayerState<'a>>,
@@ -43,18 +45,36 @@ impl Game<'_> {
 	}
 
 	pub fn initiate(&mut self) {
+		let mut user_input = String::new();
+
 		println!("The Deal has been initiated.");
 
-		println!("{}'s turn.", self.players.next().name);
-		println!("{}'s turn.", self.players.next().name);
-		println!("{}'s turn.", self.players.next().name);
-		println!("{}'s turn.", self.players.next().name);
-		println!("{}'s turn.", self.players.next().name);
+		// TODO display all of the player's cards (in hand, on the table)
+		// TODO take max three inputs
+
+		loop {
+			user_input.clear();
+
+			let player = self.players.next();
+
+			println!("{}. Your turn.", player.name);
+
+			player.update_hand(self.draw_pile.draw(DrawCount::Two));
+
+			println!("Cards in your hand: {:?}", player.hand);
+			println!("Cards on the table: {:?}", self.table);
+
+			print!("What do you want to do? ");
+			stdout().flush();
+			stdin().read_line(&mut user_input).expect("Couldn't read from `stdin`... :<");
+
+			println!("You entered {}.", user_input.trim());
+		}
 	}
 }
 
 fn get_mock_players() -> Vec<Player> {
-	["Red", "Matilda", "Bomb", "Henry"]
+	["Red", "Blue"]
 		.iter()
 			.enumerate()
 			.map(|(i, name)| Player::new(i, String::from(*name)))

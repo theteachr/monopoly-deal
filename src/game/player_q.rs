@@ -12,8 +12,8 @@ impl PlayerQ {
 		Self { index: 0, players: Vec::with_capacity(size as usize), size }
 	}
 
-	pub fn next(&mut self) -> &Player {
-		let player = &self.players[self.index];
+	pub fn next(&mut self) -> &mut Player {
+		let player = &mut self.players[self.index];
 		self.index = (self.index + 1) % self.size;
 
 		player

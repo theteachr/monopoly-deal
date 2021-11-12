@@ -5,7 +5,7 @@ use std::collections::HashSet;
 pub struct Player {
 	id: usize,
 	pub name: String,
-	hand: HashSet<Card>,
+	pub hand: HashSet<Card>,
 }
 
 impl Player {
