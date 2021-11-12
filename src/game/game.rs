@@ -1,10 +1,6 @@
 use crate::deck::{Deck, DrawCount};
 
-use crate::game::{
-    player::Player,
-    player_q::PlayerQ,
-    player_state::PlayerState,
-};
+use crate::game::{player::Player, player_q::PlayerQ, player_state::PlayerState};
 
 use std::io::{stdin, stdout, Write};
 
@@ -37,9 +33,14 @@ impl Game<'_> {
 
 		println!("{:#?}", players);
 
+		let table = players
+			.iter()
+			.map(|player| PlayerState::new(player.name.clone()))
+			.collect();
+
 		Self {
 			draw_pile,
-			table: (0..num_players).map(|_| PlayerState::new()).collect(),
+			table,
 			players: PlayerQ::from(players),
 		}
 	}
@@ -66,7 +67,9 @@ impl Game<'_> {
 
 			print!("What do you want to do? ");
 			stdout().flush();
-			stdin().read_line(&mut user_input).expect("Couldn't read from `stdin`... :<");
+			stdin()
+				.read_line(&mut user_input)
+				.expect("Couldn't read from `stdin`... :<");
 
 			println!("You entered {}.", user_input.trim());
 		}
