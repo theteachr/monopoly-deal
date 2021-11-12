@@ -12,7 +12,7 @@ pub struct Game<'a> {
 	players: PlayerQ,
 }
 
-// TODO define user actions
+// TODO define player actions
 
 impl Game<'_> {
 	pub fn new(num_players: u8) -> Self {
