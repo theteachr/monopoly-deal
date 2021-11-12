@@ -1,20 +1,26 @@
 use crate::{
 	deck::{Deck, DrawCount},
 	game::{player::Player, player_q::PlayerQ, player_state::PlayerState},
+	cards::card::Card,
 };
 
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
-pub struct Game<'a> {
-	table: Vec<PlayerState<'a>>,
+pub struct Game {
+	table: Vec<PlayerState>,
 	draw_pile: Deck,
 	players: PlayerQ,
 }
 
 // TODO define player actions
 
-impl Game<'_> {
+enum PlayerAction {
+	PlayCard,
+	Pass,
+}
+
+impl Game {
 	pub fn new(num_players: u8) -> Self {
 		let mut draw_pile = Deck::new();
 
@@ -64,16 +70,27 @@ impl Game<'_> {
 
 			player.update_hand(self.draw_pile.draw(DrawCount::Two));
 
-			println!("Cards in your hand: {:#?}", player.hand);
-			println!("Cards on the table: {:#?}", self.table);
+			let cards_in_hand = player.cards_in_hand();
+
+			println!("Cards in your hand:");
+			print_numbered_cards(&cards_in_hand);
+			println!("Cards on the table:");
+
+			let cards_played = self.table[player.id].cards();
+
+			print_numbered_cards(&cards_played);
 
 			print!("What do you want to do? ");
 			stdout().flush();
+			
 			stdin()
 				.read_line(&mut user_input)
 				.expect("Couldn't read from `stdin`... :<");
 
-			println!("You entered {}.", user_input.trim());
+			let card_num: usize = user_input.trim().parse().unwrap();
+			let selected_card = cards_in_hand[card_num];
+
+			println!("You chose {:?}.", selected_card);
 		}
 	}
 }
@@ -81,7 +98,13 @@ impl Game<'_> {
 fn get_mock_players() -> Vec<Player> {
 	["Red", "Blue"]
 		.iter()
-			.enumerate()
-			.map(|(i, name)| Player::new(i, String::from(*name)))
-			.collect()
+		.enumerate()
+		.map(|(i, name)| Player::new(i, String::from(*name)))
+		.collect()
+}
+
+fn print_numbered_cards(cards: &Vec<&Card>) {
+	for (i, card) in cards.iter().enumerate() {
+		println!("{}: {:?}", i, card);
+	}
 }

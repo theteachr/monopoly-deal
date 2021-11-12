@@ -3,7 +3,7 @@ use std::collections::HashSet;
 
 #[derive(Debug)]
 pub struct Player {
-	id: usize,
+	pub id: usize,
 	pub name: String,
 	pub hand: HashSet<Card>,
 }
@@ -26,4 +26,8 @@ impl Player {
 			self.hand.insert(card);
 		}
 	}
+
+    pub fn cards_in_hand(&self) -> Vec<&Card> {
+        self.hand.iter().collect()
+    }
 }

@@ -1,19 +1,22 @@
 use std::collections::HashSet;
 
-use crate::cards::{
-	money_card::MoneyCard,
-	property_card::PropertyCard,
-};
+use crate::cards::card::Card;
 
 #[derive(Debug)]
-pub struct PlayerState<'a> {
+pub struct PlayerState {
 	name: String,
-	properties: HashSet<&'a PropertyCard>,
-	bank: HashSet<&'a MoneyCard>,
+	cards_played: HashSet<Card>
 }
 
-impl PlayerState<'_> {
+impl PlayerState {
 	pub fn new(name: String) -> Self {
-		Self { name, properties: HashSet::new(), bank: HashSet::new() }
+		Self {
+			name,
+			cards_played: HashSet::new(),
+		}
+	}
+
+	pub fn cards(&self) -> Vec<&Card> {
+		self.cards_played.iter().collect()
 	}
 }
