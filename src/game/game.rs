@@ -1,47 +1,12 @@
-use crate::cards::money_card::MoneyCard;
-use crate::cards::property_card::PropertyCard;
 use crate::deck::{Deck, DrawCount};
-use crate::player::Player;
+
+use crate::game::{
+    player::Player,
+    player_q::PlayerQ,
+    player_state::PlayerState,
+};
 
 use std::collections::HashSet;
-
-#[derive(Debug)]
-struct PlayerState<'a> {
-	properties: HashSet<&'a PropertyCard>,
-	bank: HashSet<&'a MoneyCard>,
-}
-
-impl PlayerState<'_> {
-	fn new() -> Self {
-		Self { properties: HashSet::new(), bank: HashSet::new() }
-	}
-}
-
-#[derive(Debug)]
-struct PlayerQ {
-	players: Vec<Player>,
-	index: usize,
-	size: usize,
-}
-
-impl PlayerQ {
-	fn new(size: usize) -> Self {
-		Self { index: 0, players: Vec::with_capacity(size as usize), size }
-	}
-
-	fn next(&mut self) -> &Player {
-		let player = &self.players[self.index];
-		self.index = (self.index + 1) % self.size;
-
-		player
-	}
-}
-
-impl From<Vec<Player>> for PlayerQ {
-	fn from(players: Vec<Player>) -> Self {
-		Self { index: 0, size: players.len(), players }
-	}
-}
 
 #[derive(Debug)]
 pub struct Game<'a> {

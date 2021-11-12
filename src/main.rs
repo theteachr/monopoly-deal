@@ -1,11 +1,10 @@
 mod cards;
-mod color;
-mod deck;
-mod player;
 mod game;
+mod deck;
+mod color;
 
 fn main() {
-	let mut deal = game::Game::new(4);
+	let mut deal = game::game::Game::new(4);
 
 	deal.initiate();
 }
