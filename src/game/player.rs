@@ -5,6 +5,7 @@ pub struct Player {
 	pub id: usize,
 	pub name: String,
 	pub hand: CardSet,
+	pub played: CardSet,
 }
 
 impl Player {
@@ -13,6 +14,7 @@ impl Player {
 			id,
 			name,
 			hand: CardSet::new(),
+			played: CardSet::new(),
 		}
 	}
 
@@ -27,7 +29,11 @@ impl Player {
 		}
 	}
 
-	pub fn cards_in_hand(&self) -> Vec<&Card> {
+	pub fn hand(&self) -> Vec<&Card> {
 		self.hand.cards()
+	}
+
+	pub fn played(&self) -> Vec<&Card> {
+		self.played.cards()
 	}
 }

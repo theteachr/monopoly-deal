@@ -1,17 +1,17 @@
 use crate::{
-	cards::{card::Card, card_set::CardSet},
+	cards::card::Card,
 	deck::{Deck, DrawCount},
-	game::{player::Player, player_q::PlayerQ},
+	game::player::Player,
 };
 
+use std::collections::VecDeque;
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
 pub struct Game {
-	properties: Vec<CardSet>,
-	monies: Vec<CardSet>,
 	draw_pile: Deck,
-	players: PlayerQ,
+	players: VecDeque<Player>,
+	num_players: u8,
 }
 
 // TODO define player actions
@@ -42,9 +42,8 @@ impl Game {
 
 		Self {
 			draw_pile,
-			properties: CardSet::vec(num_players),
-			monies: CardSet::vec(num_players),
-			players: PlayerQ::from(players),
+			players: VecDeque::from(players),
+			num_players,
 		}
 	}
 
@@ -58,7 +57,7 @@ impl Game {
 		loop {
 			user_input.clear();
 
-			let player = self.players.next();
+			let mut player = self.players.pop_front().unwrap();
 
 			let cards_drawn = self.draw_pile.draw(DrawCount::Two);
 			println!(
@@ -66,22 +65,33 @@ impl Game {
 				cards_drawn.len(),
 				self.draw_pile.len()
 			);
+
 			player.update_hand(cards_drawn);
 
-			let cards_in_hand = player.cards_in_hand();
+			let hand_cards = player.hand();
+			let played_cards = player.played();
 
 			println!(
 				"{}. Your turn. You have {} card(s) in your hand.",
 				player.name,
-				cards_in_hand.len()
+				hand_cards.len()
 			);
 
 			println!("Cards in your hand:");
-			print_numbered_cards(&cards_in_hand);
+			print_numbered_cards(&hand_cards);
 
-			println!("Cards on the table:");
-			print_numbered_cards(&self.properties[player.id].cards());
-			print_numbered_cards(&self.monies[player.id].cards());
+			println!("Your cards:");
+			print_numbered_cards(&played_cards);
+
+			println!("Rest of the Table:");
+
+			for _ in 1..self.num_players {
+				let other_player = self.players.pop_front().unwrap();
+
+				println!("{}'s Cards --->", other_player.name);
+				print_numbered_cards(&other_player.played());
+				self.players.push_back(other_player);
+			}
 
 			print!("Type the number of the card: ");
 			stdout().flush();
@@ -95,19 +105,14 @@ impl Game {
 
 			println!("Adding {:?} to the table...", selected_card);
 
-			let section = match selected_card {
-				Card::Money(_) => &mut self.monies,
-				Card::Property(_) => &mut self.properties,
-				Card::Empty => unreachable!("Can't select an empty card."),
-			};
-
-			section[player.id].add(selected_card);
+			player.played.add(selected_card);
+			self.players.push_back(player);
 		}
 	}
 }
 
 fn get_mock_players() -> Vec<Player> {
-	["Red", "Blue"]
+	["Rick", "Morty"]
 		.iter()
 		.enumerate()
 		.map(|(i, name)| Player::new(i, String::from(*name)))
