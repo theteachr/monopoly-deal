@@ -1,4 +1,4 @@
-use crate::cards::{card_set::CardSet, card::Card};
+use crate::cards::{card::Card, card_set::CardSet};
 
 #[derive(Debug)]
 pub struct Player {
@@ -21,13 +21,13 @@ impl Player {
 	}
 
 	pub fn update_hand(&mut self, cards: Vec<Card>) {
-        println!("Adding {:?} to the hand....", cards);
+		println!("Adding {:?} to the hand....", cards);
 		for card in cards {
 			self.hand.add(card);
 		}
 	}
 
 	pub fn cards_in_hand(&self) -> Vec<&Card> {
-        self.hand.cards()
+		self.hand.cards()
 	}
 }

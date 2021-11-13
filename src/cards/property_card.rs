@@ -8,7 +8,7 @@ use std::{
 
 #[derive(Debug)]
 pub struct PropertyCard {
-    value: u8,
+	value: u8,
 	pub title: &'static str,
 	pub color: color::Color,
 	pub rents: RentVec,
@@ -17,7 +17,7 @@ pub struct PropertyCard {
 impl PropertyCard {
 	pub fn new(value: u8, title: &'static str, color: color::Color, rents: RentVec) -> Self {
 		Self {
-            value,
+			value,
 			title,
 			color,
 			rents,

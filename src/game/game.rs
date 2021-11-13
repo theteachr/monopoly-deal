@@ -8,8 +8,8 @@ use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
 pub struct Game {
-    properties: Vec<CardSet>,
-    monies: Vec<CardSet>,
+	properties: Vec<CardSet>,
+	monies: Vec<CardSet>,
 	draw_pile: Deck,
 	players: PlayerQ,
 }
@@ -95,13 +95,13 @@ impl Game {
 
 			println!("Adding {:?} to the table...", selected_card);
 
-            let section = match selected_card {
-                Card::Money(_) => &mut self.monies,
-                Card::Property(_) => &mut self.properties,
-                Card::Empty => unreachable!("Can't select an empty card."),
-            };
+			let section = match selected_card {
+				Card::Money(_) => &mut self.monies,
+				Card::Property(_) => &mut self.properties,
+				Card::Empty => unreachable!("Can't select an empty card."),
+			};
 
-            section[player.id].add(selected_card);
+			section[player.id].add(selected_card);
 		}
 	}
 }

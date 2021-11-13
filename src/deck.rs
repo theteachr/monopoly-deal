@@ -1,5 +1,5 @@
 use crate::cards::{
-	card::Card::{self, Property, Money},
+	card::Card::{self, Money, Property},
 	data::{MONIES, PROPERTIES},
 	money_card::MoneyCard,
 	property_card::PropertyCard,
