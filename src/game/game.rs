@@ -1,7 +1,7 @@
 use crate::{
+	cards::card::Card,
 	deck::{Deck, DrawCount},
 	game::{player::Player, player_q::PlayerQ, player_state::PlayerState},
-	cards::card::Card,
 };
 
 use std::io::{stdin, stdout, Write};
@@ -21,7 +21,7 @@ enum PlayerAction {
 }
 
 impl Game {
-	pub fn new(num_players: u8) -> Self {
+	pub fn new(_num_players: u8) -> Self {
 		let mut draw_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
@@ -68,7 +68,9 @@ impl Game {
 
 			println!("{}. Your turn.", player.name);
 
-			player.update_hand(self.draw_pile.draw(DrawCount::Two));
+            let cards_drawn = self.draw_pile.draw(DrawCount::Two);
+            println!("Drew {} cards from the deck. {} left.", cards_drawn.len(), self.draw_pile.len());
+			player.update_hand(cards_drawn);
 
 			let cards_in_hand = player.cards_in_hand();
 
@@ -76,13 +78,9 @@ impl Game {
 			print_numbered_cards(&cards_in_hand);
 			println!("Cards on the table:");
 
-			let cards_played = self.table[player.id].cards();
-
-			print_numbered_cards(&cards_played);
-
 			print!("What do you want to do? ");
 			stdout().flush();
-			
+
 			stdin()
 				.read_line(&mut user_input)
 				.expect("Couldn't read from `stdin`... :<");

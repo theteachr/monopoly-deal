@@ -9,7 +9,11 @@ pub struct PlayerQ {
 
 impl PlayerQ {
 	pub fn new(size: usize) -> Self {
-		Self { index: 0, players: Vec::with_capacity(size as usize), size }
+		Self {
+			index: 0,
+			players: Vec::with_capacity(size as usize),
+			size,
+		}
 	}
 
 	pub fn next(&mut self) -> &mut Player {
@@ -22,6 +26,10 @@ impl PlayerQ {
 
 impl From<Vec<Player>> for PlayerQ {
 	fn from(players: Vec<Player>) -> Self {
-		Self { index: 0, size: players.len(), players }
+		Self {
+			index: 0,
+			size: players.len(),
+			players,
+		}
 	}
 }

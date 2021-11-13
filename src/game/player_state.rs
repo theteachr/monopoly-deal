@@ -5,7 +5,7 @@ use crate::cards::card::Card;
 #[derive(Debug)]
 pub struct PlayerState {
 	name: String,
-	cards_played: HashSet<Card>
+	cards_played: HashSet<Card>,
 }
 
 impl PlayerState {

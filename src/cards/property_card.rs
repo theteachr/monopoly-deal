@@ -1,23 +1,27 @@
-use crate::color;
 use crate::cards::rent_vec::RentVec;
+use crate::color;
 
 use std::{
-	hash::{Hash, Hasher},
 	cmp::PartialEq,
+	hash::{Hash, Hasher},
 };
-
 
 #[derive(Debug)]
 pub struct PropertyCard {
+    value: u8,
 	pub title: &'static str,
 	pub color: color::Color,
 	pub rents: RentVec,
 }
 
-
 impl PropertyCard {
-	pub fn new(title: &'static str, color: color::Color, rents: RentVec) -> Self {
-		Self { title, color, rents }
+	pub fn new(value: u8, title: &'static str, color: color::Color, rents: RentVec) -> Self {
+		Self {
+            value,
+			title,
+			color,
+			rents,
+		}
 	}
 }
 

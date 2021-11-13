@@ -1,7 +1,7 @@
 mod cards;
-mod game;
-mod deck;
 mod color;
+mod deck;
+mod game;
 
 fn main() {
 	let mut deal = game::game::Game::new(4);

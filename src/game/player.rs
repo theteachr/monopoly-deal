@@ -27,7 +27,7 @@ impl Player {
 		}
 	}
 
-    pub fn cards_in_hand(&self) -> Vec<&Card> {
-        self.hand.iter().collect()
-    }
+	pub fn cards_in_hand(&self) -> Vec<&Card> {
+		self.hand.iter().collect()
+	}
 }
