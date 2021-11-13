@@ -32,13 +32,10 @@ impl Game {
 
 		// distribute cards
 		for player in &mut players {
-			player.update_hand(draw_pile.draw(DrawCount::Five));
+			let cards_drawn = draw_pile.draw(DrawCount::Five);
+			println!("Gave {:?} to {}.", &cards_drawn, player.name);
+			player.update_hand(cards_drawn);
 		}
-
-		println!(
-			"Gave 5 cards each. {} cards left in the deck.",
-			draw_pile.len()
-		);
 
 		println!("{:#?}", players);
 
@@ -66,13 +63,21 @@ impl Game {
 
 			let player = self.players.next();
 
-			println!("{}. Your turn.", player.name);
-
-            let cards_drawn = self.draw_pile.draw(DrawCount::Two);
-            println!("Drew {} cards from the deck. {} left.", cards_drawn.len(), self.draw_pile.len());
+			let cards_drawn = self.draw_pile.draw(DrawCount::Two);
+			println!(
+				"Drew {} cards from the deck. {} left.",
+				cards_drawn.len(),
+				self.draw_pile.len()
+			);
 			player.update_hand(cards_drawn);
 
 			let cards_in_hand = player.cards_in_hand();
+
+			println!(
+				"{}. Your turn. You have {} card(s) in your hand.",
+				player.name,
+				cards_in_hand.len()
+			);
 
 			println!("Cards in your hand:");
 			print_numbered_cards(&cards_in_hand);
