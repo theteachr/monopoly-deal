@@ -1,11 +1,10 @@
-use crate::cards::card::Card;
-use std::collections::HashSet;
+use crate::cards::{card_set::CardSet, card::Card};
 
 #[derive(Debug)]
 pub struct Player {
 	pub id: usize,
 	pub name: String,
-	pub hand: HashSet<Card>,
+	pub hand: CardSet,
 }
 
 impl Player {
@@ -13,7 +12,7 @@ impl Player {
 		Self {
 			id,
 			name,
-			hand: HashSet::new(),
+			hand: CardSet::new(),
 		}
 	}
 
@@ -22,12 +21,13 @@ impl Player {
 	}
 
 	pub fn update_hand(&mut self, cards: Vec<Card>) {
+        println!("Adding {:?} to the hand....", cards);
 		for card in cards {
-			self.hand.insert(card);
+			self.hand.add(card);
 		}
 	}
 
 	pub fn cards_in_hand(&self) -> Vec<&Card> {
-		self.hand.iter().collect()
+        self.hand.cards()
 	}
 }

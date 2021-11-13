@@ -5,4 +5,5 @@ use crate::cards::property_card::PropertyCard;
 pub enum Card {
 	Property(PropertyCard),
 	Money(MoneyCard),
+    Empty,
 }

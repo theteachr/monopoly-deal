@@ -1,14 +1,15 @@
 use crate::{
-	cards::card::Card,
+	cards::{card::Card, card_set::CardSet},
 	deck::{Deck, DrawCount},
-	game::{player::Player, player_q::PlayerQ, player_state::PlayerState},
+	game::{player::Player, player_q::PlayerQ},
 };
 
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
 pub struct Game {
-	table: Vec<PlayerState>,
+    properties: Vec<CardSet>,
+    monies: Vec<CardSet>,
 	draw_pile: Deck,
 	players: PlayerQ,
 }
@@ -21,7 +22,7 @@ enum PlayerAction {
 }
 
 impl Game {
-	pub fn new(_num_players: u8) -> Self {
+	pub fn new(num_players: u8) -> Self {
 		let mut draw_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
@@ -39,14 +40,10 @@ impl Game {
 
 		println!("{:#?}", players);
 
-		let table = players
-			.iter()
-			.map(|player| PlayerState::new(player.name.clone()))
-			.collect();
-
 		Self {
 			draw_pile,
-			table,
+			properties: CardSet::vec(num_players),
+			monies: CardSet::vec(num_players),
 			players: PlayerQ::from(players),
 		}
 	}
@@ -81,19 +78,30 @@ impl Game {
 
 			println!("Cards in your hand:");
 			print_numbered_cards(&cards_in_hand);
-			println!("Cards on the table:");
 
-			print!("What do you want to do? ");
+			println!("Cards on the table:");
+			print_numbered_cards(&self.properties[player.id].cards());
+			print_numbered_cards(&self.monies[player.id].cards());
+
+			print!("Type the number of the card: ");
 			stdout().flush();
 
 			stdin()
 				.read_line(&mut user_input)
 				.expect("Couldn't read from `stdin`... :<");
 
-			let card_num: usize = user_input.trim().parse().unwrap();
-			let selected_card = cards_in_hand[card_num];
+			let card_position: usize = user_input.trim().parse().unwrap();
+			let selected_card = player.hand.remove(card_position);
 
-			println!("You chose {:?}.", selected_card);
+			println!("Adding {:?} to the table...", selected_card);
+
+            let section = match selected_card {
+                Card::Money(_) => &mut self.monies,
+                Card::Property(_) => &mut self.properties,
+                Card::Empty => unreachable!("Can't select an empty card."),
+            };
+
+            section[player.id].add(selected_card);
 		}
 	}
 }
