@@ -14,6 +14,10 @@ pub struct MoneyCard {
 	denomination: Denomination,
 }
 
+// FIXME Differentiate two cards with the same denomination, as currently,
+// they're treated to be equal, hence, can't have multiple of them
+// in a player's hand, which is a `Set`.
+
 impl From<u8> for Denomination {
 	fn from(value: u8) -> Self {
 		match value {
