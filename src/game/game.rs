@@ -64,48 +64,68 @@ impl Game {
 
 			player.update_hand(cards_drawn);
 
-			let hand_cards = player.hand();
-			let played_cards = player.played();
-
-			println!(
-				"{}. Your turn. You have {} card(s) in your hand.",
-				player.name,
-				hand_cards.len()
-			);
-
-			println!("Cards in your hand:");
-			print_numbered_cards(&hand_cards);
-
-			println!("Your cards:");
-			print_numbered_cards(&played_cards);
-
-			println!("Rest of the Table:");
-
-			for _ in 1..self.player_count {
-				let other_player = self.players.pop_front().unwrap();
-
-				println!("{}'s Cards --->", other_player.name);
-				print_numbered_cards(&other_player.played());
-				self.players.push_back(other_player);
-			}
-
 			self.handle_player_actions(&mut player);
 			self.players.push_back(player);
 		}
 	}
 
-	fn handle_player_actions(&self, player: &mut Player) {
+	fn handle_player_actions(&mut self, player: &mut Player) {
 		while let Some(action) = read_action() {
-			let text = match action {
-				PlayerAction::Play => "play",
-				PlayerAction::Pass => "pass",
-				PlayerAction::Rearrange => "rearrange",
-			};
-
-			println!("You chose to {}.", text);
+			println!(
+				"You chose to {}.",
+				match action {
+					PlayerAction::Play      => self.handle_play(player),
+					PlayerAction::Pass      => return,
+					PlayerAction::Rearrange => "rearrange",
+				}
+			);
 		}
 
+		println!("You can't do that :o");
 		self.handle_player_actions(player);
+	}
+
+	fn handle_play(&mut self, player: &mut Player) -> &'static str {
+		let mut input = String::new();
+
+		let hand_cards = player.hand();
+		let played_cards = player.played();
+
+		println!(
+			"{}. Your turn. You have {} card(s) in your hand.",
+			player.name,
+			hand_cards.len()
+		);
+
+		println!("Cards in your hand:");
+		print_numbered_cards(&hand_cards);
+
+		println!("Your cards:");
+		print_numbered_cards(&played_cards);
+
+		println!("Rest of the Table:");
+
+		for _ in 1..self.player_count {
+			let other_player = self.players.pop_front().unwrap();
+
+			println!("{}'s Cards --->", other_player.name);
+			print_numbered_cards(&other_player.played());
+			self.players.push_back(other_player);
+		}
+
+		print!("Type card number: ");
+		stdout().flush().expect("Couldn't flush :<");
+
+		stdin()
+			.read_line(&mut input)
+			.expect("Couldn't read from `stdin`... :<");
+
+		let card_position: usize = input.trim().parse().unwrap();
+		let selected_card = player.hand.remove(card_position);
+
+		player.played.add(selected_card);
+
+		return "play";
 	}
 }
 
