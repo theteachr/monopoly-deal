@@ -18,10 +18,6 @@ impl Player {
 		}
 	}
 
-	pub fn read(id: usize) -> Player {
-		Player::new(id, String::from("Gen"))
-	}
-
 	pub fn update_hand(&mut self, cards: Vec<Card>) {
 		println!("Adding {:?} to the hand....", cards);
 		for card in cards {

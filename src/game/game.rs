@@ -16,11 +16,6 @@ pub struct Game {
 
 // TODO define player actions
 
-enum PlayerAction {
-	PlayCard,
-	Pass,
-}
-
 impl Game {
 	pub fn new(num_players: u8) -> Self {
 		let mut draw_pile = Deck::new();
@@ -94,7 +89,7 @@ impl Game {
 			}
 
 			print!("Type the number of the card: ");
-			stdout().flush();
+			stdout().flush().expect("Couldn't flush :<");
 
 			stdin()
 				.read_line(&mut user_input)

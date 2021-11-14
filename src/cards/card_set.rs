@@ -14,10 +14,6 @@ impl CardSet {
 		}
 	}
 
-	pub fn vec(size: u8) -> Vec<CardSet> {
-		(0..size).map(|_| CardSet::new()).collect()
-	}
-
 	pub fn add(&mut self, card: Card) {
 		self.cards.push(card);
 		self.size += 1;
