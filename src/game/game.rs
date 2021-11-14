@@ -71,21 +71,18 @@ impl Game {
 
 	fn handle_player_actions(&mut self, player: &mut Player) {
 		while let Some(action) = read_action() {
-			println!(
-				"You chose to {}.",
-				match action {
-					PlayerAction::Play      => self.handle_play(player),
-					PlayerAction::Pass      => return,
-					PlayerAction::Rearrange => "rearrange",
-				}
-			);
+			match action {
+				PlayerAction::Play      => self.handle_play(player),
+				PlayerAction::Pass      => todo!(),
+				PlayerAction::Rearrange => todo!(),
+			}
 		}
 
 		println!("You can't do that :o");
 		self.handle_player_actions(player);
 	}
 
-	fn handle_play(&mut self, player: &mut Player) -> &'static str {
+	fn handle_play(&mut self, player: &mut Player) {
 		let mut input = String::new();
 
 		let hand_cards = player.hand();
@@ -124,8 +121,6 @@ impl Game {
 		let selected_card = player.hand.remove(card_position);
 
 		player.played.add(selected_card);
-
-		return "play";
 	}
 }
 
