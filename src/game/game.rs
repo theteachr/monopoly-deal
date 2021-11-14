@@ -11,13 +11,13 @@ use std::io::{stdin, stdout, Write};
 pub struct Game {
 	draw_pile: Deck,
 	players: VecDeque<Player>,
-	num_players: u8,
+	player_count: u8,
 }
 
 // TODO define player actions
 
 impl Game {
-	pub fn new(num_players: u8) -> Self {
+	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
@@ -33,12 +33,10 @@ impl Game {
 			player.update_hand(cards_drawn);
 		}
 
-		println!("{:#?}", players);
-
 		Self {
 			draw_pile,
 			players: VecDeque::from(players),
-			num_players,
+			player_count,
 		}
 	}
 
@@ -55,11 +53,6 @@ impl Game {
 			let mut player = self.players.pop_front().unwrap();
 
 			let cards_drawn = self.draw_pile.draw(DrawCount::Two);
-			println!(
-				"Drew {} cards from the deck. {} left.",
-				cards_drawn.len(),
-				self.draw_pile.len()
-			);
 
 			player.update_hand(cards_drawn);
 
@@ -80,7 +73,7 @@ impl Game {
 
 			println!("Rest of the Table:");
 
-			for _ in 1..self.num_players {
+			for _ in 1..self.player_count {
 				let other_player = self.players.pop_front().unwrap();
 
 				println!("{}'s Cards --->", other_player.name);
