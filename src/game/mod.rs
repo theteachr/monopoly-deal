@@ -1,3 +1,4 @@
 mod player;
+mod game;
 
-pub mod game;
+pub use crate::game::game::Game;
