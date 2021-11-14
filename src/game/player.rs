@@ -19,7 +19,6 @@ impl Player {
 	}
 
 	pub fn update_hand(&mut self, cards: Vec<Card>) {
-		println!("Adding {:?} to the hand....", cards);
 		for card in cards {
 			self.hand.add(card);
 		}
