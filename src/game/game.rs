@@ -24,12 +24,11 @@ impl Game {
 
 		let mut players = get_mock_players();
 
-		println!("Added {} players. {:#?}", players.len(), players);
+		println!("Added {} players. {:?}", players.len(), players.iter().map(|p| p.name.as_str()).collect::<Vec<&str>>());
 
 		// distribute cards
 		for player in &mut players {
 			let cards_drawn = draw_pile.draw(DrawCount::Five);
-			println!("Gave {:?} to {}.", &cards_drawn, player.name);
 			player.update_hand(cards_drawn);
 		}
 
@@ -90,8 +89,6 @@ impl Game {
 
 			let card_position: usize = user_input.trim().parse().unwrap();
 			let selected_card = player.hand.remove(card_position);
-
-			println!("Adding {:?} to the table...", selected_card);
 
 			player.played.add(selected_card);
 			self.players.push_back(player);
