@@ -14,7 +14,14 @@ pub struct Game {
 	player_count: u8,
 }
 
-// TODO define player actions
+const ACTION_TEXTS: [&str; 3] = ["Play a card", "Pass", "Rearrange"];
+
+#[repr(u8)]
+enum PlayerAction {
+	Play,
+	Pass,
+	Rearrange,
+}
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {
@@ -24,7 +31,14 @@ impl Game {
 
 		let mut players = get_mock_players();
 
-		println!("Added {} players. {:?}", players.len(), players.iter().map(|p| p.name.as_str()).collect::<Vec<&str>>());
+		println!(
+			"Added {} players: {:?}.",
+			players.len(),
+			players
+				.iter()
+				.map(|p| p.name.as_str())
+				.collect::<Vec<&str>>()
+		);
 
 		// distribute cards
 		for player in &mut players {
@@ -40,17 +54,12 @@ impl Game {
 	}
 
 	pub fn initiate(&mut self) {
-		let mut user_input = String::new();
-
 		println!("The Deal has been initiated.");
 
 		// TODO take max three inputs
 
 		loop {
-			user_input.clear();
-
 			let mut player = self.players.pop_front().unwrap();
-
 			let cards_drawn = self.draw_pile.draw(DrawCount::Two);
 
 			player.update_hand(cards_drawn);
@@ -80,19 +89,23 @@ impl Game {
 				self.players.push_back(other_player);
 			}
 
-			print!("Type the number of the card: ");
-			stdout().flush().expect("Couldn't flush :<");
-
-			stdin()
-				.read_line(&mut user_input)
-				.expect("Couldn't read from `stdin`... :<");
-
-			let card_position: usize = user_input.trim().parse().unwrap();
-			let selected_card = player.hand.remove(card_position);
-
-			player.played.add(selected_card);
+			self.handle_player_actions(&mut player);
 			self.players.push_back(player);
 		}
+	}
+
+	fn handle_player_actions(&self, player: &mut Player) {
+		while let Some(action) = read_action() {
+			let text = match action {
+				PlayerAction::Play => "play",
+				PlayerAction::Pass => "pass",
+				PlayerAction::Rearrange => "rearrange",
+			};
+
+			println!("You chose to {}.", text);
+		}
+
+		self.handle_player_actions(player);
 	}
 }
 
@@ -107,5 +120,27 @@ fn get_mock_players() -> Vec<Player> {
 fn print_numbered_cards(cards: &Vec<&Card>) {
 	for (i, card) in cards.iter().enumerate() {
 		println!("{}: {}", i, card);
+	}
+}
+
+fn read_action() -> Option<PlayerAction> {
+	let mut input = String::new();
+
+	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
+		println!("{}: {}", i, action_text);
+	}
+
+	print!("What do you want to do? ");
+	stdout().flush().expect("Couldn't flush :<");
+
+	stdin()
+		.read_line(&mut input)
+		.expect("Couldn't read from `stdin`... :<");
+
+	match input.trim().parse() {
+		Ok(0) => Some(PlayerAction::Play),
+		Ok(1) => Some(PlayerAction::Pass),
+		Ok(2) => Some(PlayerAction::Rearrange),
+		    _ => None,
 	}
 }
