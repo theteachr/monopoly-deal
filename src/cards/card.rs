@@ -1,56 +1,21 @@
+use std::fmt;
+
 use crate::cards::money_card::MoneyCard;
 use crate::cards::property_card::PropertyCard;
 
-use std::{
-	fmt::{Debug, Formatter, Result},
-	hash::{Hash, Hasher},
-};
-
-#[derive(Eq, PartialEq)]
-pub enum CardType {
+#[derive(Debug, Hash, Eq, PartialEq)]
+pub enum Card {
 	Property(PropertyCard),
 	Money(MoneyCard),
 }
 
-#[derive(Eq, PartialEq)]
-pub struct Card {
-	value: u8,
-	card_type: CardType,
-}
+impl fmt::Display for Card {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		let string = match self {
+			Card::Property(p) => p.to_string(),
+			Card::Money(m) => m.to_string(),
+		};
 
-impl Card {
-	pub fn new(value: u8, card_type: CardType) -> Self {
-		Self { value, card_type }
-	}
-}
-
-impl Debug for Card {
-	fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-		write!(
-			f,
-			"<{}>",
-			match &self.card_type {
-				CardType::Property(p) => format!(
-					"Property: '{}', {}, {:?}, {}",
-					p.title,
-					p.color,
-					p.rents,
-					self.value
-				),
-				CardType::Money(_) => format!("Money: {}", self.value),
-			}
-		)
-	}
-}
-
-impl Hash for Card {
-	fn hash<H: Hasher>(&self, state: &mut H) {
-		match &self.card_type {
-			CardType::Property(p) => p.hash(state),
-			CardType::Money(m) => {
-				m.id.hash(state);
-				self.value.hash(state);
-			}
-		}
+		write!(f, "{}", string)
 	}
 }

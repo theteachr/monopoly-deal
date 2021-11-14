@@ -1,12 +1,9 @@
 use crate::cards::{
-	card::{
-		Card,
-		CardType::{Money, Property},
-	},
+	card::Card::{self, Money, Property},
+	data::{MONIES, PROPERTIES},
 	money_card::MoneyCard,
 	property_card::PropertyCard,
-	data::{MONIES, PROPERTIES},
-    rent_vec::RentVec,
+	rent_vec::RentVec,
 };
 
 use rand::seq::SliceRandom;
@@ -17,9 +14,10 @@ pub struct Deck {
 	cards: Vec<Card>,
 }
 
+#[repr(u8)]
 pub enum DrawCount {
-	Two,
-	Five,
+	Two = 2,
+	Five = 5,
 }
 
 impl Deck {
@@ -28,16 +26,18 @@ impl Deck {
 
 		for (value, color, titles) in PROPERTIES.iter() {
 			for title in *titles {
-				cards.push(Card::new(
+				cards.push(Property(PropertyCard::new(
 					*value,
-					Property(PropertyCard::new(title, *color, RentVec::new(*color))),
-				));
+					title,
+					*color,
+					RentVec::new(*color),
+				)));
 			}
 		}
 
 		for (value, count) in MONIES.iter() {
-			for i in 0..*count {
-				cards.push(Card::new(*value, Money(MoneyCard::new((count * 10 + i).to_string()))))
+			for _ in 0..*count {
+				cards.push(Money(MoneyCard::new(*value)));
 			}
 		}
 
@@ -49,12 +49,7 @@ impl Deck {
 	pub fn draw(&mut self, count: DrawCount) -> Vec<Card> {
 		let mut cards = Vec::new();
 
-		let count = match count {
-			DrawCount::Two => 2,
-			DrawCount::Five => 5,
-		};
-
-		for _ in 0..count {
+		for _ in 0..count as u8 {
 			cards.push(self.cards.pop().unwrap());
 		}
 
