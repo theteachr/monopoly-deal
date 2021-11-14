@@ -116,6 +116,6 @@ fn get_mock_players() -> Vec<Player> {
 
 fn print_numbered_cards(cards: &Vec<&Card>) {
 	for (i, card) in cards.iter().enumerate() {
-		println!("{}: {:?}", i, card);
+		println!("{}: {}", i, card);
 	}
 }

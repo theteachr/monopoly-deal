@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::cards::rent_vec::RentVec;
 use crate::color;
 
@@ -38,3 +40,9 @@ impl PartialEq for PropertyCard {
 }
 
 impl Eq for PropertyCard {}
+
+impl fmt::Display for PropertyCard {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "'{}'", self.title)
+	}
+}
