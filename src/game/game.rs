@@ -10,6 +10,7 @@ use std::io::{stdin, stdout, Write};
 #[derive(Debug)]
 pub struct Game {
 	draw_pile: Deck,
+	discard_pile: Deck,
 	players: VecDeque<Player>,
 	player_count: u8,
 }
@@ -58,6 +59,7 @@ impl Game {
 
 		Self {
 			draw_pile,
+			discard_pile: Deck::new(),
 			players: VecDeque::from(players),
 			player_count,
 		}
@@ -122,13 +124,22 @@ impl Game {
 		player.play_card_at(card_position);
 	}
 
-	fn handle_excess_cards(&self, player: &mut Player) {
+	fn handle_excess_cards(&mut self, player: &mut Player) {
 		// A player is not allowed to have more than 7 cards in their hand at theend of a turn.
 		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
 		let card_count = player.hand.len();
+		let to_be_discarded = card_count - 7;
 
-		if card_count > 7 {
-			println!("You need to discard {}.", card_count - 7);
+		if to_be_discarded <= 0 {
+			return;
+		}
+
+		println!("You need to discard {}.", to_be_discarded);
+
+		for _ in 0..to_be_discarded {
+			print_numbered_cards(&player.hand());
+			let card = player.hand.remove(choose_card(player.hand.len()));
+			self.discard_pile.add(card);
 		}
 	}
 
