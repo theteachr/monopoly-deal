@@ -67,7 +67,12 @@ impl Game {
 
 		loop {
 			let mut player = self.players.pop_front().unwrap();
-			let cards_drawn = self.draw_pile.draw(DrawCount::Two);
+			let draw_count = if player.hand.len() == 0 {
+				DrawCount::Five
+			} else {
+				DrawCount::Two
+			};
+			let cards_drawn = self.draw_pile.draw(draw_count);
 
 			player.update_hand(cards_drawn);
 
@@ -86,7 +91,11 @@ impl Game {
 		let mut count = 0;
 
 		while let Ok(state) = read_action(&mut count) {
-			println!("{}'s played cards: {}", player.name, cards_to_string(player.played()));
+			println!(
+				"{}'s played cards: {}",
+				player.name,
+				cards_to_string(player.played())
+			);
 
 			match state {
 				Continue(action) => match action {
