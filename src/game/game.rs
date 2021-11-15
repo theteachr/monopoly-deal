@@ -117,7 +117,7 @@ impl Game {
 	fn handle_play(&mut self, player: &mut Player) {
 		print_numbered_cards(&player.hand());
 
-		let card_position: usize = input("Choose card: ").trim().parse().unwrap();
+		let card_position: usize = choose_card(player.hand.len());
 
 		player.play_card_at(card_position);
 	}
@@ -208,4 +208,18 @@ fn cards_to_string(cards: Vec<&Card>) -> String {
 			.collect::<Vec<String>>()
 			.join("; ")
 	)
+}
+
+fn choose_card(card_count: usize) -> usize {
+	if let Ok(n) = input("Choose card: ").trim().parse() {
+		if n < card_count {
+			return n;
+		}
+	}
+
+	println!(
+		"That can't be chosen, please enter a number between 0 and {}.",
+		card_count - 1
+	);
+	return choose_card(card_count);
 }
