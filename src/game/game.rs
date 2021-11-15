@@ -23,6 +23,15 @@ enum PlayerAction {
 	Rearrange,
 }
 
+#[repr(u8)]
+enum PlayerInputState {
+	Continue(PlayerAction),
+	Stop,
+}
+
+use PlayerInputState::*;
+use PlayerAction::*;
+
 impl Game {
 	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
@@ -32,12 +41,13 @@ impl Game {
 		let mut players = get_mock_players();
 
 		println!(
-			"Added {} players: {:?}.",
+			"Added {} players: {}.",
 			players.len(),
 			players
 				.iter()
 				.map(|p| p.name.as_str())
 				.collect::<Vec<&str>>()
+				.join(", ")
 		);
 
 		// distribute cards
@@ -56,56 +66,85 @@ impl Game {
 	pub fn initiate(&mut self) {
 		println!("The Deal has been initiated.");
 
-		// TODO take max three inputs
-
 		loop {
 			let mut player = self.players.pop_front().unwrap();
-			let cards_drawn = self.draw_pile.draw(DrawCount::Two);
+			let draw_count = if player.hand.len() == 0 {
+				DrawCount::Five
+			} else {
+				DrawCount::Two
+			};
+			let cards_drawn = self.draw_pile.draw(draw_count);
 
 			player.update_hand(cards_drawn);
 
-			let hand_cards = player.hand();
-			let played_cards = player.played();
+			println!("{}'s turn.", player.name);
 
-			println!(
-				"{}. Your turn. You have {} card(s) in your hand.",
-				player.name,
-				hand_cards.len()
-			);
+			self.table();
 
-			println!("Cards in your hand:");
-			print_numbered_cards(&hand_cards);
+			self.handle_player_action(&mut player);
+			self.handle_excess_cards(&mut player);
 
-			println!("Your cards:");
-			print_numbered_cards(&played_cards);
-
-			println!("Rest of the Table:");
-
-			for _ in 1..self.player_count {
-				let other_player = self.players.pop_front().unwrap();
-
-				println!("{}'s Cards --->", other_player.name);
-				print_numbered_cards(&other_player.played());
-				self.players.push_back(other_player);
-			}
-
-			self.handle_player_actions(&mut player);
 			self.players.push_back(player);
 		}
 	}
 
-	fn handle_player_actions(&self, player: &mut Player) {
-		while let Some(action) = read_action() {
-			let text = match action {
-				PlayerAction::Play => "play",
-				PlayerAction::Pass => "pass",
-				PlayerAction::Rearrange => "rearrange",
-			};
+	fn handle_player_action(&mut self, player: &mut Player) {
+		let mut count = 0;
 
-			println!("You chose to {}.", text);
+		while let Ok(state) = read_action(&mut count) {
+			println!(
+				"{}'s played cards: {}",
+				player.name,
+				cards_to_string(player.played())
+			);
+
+			match state {
+				Continue(action) => match action {
+					Play      => self.handle_play(player),
+					Pass      => todo!(), // should not be reachable
+					Rearrange => todo!(),
+				},
+				Stop => return,
+			}
 		}
 
-		self.handle_player_actions(player);
+		// TODO Handle excess cards in hand (<= 7)
+		// TODO Handle wrong card selection
+
+		println!("{}, you can't do that :o", player.name);
+		self.handle_player_action(player);
+	}
+
+	fn handle_play(&mut self, player: &mut Player) {
+		print_numbered_cards(&player.hand());
+
+		let card_position: usize = choose_card(player.hand.len());
+
+		player.play_card_at(card_position);
+	}
+
+	fn handle_excess_cards(&self, player: &mut Player) {
+		// A player is not allowed to have more than 7 cards in their hand at theend of a turn.
+		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
+		let card_count = player.hand.len();
+
+		if card_count > 7 {
+			println!("You need to discard {}.", card_count - 7);
+		}
+	}
+
+	fn table(&mut self) {
+		for _ in 1..self.player_count {
+			let player = self.players.pop_front().unwrap();
+
+			println!(
+				"{}'s cards: {}",
+				player.name,
+				cards_to_string(player.played())
+			);
+
+			self.players.push_back(player);
+		}
 	}
 }
 
@@ -123,24 +162,65 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 	}
 }
 
-fn read_action() -> Option<PlayerAction> {
-	let mut input = String::new();
+fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
+	if *count == 3 {
+		return Ok(Stop);
+	}
 
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
 		println!("{}: {}", i, action_text);
 	}
 
-	print!("What do you want to do? ");
+	let (action, update) = match input("What do you want to do? ").trim().parse() {
+		Ok(0) => (Play, *count + 1),
+		Ok(1) => (Pass, *count),
+		Ok(2) => (Rearrange, *count),
+		_ => return Err("You can't do that :o"),
+	};
+
+	if let Pass = action {
+		return Ok(Stop);
+	}
+
+	*count = update;
+
+	return Ok(Continue(action));
+}
+
+fn input(prompt: &str) -> String {
+	let mut input = String::new();
+
+	print!("{}", prompt);
 	stdout().flush().expect("Couldn't flush :<");
 
 	stdin()
 		.read_line(&mut input)
 		.expect("Couldn't read from `stdin`... :<");
 
-	match input.trim().parse() {
-		Ok(0) => Some(PlayerAction::Play),
-		Ok(1) => Some(PlayerAction::Pass),
-		Ok(2) => Some(PlayerAction::Rearrange),
-		    _ => None,
+	return input;
+}
+
+fn cards_to_string(cards: Vec<&Card>) -> String {
+	format!(
+		"[{}]",
+		cards
+			.iter()
+			.map(|card| card.to_string())
+			.collect::<Vec<String>>()
+			.join("; ")
+	)
+}
+
+fn choose_card(card_count: usize) -> usize {
+	if let Ok(n) = input("Choose card: ").trim().parse() {
+		if n < card_count {
+			return n;
+		}
 	}
+
+	println!(
+		"That can't be chosen, please enter a number between 0 and {}.",
+		card_count - 1
+	);
+	return choose_card(card_count);
 }

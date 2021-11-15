@@ -44,6 +44,6 @@ impl MoneyCard {
 
 impl fmt::Display for MoneyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{} M", self.denomination as u8)
+		write!(f, "{}M", self.denomination as u8)
 	}
 }

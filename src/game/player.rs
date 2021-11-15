@@ -31,4 +31,9 @@ impl Player {
 	pub fn played(&self) -> Vec<&Card> {
 		self.played.cards()
 	}
+
+	pub fn play_card_at(&mut self, position: usize) {
+		let selected_card = self.hand.remove(position);
+		self.played.add(selected_card);
+	}
 }

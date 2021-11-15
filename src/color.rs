@@ -16,17 +16,19 @@ pub enum Color {
 
 impl Color {
 	fn to_string(&self) -> &'static str {
+		use Color::*;
+
 		match self {
-			Color::Black => "Black",
-			Color::Blue => "Blue",
-			Color::Brown => "Brown",
-			Color::Green => "Green",
-			Color::LightBlue => "Light Blue",
-			Color::LightGreen => "Light Green",
-			Color::Orange => "Orange",
-			Color::Pink => "Pink",
-			Color::Red => "Red",
-			Color::Yellow => "Yellow",
+			Black       => "Black",
+			Blue        => "Blue",
+			Brown       => "Brown",
+			Green       => "Green",
+			LightBlue   => "Light Blue",
+			LightGreen  => "Light Green",
+			Orange      => "Orange",
+			Pink        => "Pink",
+			Red         => "Red",
+			Yellow      => "Yellow",
 		}
 	}
 }

@@ -45,17 +45,19 @@ impl Eq for PropertyCard {}
 
 impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		use Color::*;
+
 		let text = match self.color {
-			Color::Black	   => self.title.dark_grey(),
-			Color::Blue		   => self.title.dark_blue(),
-			Color::Brown	   => self.title.grey(),
-			Color::Green	   => self.title.dark_green(),
-			Color::LightBlue   => self.title.blue(),
-			Color::LightGreen  => self.title.green(),
-			Color::Orange	   => self.title.dark_yellow(),
-			Color::Pink		   => self.title.magenta(),
-			Color::Red		   => self.title.red(),
-			Color::Yellow	   => self.title.yellow(),
+			Black       => self.title.dark_grey(),
+			Blue        => self.title.dark_blue(),
+			Brown       => self.title.grey(),
+			Green       => self.title.dark_green(),
+			LightBlue   => self.title.blue(),
+			LightGreen  => self.title.green(),
+			Orange      => self.title.dark_yellow(),
+			Pink        => self.title.magenta(),
+			Red         => self.title.red(),
+			Yellow      => self.title.yellow(),
 		};
 
 		write!(f, "{}", text)
