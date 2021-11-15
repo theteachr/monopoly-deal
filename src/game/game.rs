@@ -30,6 +30,7 @@ enum PlayerInputState {
 }
 
 use PlayerInputState::*;
+use PlayerAction::*;
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {
@@ -99,9 +100,9 @@ impl Game {
 
 			match state {
 				Continue(action) => match action {
-					PlayerAction::Play      => self.handle_play(player),
-					PlayerAction::Pass      => todo!(), // should not be reachable
-					PlayerAction::Rearrange => todo!(),
+					Play      => self.handle_play(player),
+					Pass      => todo!(), // should not be reachable
+					Rearrange => todo!(),
 				},
 				Stop => return,
 			}
@@ -163,7 +164,7 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 
 fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
 	if *count == 3 {
-		return Ok(PlayerInputState::Stop);
+		return Ok(Stop);
 	}
 
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
@@ -171,14 +172,14 @@ fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
 	}
 
 	let (action, update) = match input("What do you want to do? ").trim().parse() {
-		Ok(0) => (PlayerAction::Play, *count + 1),
-		Ok(1) => (PlayerAction::Pass, *count),
-		Ok(2) => (PlayerAction::Rearrange, *count),
+		Ok(0) => (Play, *count + 1),
+		Ok(1) => (Pass, *count),
+		Ok(2) => (Rearrange, *count),
 		_ => return Err("You can't do that :o"),
 	};
 
-	if let PlayerAction::Pass = action {
-		return Ok(PlayerInputState::Stop);
+	if let Pass = action {
+		return Ok(Stop);
 	}
 
 	*count = update;
