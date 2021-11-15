@@ -206,7 +206,7 @@ fn input(prompt: &str) -> String {
 
 	stdin()
 		.read_line(&mut input)
-		.expect("Couldn't read from `stdin`... :<");
+		.expect("Couldn't read from `stdin` :<");
 
 	return input;
 }
