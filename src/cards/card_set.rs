@@ -9,7 +9,7 @@ pub struct CardSet {
 impl CardSet {
 	pub fn new() -> Self {
 		Self {
-			cards: Vec::with_capacity(7),
+			cards: Vec::new(),
 			size: 0,
 		}
 	}
