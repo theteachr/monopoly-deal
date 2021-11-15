@@ -23,6 +23,12 @@ enum PlayerAction {
 	Rearrange,
 }
 
+#[repr(u8)]
+enum PlayerInputState {
+	Continue(PlayerAction),
+	Stop,
+}
+
 impl Game {
 	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
@@ -57,15 +63,13 @@ impl Game {
 	pub fn initiate(&mut self) {
 		println!("The Deal has been initiated.");
 
-		// TODO take max three inputs
-
 		loop {
 			let mut player = self.players.pop_front().unwrap();
 			let cards_drawn = self.draw_pile.draw(DrawCount::Two);
 
 			player.update_hand(cards_drawn);
 
-			println!("{}. Your turn", player.name);
+			println!("{}. Your turn.", player.name);
 
 			println!("Hand: {}", cards_to_string(player.hand()));
 			println!("Table: {}", cards_to_string(player.played()));
@@ -78,11 +82,16 @@ impl Game {
 	}
 
 	fn handle_player_action(&mut self, player: &mut Player) {
-		while let Some(action) = read_action() {
-			match action {
-				PlayerAction::Play      => self.handle_play(player),
-				PlayerAction::Pass      => todo!(),
-				PlayerAction::Rearrange => todo!(),
+		let mut count = 0;
+
+		while let Ok(state) = read_action(&mut count) {
+			match state {
+				PlayerInputState::Continue(action) => match action {
+					PlayerAction::Play      => self.handle_play(player),
+					PlayerAction::Pass      => todo!(),
+					PlayerAction::Rearrange => todo!(),
+				},
+				PlayerInputState::Stop => return,
 			}
 		}
 
@@ -96,8 +105,6 @@ impl Game {
 
 		println!("Your cards:");
 		print_numbered_cards(&player.played());
-
-		println!("Rest of the Table:");
 
 		let card_position: usize = input("Choose card: ").trim().parse().unwrap();
 		let selected_card = player.hand.remove(card_position);
@@ -134,17 +141,29 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 	}
 }
 
-fn read_action() -> Option<PlayerAction> {
+fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
+	if *count == 3 {
+		return Ok(PlayerInputState::Stop);
+	}
+
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
 		println!("{}: {}", i, action_text);
 	}
 
-	match input("What do you want to do? ").trim().parse() {
-		Ok(0) => Some(PlayerAction::Play),
-		Ok(1) => Some(PlayerAction::Pass),
-		Ok(2) => Some(PlayerAction::Rearrange),
-		_ => None,
+	let (action, update) = match input("What do you want to do? ").trim().parse() {
+		Ok(0) => (PlayerAction::Play, *count + 1),
+		Ok(1) => (PlayerAction::Pass, *count),
+		Ok(2) => (PlayerAction::Rearrange, *count),
+		_ => return Err("You can't do that :o"),
+	};
+
+	if let PlayerAction::Pass = action {
+		return Ok(PlayerInputState::Stop);
 	}
+
+	*count = update;
+
+	return Ok(PlayerInputState::Continue(action));
 }
 
 fn input(prompt: &str) -> String {
