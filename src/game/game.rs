@@ -109,7 +109,6 @@ impl Game {
 		}
 
 		// TODO Handle excess cards in hand (<= 7)
-		// TODO Handle wrong card selection
 
 		println!("{}, you can't do that :o", player.name);
 		self.handle_player_action(player);
@@ -222,5 +221,6 @@ fn choose_card(card_count: usize) -> usize {
 		"That can't be chosen, please enter a number between 0 and {}.",
 		card_count - 1
 	);
+
 	return choose_card(card_count);
 }
