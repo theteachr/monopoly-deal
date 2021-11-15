@@ -32,12 +32,13 @@ impl Game {
 		let mut players = get_mock_players();
 
 		println!(
-			"Added {} players: {:?}.",
+			"Added {} players: {}.",
 			players.len(),
 			players
 				.iter()
 				.map(|p| p.name.as_str())
 				.collect::<Vec<&str>>()
+				.join(", ")
 		);
 
 		// distribute cards
@@ -64,12 +65,19 @@ impl Game {
 
 			player.update_hand(cards_drawn);
 
-			self.handle_player_actions(&mut player);
+			println!("{}. Your turn", player.name);
+
+			println!("Hand: {}", cards_to_string(player.hand()));
+			println!("Table: {}", cards_to_string(player.played()));
+
+			self.table();
+
+			self.handle_player_action(&mut player);
 			self.players.push_back(player);
 		}
 	}
 
-	fn handle_player_actions(&mut self, player: &mut Player) {
+	fn handle_player_action(&mut self, player: &mut Player) {
 		while let Some(action) = read_action() {
 			match action {
 				PlayerAction::Play      => self.handle_play(player),
@@ -79,39 +87,36 @@ impl Game {
 		}
 
 		println!("You can't do that :o");
-		self.handle_player_actions(player);
+		self.handle_player_action(player);
 	}
 
 	fn handle_play(&mut self, player: &mut Player) {
-		let hand_cards = player.hand();
-		let played_cards = player.played();
-
-		println!(
-			"{}. Your turn. You have {} card(s) in your hand.",
-			player.name,
-			hand_cards.len()
-		);
-
 		println!("Cards in your hand:");
-		print_numbered_cards(&hand_cards);
+		print_numbered_cards(&player.hand());
 
 		println!("Your cards:");
-		print_numbered_cards(&played_cards);
+		print_numbered_cards(&player.played());
 
 		println!("Rest of the Table:");
-
-		for _ in 1..self.player_count {
-			let other_player = self.players.pop_front().unwrap();
-
-			println!("{}'s Cards --->", other_player.name);
-			print_numbered_cards(&other_player.played());
-			self.players.push_back(other_player);
-		}
 
 		let card_position: usize = input("Choose card: ").trim().parse().unwrap();
 		let selected_card = player.hand.remove(card_position);
 
 		player.played.add(selected_card);
+	}
+
+	fn table(&mut self) {
+		for _ in 1..self.player_count {
+			let player = self.players.pop_front().unwrap();
+
+			println!(
+				"{}'s Cards: {}",
+				player.name,
+				cards_to_string(player.played())
+			);
+
+			self.players.push_back(player);
+		}
 	}
 }
 
@@ -138,7 +143,7 @@ fn read_action() -> Option<PlayerAction> {
 		Ok(0) => Some(PlayerAction::Play),
 		Ok(1) => Some(PlayerAction::Pass),
 		Ok(2) => Some(PlayerAction::Rearrange),
-		    _ => None,
+		_ => None,
 	}
 }
 
@@ -153,4 +158,15 @@ fn input(prompt: &str) -> String {
 		.expect("Couldn't read from `stdin`... :<");
 
 	return input;
+}
+
+fn cards_to_string(cards: Vec<&Card>) -> String {
+	format!(
+		"[{}]",
+		cards
+			.iter()
+			.map(|card| card.to_string())
+			.collect::<Vec<String>>()
+			.join("; ")
+	)
 }
