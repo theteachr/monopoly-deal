@@ -38,7 +38,7 @@ impl Game {
 
 		println!("Shuffled {} cards.", draw_pile.len());
 
-		let mut players = get_mock_players();
+		let mut players = get_mock_players(player_count);
 
 		println!(
 			"Added {} players: {}.",
@@ -147,9 +147,10 @@ impl Game {
 	}
 }
 
-fn get_mock_players() -> Vec<Player> {
-	["Rick", "Morty"]
+fn get_mock_players(count: u8) -> Vec<Player> {
+	["Rick", "Morty", "Pupa", "Gourd", "Harge"]
 		.iter()
+		.take(count as usize)
 		.enumerate()
 		.map(|(i, name)| Player::new(i, String::from(*name)))
 		.collect()
