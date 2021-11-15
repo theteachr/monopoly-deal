@@ -128,7 +128,7 @@ impl Game {
 		// A player is not allowed to have more than 7 cards in their hand at theend of a turn.
 		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
 		let card_count = player.hand.len();
-		let to_be_discarded = card_count - 7;
+		let to_be_discarded: i8 = card_count as i8 - 7;
 
 		if to_be_discarded <= 0 {
 			return;
