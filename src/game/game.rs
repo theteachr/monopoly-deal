@@ -83,8 +83,6 @@ impl Game {
 	}
 
 	fn handle_play(&mut self, player: &mut Player) {
-		let mut input = String::new();
-
 		let hand_cards = player.hand();
 		let played_cards = player.played();
 
@@ -110,14 +108,7 @@ impl Game {
 			self.players.push_back(other_player);
 		}
 
-		print!("Type card number: ");
-		stdout().flush().expect("Couldn't flush :<");
-
-		stdin()
-			.read_line(&mut input)
-			.expect("Couldn't read from `stdin`... :<");
-
-		let card_position: usize = input.trim().parse().unwrap();
+		let card_position: usize = input("Choose card: ").trim().parse().unwrap();
 		let selected_card = player.hand.remove(card_position);
 
 		player.played.add(selected_card);
@@ -139,23 +130,27 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 }
 
 fn read_action() -> Option<PlayerAction> {
-	let mut input = String::new();
-
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
 		println!("{}: {}", i, action_text);
 	}
 
-	print!("What do you want to do? ");
+	match input("What do you want to do? ").trim().parse() {
+		Ok(0) => Some(PlayerAction::Play),
+		Ok(1) => Some(PlayerAction::Pass),
+		Ok(2) => Some(PlayerAction::Rearrange),
+		    _ => None,
+	}
+}
+
+fn input(prompt: &str) -> String {
+	let mut input = String::new();
+
+	print!("{}", prompt);
 	stdout().flush().expect("Couldn't flush :<");
 
 	stdin()
 		.read_line(&mut input)
 		.expect("Couldn't read from `stdin`... :<");
 
-	match input.trim().parse() {
-		Ok(0) => Some(PlayerAction::Play),
-		Ok(1) => Some(PlayerAction::Pass),
-		Ok(2) => Some(PlayerAction::Rearrange),
-		    _ => None,
-	}
+	return input;
 }
