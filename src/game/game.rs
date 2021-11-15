@@ -82,7 +82,6 @@ impl Game {
 		let mut count = 0;
 
 		while let Ok(state) = read_action(&mut count) {
-			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 			println!("{}'s played cards: {}", player.name, cards_to_string(player.played()));
 
 			match state {
@@ -102,7 +101,6 @@ impl Game {
 	}
 
 	fn handle_play(&mut self, player: &mut Player) {
-		println!("{}'s Hand:", player.name);
 		print_numbered_cards(&player.hand());
 
 		let card_position: usize = input("Choose card: ").trim().parse().unwrap();
