@@ -97,6 +97,7 @@ impl Game {
 		}
 
 		// TODO Handle excess cards in hand (<= 7)
+		// TODO Handle wrong card selection
 
 		println!("{}, you can't do that :o", player.name);
 		self.handle_player_action(player);
