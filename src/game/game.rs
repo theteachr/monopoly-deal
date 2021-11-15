@@ -76,6 +76,8 @@ impl Game {
 			self.table();
 
 			self.handle_player_action(&mut player);
+			self.handle_excess_cards(&mut player);
+
 			self.players.push_back(player);
 		}
 	}
@@ -109,6 +111,16 @@ impl Game {
 		let card_position: usize = input("Choose card: ").trim().parse().unwrap();
 
 		player.play_card_at(card_position);
+	}
+
+	fn handle_excess_cards(&self, player: &mut Player) {
+		// A player is not allowed to have more than 7 cards in their hand at theend of a turn.
+		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
+		let card_count = player.hand.len();
+
+		if card_count > 7 {
+			println!("You need to discard {}.", card_count - 7);
+		}
 	}
 
 	fn table(&mut self) {
