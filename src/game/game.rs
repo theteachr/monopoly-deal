@@ -69,10 +69,7 @@ impl Game {
 
 			player.update_hand(cards_drawn);
 
-			println!("{}. Your turn.", player.name);
-
-			println!("Hand: {}", cards_to_string(player.hand()));
-			println!("Table: {}", cards_to_string(player.played()));
+			println!("{}'s turn.", player.name);
 
 			self.table();
 
@@ -85,6 +82,9 @@ impl Game {
 		let mut count = 0;
 
 		while let Ok(state) = read_action(&mut count) {
+			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
+			println!("{}'s played cards: {}", player.name, cards_to_string(player.played()));
+
 			match state {
 				PlayerInputState::Continue(action) => match action {
 					PlayerAction::Play      => self.handle_play(player),
@@ -95,21 +95,17 @@ impl Game {
 			}
 		}
 
-		println!("You can't do that :o");
+		println!("{}, you can't do that :o", player.name);
 		self.handle_player_action(player);
 	}
 
 	fn handle_play(&mut self, player: &mut Player) {
-		println!("Cards in your hand:");
+		println!("{}'s Hand:", player.name);
 		print_numbered_cards(&player.hand());
 
-		println!("Your cards:");
-		print_numbered_cards(&player.played());
-
 		let card_position: usize = input("Choose card: ").trim().parse().unwrap();
-		let selected_card = player.hand.remove(card_position);
 
-		player.played.add(selected_card);
+		player.play_card_at(card_position);
 	}
 
 	fn table(&mut self) {
