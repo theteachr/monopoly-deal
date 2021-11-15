@@ -125,7 +125,7 @@ impl Game {
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
-		// A player is not allowed to have more than 7 cards in their hand at theend of a turn.
+		// A player is not allowed to have more than 7 cards in their hand at the end of a turn.
 		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
 		let card_count = player.hand.len();
 		let to_be_discarded: i8 = card_count as i8 - 7;
