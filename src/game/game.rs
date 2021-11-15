@@ -88,7 +88,7 @@ impl Game {
 			match state {
 				PlayerInputState::Continue(action) => match action {
 					PlayerAction::Play      => self.handle_play(player),
-					PlayerAction::Pass      => todo!(),
+					PlayerAction::Pass      => todo!(), // should not be reachable
 					PlayerAction::Rearrange => todo!(),
 				},
 				PlayerInputState::Stop => return,
@@ -115,7 +115,7 @@ impl Game {
 			let player = self.players.pop_front().unwrap();
 
 			println!(
-				"{}'s Cards: {}",
+				"{}'s cards: {}",
 				player.name,
 				cards_to_string(player.played())
 			);
