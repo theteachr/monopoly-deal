@@ -29,6 +29,8 @@ enum PlayerInputState {
 	Stop,
 }
 
+use PlayerInputState::*;
+
 impl Game {
 	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
@@ -85,12 +87,12 @@ impl Game {
 			println!("{}'s played cards: {}", player.name, cards_to_string(player.played()));
 
 			match state {
-				PlayerInputState::Continue(action) => match action {
+				Continue(action) => match action {
 					PlayerAction::Play      => self.handle_play(player),
 					PlayerAction::Pass      => todo!(), // should not be reachable
 					PlayerAction::Rearrange => todo!(),
 				},
-				PlayerInputState::Stop => return,
+				Stop => return,
 			}
 		}
 
@@ -159,7 +161,7 @@ fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
 
 	*count = update;
 
-	return Ok(PlayerInputState::Continue(action));
+	return Ok(Continue(action));
 }
 
 fn input(prompt: &str) -> String {
