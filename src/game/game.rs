@@ -87,7 +87,7 @@ impl Game {
 			);
 			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 
-			self.handle_player_action(&mut player, &mut 0);
+			self.handle_player_action(&mut player, &mut 1);
 			self.handle_excess_cards(&mut player);
 
 			self.players.push_back(player);
@@ -177,11 +177,11 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 }
 
 fn read_action(cards_played: &mut u8) -> Result<PlayerInputState, &str> {
-	if *cards_played == 3 {
+	if *cards_played > 3 {
 		return Ok(Stop);
 	}
 
-	let prompt = format!("({}) What do you want to do? ", *cards_played + 1);
+	let prompt = format!("({}) What do you want to do? ", *cards_played);
 
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
 		println!("{}: {}", i, action_text);
