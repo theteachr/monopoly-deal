@@ -13,16 +13,16 @@ use crossterm::style::Stylize;
 #[derive(Debug)]
 pub struct PropertyCard {
 	value: u8,
-	pub title: &'static str,
+	pub name: &'static str,
 	pub color: Color,
 	pub rents: RentVec,
 }
 
 impl PropertyCard {
-	pub fn new(value: u8, title: &'static str, color: Color, rents: RentVec) -> Self {
+	pub fn new(value: u8, name: &'static str, color: Color, rents: RentVec) -> Self {
 		Self {
 			value,
-			title,
+			name,
 			color,
 			rents,
 		}
@@ -31,13 +31,13 @@ impl PropertyCard {
 
 impl Hash for PropertyCard {
 	fn hash<H: Hasher>(&self, state: &mut H) {
-		self.title.hash(state);
+		self.name.hash(state);
 	}
 }
 
 impl PartialEq for PropertyCard {
 	fn eq(&self, other: &Self) -> bool {
-		self.title == other.title
+		self.name == other.name
 	}
 }
 
@@ -48,16 +48,16 @@ impl fmt::Display for PropertyCard {
 		use Color::*;
 
 		let text = match self.color {
-			Blue => self.title.dark_blue(),
-			Green => self.title.dark_green(),
-			Magenta => self.title.dark_magenta(),
-			Red => self.title.dark_red(),
-			Yellow => self.title.dark_yellow(),
-			LightBlue => self.title.blue(),
-			LightGreen => self.title.green(),
-			LightMagenta => self.title.magenta(),
-			LightRed => self.title.red(),
-			LightYellow => self.title.yellow(),
+			Blue => self.name.dark_blue(),
+			Green => self.name.dark_green(),
+			Magenta => self.name.dark_magenta(),
+			Red => self.name.dark_red(),
+			Yellow => self.name.dark_yellow(),
+			LightBlue => self.name.blue(),
+			LightGreen => self.name.green(),
+			LightMagenta => self.name.magenta(),
+			LightRed => self.name.red(),
+			LightYellow => self.name.yellow(),
 		};
 
 		write!(f, "{}", text)

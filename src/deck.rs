@@ -24,11 +24,11 @@ impl Deck {
 	pub fn new() -> Self {
 		let mut cards = Vec::new();
 
-		for (value, color, titles) in PROPERTIES.iter() {
-			for title in *titles {
+		for (value, color, names) in PROPERTIES.iter() {
+			for name in *names {
 				cards.push(Property(PropertyCard::new(
 					*value,
-					title,
+					name,
 					*color,
 					RentVec::new(*color),
 				)));
