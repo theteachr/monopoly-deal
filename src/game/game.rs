@@ -115,6 +115,9 @@ impl Game {
 
 		let card_position: usize = choose_card(player.hand.len());
 
+		// XXX read numbers of all cards the user wants to play (will require the numbers be
+		// sorted in descending order)
+
 		player.play_card_at(card_position);
 		println!("{}'s assets: {}", player.name, cards_to_string(player.played()));
 		println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));

@@ -1,5 +1,7 @@
 use std::fmt;
 
+// TODO use terminal friendly colors
+
 #[derive(Copy, Clone)]
 pub enum Color {
 	Black,
