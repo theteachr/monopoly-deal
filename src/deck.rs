@@ -53,7 +53,7 @@ impl Deck {
 			cards.push(self.cards.pop().unwrap());
 		}
 
-		cards
+		return cards;
 	}
 
 	pub fn len(&self) -> u8 {
