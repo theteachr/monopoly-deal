@@ -102,8 +102,8 @@ impl Game {
 		while let Ok(state) = read_action(&mut count) {
 			match state {
 				Continue(action) => match action {
-					     Play => self.handle_play(player),
-					     Pass => todo!(), // should not be reachable
+					Play => self.handle_play(player),
+					Pass => todo!(), // should not be reachable
 					Rearrange => todo!(),
 				},
 				Stop => return,
@@ -193,7 +193,7 @@ fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
 		Ok(0) => (Play, *count + 1),
 		Ok(1) => (Pass, *count),
 		Ok(2) => (Rearrange, *count),
-		    _ => return Err("You can't do that :o"),
+		_ => return Err("You can't do that :o"),
 	};
 
 	if let Pass = action {

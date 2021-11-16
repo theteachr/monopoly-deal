@@ -48,16 +48,16 @@ impl fmt::Display for PropertyCard {
 		use Color::*;
 
 		let text = match self.color {
-			     Black => self.title.dark_grey(),
-			      Blue => self.title.dark_blue(),
-			     Brown => self.title.grey(),
-			     Green => self.title.dark_green(),
-			 LightBlue => self.title.blue(),
+			Blue => self.title.dark_blue(),
+			Green => self.title.dark_green(),
+			Magenta => self.title.dark_magenta(),
+			Red => self.title.dark_red(),
+			Yellow => self.title.dark_yellow(),
+			LightBlue => self.title.blue(),
 			LightGreen => self.title.green(),
-			    Orange => self.title.dark_yellow(),
-			      Pink => self.title.magenta(),
-			       Red => self.title.red(),
-			    Yellow => self.title.yellow(),
+			LightMagenta => self.title.magenta(),
+			LightRed => self.title.red(),
+			LightYellow => self.title.yellow(),
 		};
 
 		write!(f, "{}", text)

@@ -1,7 +1,7 @@
 use crate::color::Color;
 
 pub const PROPERTIES: [(u8, Color, &[&str]); 10] = [
-	(1, Color::Brown, &["Baltic Avenue", "Mediterranean Avenue"]),
+	(1, Color::LightRed, &["Baltic Avenue", "Mediterranean Avenue"]),
 	(4, Color::Blue, &["Broadwalk", "Park Place"]),
 	(
 		4,
@@ -19,17 +19,17 @@ pub const PROPERTIES: [(u8, Color, &[&str]); 10] = [
 	),
 	(
 		2,
-		Color::Orange,
+		Color::LightYellow,
 		&["New York Avenue", "St. James Place", "Tennesse Avenue"],
 	),
 	(
 		2,
-		Color::Pink,
+		Color::LightMagenta,
 		&["St. Charles Place", "Virginia Avenue", "States Avenue"],
 	),
 	(
 		2,
-		Color::Black,
+		Color::Magenta,
 		&[
 			"Short Line",
 			"B. & O. Railroad",
