@@ -17,14 +17,12 @@ pub struct Game {
 
 const ACTION_TEXTS: [&str; 3] = ["Play a card", "Pass", "Rearrange"];
 
-#[repr(u8)]
 enum PlayerAction {
 	Play,
 	Pass,
 	Rearrange,
 }
 
-#[repr(u8)]
 enum PlayerInputState {
 	Continue(PlayerAction),
 	Stop,
