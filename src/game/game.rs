@@ -82,6 +82,8 @@ impl Game {
 			println!("{}'s turn.", player.name);
 
 			self.table();
+			println!("{}'s assets: {}", player.name, cards_to_string(player.played()));
+			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 
 			self.handle_player_action(&mut player);
 			self.handle_excess_cards(&mut player);
@@ -94,12 +96,6 @@ impl Game {
 		let mut count = 0;
 
 		while let Ok(state) = read_action(&mut count) {
-			println!(
-				"{}'s played cards: {}",
-				player.name,
-				cards_to_string(player.played())
-			);
-
 			match state {
 				Continue(action) => match action {
 					Play      => self.handle_play(player),
@@ -120,6 +116,8 @@ impl Game {
 		let card_position: usize = choose_card(player.hand.len());
 
 		player.play_card_at(card_position);
+		println!("{}'s assets: {}", player.name, cards_to_string(player.played()));
+		println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
@@ -146,7 +144,7 @@ impl Game {
 			let player = self.players.pop_front().unwrap();
 
 			println!(
-				"{}'s cards: {}",
+				"{}'s assets: {}",
 				player.name,
 				cards_to_string(player.played())
 			);
