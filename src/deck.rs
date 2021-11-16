@@ -16,7 +16,7 @@ pub struct Deck {
 
 #[repr(u8)]
 pub enum DrawCount {
-	Two = 2,
+	 Two = 2,
 	Five = 5,
 }
 
