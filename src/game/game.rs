@@ -87,17 +87,15 @@ impl Game {
 			);
 			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 
-			self.handle_player_action(&mut player);
+			self.handle_player_action(&mut player, &mut 0);
 			self.handle_excess_cards(&mut player);
 
 			self.players.push_back(player);
 		}
 	}
 
-	fn handle_player_action(&mut self, player: &mut Player) {
-		let mut count = 0;
-
-		while let Ok(state) = read_action(&mut count) {
+	fn handle_player_action(&mut self, player: &mut Player, cards_played: &mut u8) {
+		while let Ok(state) = read_action(cards_played) {
 			match state {
 				Continue(action) => match action {
 					Play => self.handle_play(player),
@@ -109,7 +107,7 @@ impl Game {
 		}
 
 		println!("{}, you can't do that :o", player.name);
-		self.handle_player_action(player);
+		self.handle_player_action(player, cards_played);
 	}
 
 	fn handle_play(&mut self, player: &mut Player) {
@@ -178,21 +176,21 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 	}
 }
 
-fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
-	if *count == 3 {
+fn read_action(cards_played: &mut u8) -> Result<PlayerInputState, &str> {
+	if *cards_played == 3 {
 		return Ok(Stop);
 	}
 
-	let prompt = format!("({}) What do you want to do? ", *count + 1);
+	let prompt = format!("({}) What do you want to do? ", *cards_played + 1);
 
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
 		println!("{}: {}", i, action_text);
 	}
 
 	let (action, update) = match input(&prompt).trim().parse() {
-		Ok(0) => (Play, *count + 1),
-		Ok(1) => (Pass, *count),
-		Ok(2) => (Rearrange, *count),
+		Ok(0) => (Play, *cards_played + 1),
+		Ok(1) => (Pass, *cards_played),
+		Ok(2) => (Rearrange, *cards_played),
 		_ => return Err("You can't do that :o"),
 	};
 
@@ -200,7 +198,7 @@ fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
 		return Ok(Stop);
 	}
 
-	*count = update;
+	*cards_played = update;
 
 	return Ok(Continue(action));
 }
