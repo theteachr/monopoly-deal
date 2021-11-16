@@ -185,11 +185,13 @@ fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
 		return Ok(Stop);
 	}
 
+	let prompt = format!("({}) What do you want to do? ", *count + 1);
+
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
 		println!("{}: {}", i, action_text);
 	}
 
-	let (action, update) = match input("What do you want to do? ").trim().parse() {
+	let (action, update) = match input(&prompt).trim().parse() {
 		Ok(0) => (Play, *count + 1),
 		Ok(1) => (Pass, *count),
 		Ok(2) => (Rearrange, *count),
