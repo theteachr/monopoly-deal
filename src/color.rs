@@ -21,16 +21,16 @@ impl Color {
 		use Color::*;
 
 		match self {
-			Black       => "Black",
-			Blue        => "Blue",
-			Brown       => "Brown",
-			Green       => "Green",
-			LightBlue   => "Light Blue",
-			LightGreen  => "Light Green",
-			Orange      => "Orange",
-			Pink        => "Pink",
-			Red         => "Red",
-			Yellow      => "Yellow",
+			     Black => "Black",
+			      Blue => "Blue",
+			     Brown => "Brown",
+			     Green => "Green",
+			 LightBlue => "Light Blue",
+			LightGreen => "Light Green",
+			    Orange => "Orange",
+			      Pink => "Pink",
+			       Red => "Red",
+			    Yellow => "Yellow",
 		}
 	}
 }

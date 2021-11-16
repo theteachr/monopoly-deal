@@ -3,12 +3,12 @@ use std::fmt;
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 #[repr(u8)]
 enum Denomination {
-	One    = 1,
-	Two    = 2,
-	Three  = 3,
-	Four   = 4,
-	Five   = 5,
-	Ten    = 10,
+	  One = 1,
+	  Two = 2,
+	Three = 3,
+	 Four = 4,
+	 Five = 5,
+	  Ten = 10,
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]

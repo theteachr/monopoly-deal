@@ -30,8 +30,8 @@ enum PlayerInputState {
 	Stop,
 }
 
-use PlayerInputState::*;
 use PlayerAction::*;
+use PlayerInputState::*;
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {
@@ -82,7 +82,11 @@ impl Game {
 			println!("{}'s turn.", player.name);
 
 			self.table();
-			println!("{}'s assets: {}", player.name, cards_to_string(player.played()));
+			println!(
+				"{}'s assets: {}",
+				player.name,
+				cards_to_string(player.played())
+			);
 			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 
 			self.handle_player_action(&mut player);
@@ -98,8 +102,8 @@ impl Game {
 		while let Ok(state) = read_action(&mut count) {
 			match state {
 				Continue(action) => match action {
-					Play      => self.handle_play(player),
-					Pass      => todo!(), // should not be reachable
+					     Play => self.handle_play(player),
+					     Pass => todo!(), // should not be reachable
 					Rearrange => todo!(),
 				},
 				Stop => return,
@@ -119,7 +123,11 @@ impl Game {
 		// sorted in descending order)
 
 		player.play_card_at(card_position);
-		println!("{}'s assets: {}", player.name, cards_to_string(player.played()));
+		println!(
+			"{}'s assets: {}",
+			player.name,
+			cards_to_string(player.played())
+		);
 		println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 	}
 
@@ -185,7 +193,7 @@ fn read_action(count: &mut u8) -> Result<PlayerInputState, &str> {
 		Ok(0) => (Play, *count + 1),
 		Ok(1) => (Pass, *count),
 		Ok(2) => (Rearrange, *count),
-		_ => return Err("You can't do that :o"),
+		    _ => return Err("You can't do that :o"),
 	};
 
 	if let Pass = action {
