@@ -99,7 +99,7 @@ impl Game {
 			match state {
 				Continue(action) => match action {
 					Play => self.handle_play(player),
-					Pass => todo!(), // should not be reachable
+					Pass => return,
 					Rearrange => todo!(),
 				},
 				Stop => return,
@@ -193,10 +193,6 @@ fn read_action(cards_played: &mut u8) -> Result<PlayerInputState, &str> {
 		Ok(2) => (Rearrange, *cards_played),
 		_ => return Err("You can't do that :o"),
 	};
-
-	if let Pass = action {
-		return Ok(Stop);
-	}
 
 	*cards_played = update;
 
