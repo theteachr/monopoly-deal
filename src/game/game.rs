@@ -4,7 +4,7 @@ use crate::{
 	game::player::Player,
 };
 
-use std::collections::VecDeque;
+use std::collections::{HashSet, VecDeque};
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
@@ -95,30 +95,33 @@ impl Game {
 	}
 
 	fn handle_player_action(&mut self, player: &mut Player, cards_played: &mut u8) {
-		while let Ok(state) = read_action(cards_played) {
-			match state {
-				Continue(action) => match action {
-					Play => self.handle_play(player),
-					Pass => return,
-					Rearrange => todo!(),
-				},
-				Stop => return,
+		loop {
+			while let Ok(state) = read_action(cards_played) {
+				match state {
+					Continue(action) => match action {
+						Play => self.handle_play(player),
+						Pass => return,
+						Rearrange => todo!(),
+					},
+					Stop => return,
+				}
 			}
-		}
 
-		println!("{}, you can't do that :o", player.name);
-		self.handle_player_action(player, cards_played);
+			println!("{}, you can't do that :o", player.name);
+		}
 	}
 
 	fn handle_play(&mut self, player: &mut Player) {
 		print_numbered_cards(&player.hand());
 
-		let card_position: usize = choose_card(player.hand.len());
+		let card_positions = read_card_numbers(player.hand.len());
 
 		// XXX read numbers of all cards the user wants to play (will require the numbers be
 		// sorted in descending order)
 
-		player.play_card_at(card_position);
+		println!("{:?}", card_positions);
+
+		// player.play_card_at(card_position);
 		println!(
 			"{}'s assets: {}",
 			player.name,
@@ -141,8 +144,8 @@ impl Game {
 
 		for _ in 0..to_be_discarded {
 			print_numbered_cards(&player.hand());
-			let card = player.hand.remove(choose_card(player.hand.len()));
-			self.discard_pile.add(card);
+			// let card = player.hand.remove(read_card_numbers(player.hand.len()));
+			// self.discard_pile.add(card);
 		}
 	}
 
@@ -223,17 +226,25 @@ fn cards_to_string(cards: Vec<&Card>) -> String {
 	)
 }
 
-fn choose_card(card_count: usize) -> usize {
-	if let Ok(n) = input("Choose card: ").trim().parse() {
-		if n < card_count {
-			return n;
+fn read_card_numbers(card_count: usize) -> HashSet<u8> {
+	loop {
+		let results = input("Enter the numbers of cards that you want to play: ")
+			.trim()
+			.split(" ")
+			.map(|n| is_valid_card_number(n.parse().ok(), card_count))
+			.collect::<Option<HashSet<u8>>>();
+
+		match results {
+			Some(card_numbers) => return card_numbers,
+			None => continue,
 		}
 	}
+}
 
-	println!(
-		"That can't be chosen, please enter a number between 0 and {}.",
-		card_count - 1
-	);
-
-	return choose_card(card_count);
+fn is_valid_card_number(n: Option<u8>, card_count: usize) -> Option<u8> {
+    n.and_then(|n| if (n as usize) < card_count {
+        Some(n)
+    } else {
+        None
+    })
 }
