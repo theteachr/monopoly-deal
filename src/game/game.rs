@@ -68,11 +68,12 @@ impl Game {
 
 		loop {
 			let mut player = self.players.pop_front().unwrap();
-			let draw_count = if player.hand.len() == 0 {
-				DrawCount::Five
-			} else {
-				DrawCount::Two
+
+			let draw_count = match player.hand.len() {
+				0 => DrawCount::Five,
+				_ => DrawCount::Two,
 			};
+
 			let cards_drawn = self.draw_pile.draw(draw_count);
 
 			player.update_hand(cards_drawn);
