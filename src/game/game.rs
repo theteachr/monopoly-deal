@@ -95,33 +95,20 @@ impl Game {
 	}
 
 	fn handle_player_action(&mut self, player: &mut Player, cards_played: &mut u8) {
-		loop {
-			while let Ok(state) = read_action(cards_played) {
-				match state {
-					Continue(action) => match action {
-						Play => self.handle_play(player),
-						Pass => return,
-						Rearrange => todo!(),
-					},
-					Stop => return,
-				}
-			}
-
-			println!("{}, you can't do that :o", player.name);
+		while let Some(action) = read_action(cards_played) {
+			match action {
+				Play => self.handle_play(player),
+				Pass => return,
+				Rearrange => todo!(),
+			};
 		}
 	}
 
 	fn handle_play(&mut self, player: &mut Player) {
-		print_numbered_cards(&player.hand());
-
-		let card_positions = read_card_numbers(player.hand.len());
-
-		// XXX read numbers of all cards the user wants to play (will require the numbers be
-		// sorted in descending order)
+		let card_positions = read_card_numbers(&player.hand());
 
 		println!("{:?}", card_positions);
 
-		// player.play_card_at(card_position);
 		println!(
 			"{}'s assets: {}",
 			player.name,
@@ -179,9 +166,9 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 	}
 }
 
-fn read_action(cards_played: &mut u8) -> Result<PlayerInputState, &str> {
+fn read_action(cards_played: &mut u8) -> Option<PlayerAction> {
 	if *cards_played > 3 {
-		return Ok(Stop);
+		return None;
 	}
 
 	let prompt = format!("({}) What do you want to do? ", *cards_played);
@@ -190,16 +177,18 @@ fn read_action(cards_played: &mut u8) -> Result<PlayerInputState, &str> {
 		println!("{}: {}", i, action_text);
 	}
 
-	let (action, update) = match input(&prompt).trim().parse() {
-		Ok(0) => (Play, *cards_played + 1),
-		Ok(1) => (Pass, *cards_played),
-		Ok(2) => (Rearrange, *cards_played),
-		_ => return Err("You can't do that :o"),
+	let (action, update) = loop {
+		match input(&prompt).trim().parse() {
+			Ok(0) => break (Play, *cards_played + 1),
+			Ok(1) => break (Pass, *cards_played),
+			Ok(2) => break (Rearrange, *cards_played),
+			_ => continue,
+		};
 	};
 
 	*cards_played = update;
 
-	return Ok(Continue(action));
+	return Some(action);
 }
 
 fn input(prompt: &str) -> String {
@@ -226,7 +215,9 @@ fn cards_to_string(cards: Vec<&Card>) -> String {
 	)
 }
 
-fn read_card_numbers(card_count: usize) -> Vec<u8> {
+fn read_card_numbers(cards: &Vec<&Card>) -> Vec<u8> {
+	print_numbered_cards(cards);
+
 	let mut results = loop {
 		match input("Enter the numbers of cards that you want to play: ")
 			.trim()
@@ -234,9 +225,13 @@ fn read_card_numbers(card_count: usize) -> Vec<u8> {
 			.map(|n| n.parse().ok())
 			.collect::<Option<HashSet<u8>>>()
 		{
-			Some(nums) => break nums.into_iter().collect::<Vec<u8>>(),
+			Some(nums) => {
+				if nums.iter().all(|&n| (n as usize) < cards.len()) {
+					break nums.into_iter().collect::<Vec<u8>>();
+				}
+			}
 			None => continue,
-		}
+		};
 	};
 
 	results.sort_by_key(|k| std::cmp::Reverse(*k));
