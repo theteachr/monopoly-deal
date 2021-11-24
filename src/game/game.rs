@@ -87,15 +87,19 @@ impl Game {
 			);
 			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 
-			self.handle_player_action(&mut player, &mut 1);
+			// TODO: Use a struct to maintain the states needed for a turn
+
+			self.handle_player_action(&mut player);
 			self.handle_excess_cards(&mut player);
 
 			self.players.push_back(player);
 		}
 	}
 
-	fn handle_player_action(&mut self, player: &mut Player, cards_played: &mut u8) {
-		while let Some(action) = read_action(cards_played) {
+	fn handle_player_action(&mut self, player: &mut Player) {
+		let mut cards_played = 0;
+
+		while let Some(action) = read_action(&mut cards_played) {
 			match action {
 				Play => self.handle_play(player),
 				Pass => return,
@@ -108,6 +112,7 @@ impl Game {
 		let card_positions = read_card_numbers(&player.hand());
 
 		println!("{:?}", card_positions);
+		self.play_cards(player, card_positions);
 
 		println!(
 			"{}'s assets: {}",
@@ -115,6 +120,12 @@ impl Game {
 			cards_to_string(player.played())
 		);
 		println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
+	}
+
+	fn play_cards(&self, player: &mut Player, card_positions: Vec<u8>) {
+		for pos in card_positions.into_iter() {
+			player.play_card_at(pos as usize);
+		}
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
@@ -171,7 +182,7 @@ fn read_action(cards_played: &mut u8) -> Option<PlayerAction> {
 		return None;
 	}
 
-	let prompt = format!("({}) What do you want to do? ", *cards_played);
+	let prompt = format!("({}) What do you want to do? ", *cards_played + 1);
 
 	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
 		println!("{}: {}", i, action_text);
