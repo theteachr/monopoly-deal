@@ -226,25 +226,20 @@ fn cards_to_string(cards: Vec<&Card>) -> String {
 	)
 }
 
-fn read_card_numbers(card_count: usize) -> HashSet<u8> {
-	loop {
-		let results = input("Enter the numbers of cards that you want to play: ")
+fn read_card_numbers(card_count: usize) -> Vec<u8> {
+	let mut results = loop {
+		match input("Enter the numbers of cards that you want to play: ")
 			.trim()
 			.split(" ")
-			.map(|n| is_valid_card_number(n.parse().ok(), card_count))
-			.collect::<Option<HashSet<u8>>>();
-
-		match results {
-			Some(card_numbers) => return card_numbers,
+			.map(|n| n.parse().ok())
+			.collect::<Option<HashSet<u8>>>()
+		{
+			Some(nums) => break nums.into_iter().collect::<Vec<u8>>(),
 			None => continue,
 		}
-	}
-}
+	};
 
-fn is_valid_card_number(n: Option<u8>, card_count: usize) -> Option<u8> {
-    n.and_then(|n| if (n as usize) < card_count {
-        Some(n)
-    } else {
-        None
-    })
+	results.sort_by_key(|k| std::cmp::Reverse(*k));
+
+	return results;
 }
