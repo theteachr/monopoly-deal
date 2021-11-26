@@ -81,7 +81,7 @@ impl Game {
 	}
 
 	fn handle_player_action(&mut self, player: &mut Player) {
-		player.print_hand();
+		player.print_numbered_hand();
 
 		let actions = loop {
 			match input("> ")
@@ -95,14 +95,14 @@ impl Game {
 			}
 		};
 
+		// TODO sort cards in descending order
+
 		for action in actions.iter() {
 			match action {
 				Play(position) => player.play_card_at(*position as usize),
 				Rearrange => todo!(),
 			}
 		}
-
-		println!("{:?}", actions);
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {

@@ -52,15 +52,12 @@ impl Player {
 	pub fn print_hand(&self) {
 		println!("{}'s hand: {}", self.name, self.hand);
 	}
-}
 
-fn cards_to_string(cards: Vec<&Card>) -> String {
-	format!(
-		"[{}]",
-		cards
-			.iter()
-			.map(|card| card.to_string())
-			.collect::<Vec<String>>()
-			.join("; ")
-	)
+	pub fn print_numbered_hand(&self) {
+		println!("{}'s hand:", self.name);
+
+		for (i, card) in self.hand.cards().iter().enumerate() {
+			println!("{}: {}", i, card);
+		}
+	}
 }
