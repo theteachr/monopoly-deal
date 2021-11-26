@@ -4,7 +4,7 @@ use crate::{
 	game::player::Player,
 };
 
-use std::collections::{HashSet, VecDeque};
+use std::collections::VecDeque;
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
@@ -17,8 +17,9 @@ pub struct Game {
 
 const ACTION_TEXTS: [&str; 3] = ["Play a card", "Pass", "Rearrange"];
 
+#[derive(Debug)]
 enum PlayerAction {
-	Play,
+	Play(u8),
 	Pass,
 	Rearrange,
 }
@@ -97,35 +98,19 @@ impl Game {
 	}
 
 	fn handle_player_action(&mut self, player: &mut Player) {
-		let mut cards_played = 0;
+		let actions = loop {
+			match input(": ")
+				.trim()
+				.split(" ")
+				.map(process_unit)
+				.collect::<Option<Vec<PlayerAction>>>()
+			{
+				Some(actions) => break actions,
+				_ => continue,
+			}
+		};
 
-		while let Some(action) = read_action(&mut cards_played) {
-			match action {
-				Play => self.handle_play(player),
-				Pass => return,
-				Rearrange => todo!(),
-			};
-		}
-	}
-
-	fn handle_play(&mut self, player: &mut Player) {
-		let card_positions = read_card_numbers(&player.hand());
-
-		println!("{:?}", card_positions);
-		self.play_cards(player, card_positions);
-
-		println!(
-			"{}'s assets: {}",
-			player.name,
-			cards_to_string(player.played())
-		);
-		println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
-	}
-
-	fn play_cards(&self, player: &mut Player, card_positions: Vec<u8>) {
-		for pos in card_positions.into_iter() {
-			player.play_card_at(pos as usize);
-		}
+		println!("{:?}", actions);
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
@@ -177,31 +162,6 @@ fn print_numbered_cards(cards: &Vec<&Card>) {
 	}
 }
 
-fn read_action(cards_played: &mut u8) -> Option<PlayerAction> {
-	if *cards_played > 3 {
-		return None;
-	}
-
-	let prompt = format!("({}) What do you want to do? ", *cards_played + 1);
-
-	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
-		println!("{}: {}", i, action_text);
-	}
-
-	let (action, update) = loop {
-		match input(&prompt).trim().parse() {
-			Ok(0) => break (Play, *cards_played + 1),
-			Ok(1) => break (Pass, *cards_played),
-			Ok(2) => break (Rearrange, *cards_played),
-			_ => continue,
-		};
-	};
-
-	*cards_played = update;
-
-	return Some(action);
-}
-
 fn input(prompt: &str) -> String {
 	let mut input = String::new();
 
@@ -226,26 +186,14 @@ fn cards_to_string(cards: Vec<&Card>) -> String {
 	)
 }
 
-fn read_card_numbers(cards: &Vec<&Card>) -> Vec<u8> {
-	print_numbered_cards(cards);
-
-	let mut results = loop {
-		match input("Enter the numbers of cards that you want to play: ")
-			.trim()
-			.split(" ")
-			.map(|n| n.parse().ok())
-			.collect::<Option<HashSet<u8>>>()
-		{
-			Some(nums) => {
-				if nums.iter().all(|&n| (n as usize) < cards.len()) {
-					break nums.into_iter().collect::<Vec<u8>>();
-				}
-			}
-			None => continue,
-		};
+fn process_unit(action: &str) -> Option<PlayerAction> {
+	let number = match &action[1..].parse::<u8>() {
+		Ok(n) => *n,
+		_ => return None,
 	};
 
-	results.sort_by_key(|k| std::cmp::Reverse(*k));
-
-	return results;
+	match &action[0..1] {
+		"p" => Some(Play(number)),
+		_ => Some(Pass),
+	}
 }
