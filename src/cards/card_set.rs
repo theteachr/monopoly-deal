@@ -1,4 +1,5 @@
 use crate::cards::card::Card;
+use std::fmt;
 
 #[derive(Debug)]
 pub struct CardSet {
@@ -33,5 +34,18 @@ impl CardSet {
 		self.size -= 1;
 
 		return self.cards.pop().unwrap();
+	}
+}
+
+impl fmt::Display for CardSet {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		let string = self
+			.cards
+			.iter()
+			.map(|card| card.to_string())
+			.collect::<Vec<String>>()
+			.join("; ");
+
+		write!(f, "[{}]", string)
 	}
 }
