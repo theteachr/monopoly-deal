@@ -88,14 +88,14 @@ impl Game {
 				.trim()
 				.split(" ")
 				.map(process_action_str)
-				.collect::<Option<HashSet<PlayerAction>>>()
+				.collect::<Option<Vec<PlayerAction>>>()
 			{
 				Some(actions) => break actions,
 				_ => continue,
 			}
 		};
 
-		// TODO sort cards in descending order
+		// TODO sort card numbers in descending order
 
 		for action in actions.iter() {
 			match action {
