@@ -37,11 +37,30 @@ impl Player {
 		self.played.add(selected_card);
 	}
 
-    pub fn play_cards_at(&mut self, mut card_positions: Vec<u8>) {
-        card_positions.sort_by_key(|k| std::cmp::Reverse(*k));
+	pub fn play_cards_at(&mut self, mut card_positions: Vec<u8>) {
+		card_positions.sort_by_key(|k| std::cmp::Reverse(*k));
 
-        for pos in card_positions {
-            self.play_card_at(pos.into());
-        }
-    }
+		for pos in card_positions {
+			self.play_card_at(pos.into());
+		}
+	}
+
+	pub fn print_assets(&self) {
+		println!("{}'s assets: {}", self.name, self.played);
+	}
+
+	pub fn print_hand(&self) {
+		println!("{}'s hand: {}", self.name, self.hand);
+	}
+}
+
+fn cards_to_string(cards: Vec<&Card>) -> String {
+	format!(
+		"[{}]",
+		cards
+			.iter()
+			.map(|card| card.to_string())
+			.collect::<Vec<String>>()
+			.join("; ")
+	)
 }

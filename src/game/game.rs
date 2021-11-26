@@ -1,10 +1,9 @@
 use crate::{
-	cards::card::Card,
 	deck::{Deck, DrawCount},
 	game::player::Player,
 };
 
-use std::collections::VecDeque;
+use std::collections::{HashSet, VecDeque};
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
@@ -15,22 +14,13 @@ pub struct Game {
 	player_count: u8,
 }
 
-const ACTION_TEXTS: [&str; 3] = ["Play a card", "Pass", "Rearrange"];
-
-#[derive(Debug)]
+#[derive(Debug, Hash, Eq, PartialEq)]
 enum PlayerAction {
 	Play(u8),
-	Pass,
 	Rearrange,
 }
 
-enum PlayerInputState {
-	Continue(PlayerAction),
-	Stop,
-}
-
 use PlayerAction::*;
-use PlayerInputState::*;
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {
@@ -79,14 +69,7 @@ impl Game {
 			player.update_hand(cards_drawn);
 
 			println!("{}'s turn.", player.name);
-
 			self.table();
-			println!(
-				"{}'s assets: {}",
-				player.name,
-				cards_to_string(player.played())
-			);
-			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 
 			// TODO: Use a struct to maintain the states needed for a turn
 
@@ -98,17 +81,26 @@ impl Game {
 	}
 
 	fn handle_player_action(&mut self, player: &mut Player) {
+		player.print_hand();
+
 		let actions = loop {
-			match input(": ")
+			match input("> ")
 				.trim()
 				.split(" ")
-				.map(process_unit)
-				.collect::<Option<Vec<PlayerAction>>>()
+				.map(process_action_str)
+				.collect::<Option<HashSet<PlayerAction>>>()
 			{
 				Some(actions) => break actions,
 				_ => continue,
 			}
 		};
+
+		for action in actions.iter() {
+			match action {
+				Play(position) => player.play_card_at(*position as usize),
+				Rearrange => todo!(),
+			}
+		}
 
 		println!("{:?}", actions);
 	}
@@ -126,7 +118,7 @@ impl Game {
 		println!("You need to discard {}.", to_be_discarded);
 
 		for _ in 0..to_be_discarded {
-			print_numbered_cards(&player.hand());
+			player.print_hand();
 			// let card = player.hand.remove(read_card_numbers(player.hand.len()));
 			// self.discard_pile.add(card);
 		}
@@ -136,12 +128,7 @@ impl Game {
 		for _ in 1..self.player_count {
 			let player = self.players.pop_front().unwrap();
 
-			println!(
-				"{}'s assets: {}",
-				player.name,
-				cards_to_string(player.played())
-			);
-
+			player.print_assets();
 			self.players.push_back(player);
 		}
 	}
@@ -154,12 +141,6 @@ fn get_mock_players(count: u8) -> Vec<Player> {
 		.enumerate()
 		.map(|(i, name)| Player::new(i, String::from(*name)))
 		.collect()
-}
-
-fn print_numbered_cards(cards: &Vec<&Card>) {
-	for (i, card) in cards.iter().enumerate() {
-		println!("{}: {}", i, card);
-	}
 }
 
 fn input(prompt: &str) -> String {
@@ -175,18 +156,7 @@ fn input(prompt: &str) -> String {
 	return input;
 }
 
-fn cards_to_string(cards: Vec<&Card>) -> String {
-	format!(
-		"[{}]",
-		cards
-			.iter()
-			.map(|card| card.to_string())
-			.collect::<Vec<String>>()
-			.join("; ")
-	)
-}
-
-fn process_unit(action: &str) -> Option<PlayerAction> {
+fn process_action_str(action: &str) -> Option<PlayerAction> {
 	let number = match &action[1..].parse::<u8>() {
 		Ok(n) => *n,
 		_ => return None,
@@ -194,6 +164,6 @@ fn process_unit(action: &str) -> Option<PlayerAction> {
 
 	match &action[0..1] {
 		"p" => Some(Play(number)),
-		_ => Some(Pass),
+		_ => None,
 	}
 }
