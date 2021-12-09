@@ -157,6 +157,10 @@ fn input(prompt: &str) -> String {
 }
 
 fn process_action_str(action: &str) -> Option<PlayerAction> {
+	if action.is_empty() {
+		return None;
+	}
+
 	let number = match &action[1..].parse::<u8>() {
 		Ok(n) => *n,
 		_ => return None,
