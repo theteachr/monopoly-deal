@@ -95,6 +95,11 @@ impl Game {
 			}
 		};
 
+		// gather all the cards `Play`s
+		let play_actions: (Vec<PlayerAction>, Vec<PlayerAction>) = actions
+			.iter()
+			.partition(|action| if let Play(_) = action { true } else { false });
+		println!("{:?}", play_actions);
 		// TODO sort card numbers in descending order
 
 		for action in actions.iter() {
