@@ -71,7 +71,7 @@ impl Game {
 			println!("{}'s turn.", player.name);
 			self.table();
 
-			// TODO: Use a struct to maintain the states needed for a turn
+			// TODO: Use a struct to maintain the states needed for a turn?
 
 			self.handle_player_action(&mut player);
 			self.handle_excess_cards(&mut player);
@@ -83,6 +83,7 @@ impl Game {
 	fn handle_player_action(&mut self, player: &mut Player) {
 		player.print_numbered_hand();
 
+        // TODO Bounds checking on the index entered (< the number of cards in hand)
 		let actions = loop {
 			match input("> ")
 				.trim()
@@ -95,19 +96,16 @@ impl Game {
 			}
 		};
 
-		// gather all the cards `Play`s
-		let play_actions: (Vec<PlayerAction>, Vec<PlayerAction>) = actions
-			.iter()
-			.partition(|action| if let Play(_) = action { true } else { false });
-		println!("{:?}", play_actions);
-		// TODO sort card numbers in descending order
+		let mut card_positions = Vec::new();
 
 		for action in actions.iter() {
 			match action {
-				Play(position) => player.play_card_at(*position as usize),
+				Play(position) => card_positions.push(*position),
 				Rearrange => todo!(),
 			}
 		}
+
+		player.play_cards_at(card_positions);
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
