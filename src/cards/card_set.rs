@@ -7,6 +7,8 @@ pub struct CardSet {
 	size: usize,
 }
 
+// XXX: Implement `Iterator`?
+
 impl CardSet {
 	pub fn new() -> Self {
 		Self {
