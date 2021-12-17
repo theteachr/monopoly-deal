@@ -1,5 +1,7 @@
 use crate::cards::{card::Card, card_set::CardSet};
 use crate::game::game::PlayerAction::{self, Play, Rearrange};
+
+use std::collections::HashSet;
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
@@ -55,16 +57,15 @@ impl Player {
 		}
 	}
 
-    // TODO: Handle duplicate card numbers and max plays of 3
 	pub fn read_actions(&self) -> Vec<PlayerAction> {
 		loop {
 			match input("> ")
 				.trim()
 				.split(" ")
 				.map(|s| self.process_action_str(s))
-				.collect::<Option<Vec<PlayerAction>>>()
+				.collect::<Option<HashSet<PlayerAction>>>()
 			{
-				Some(actions) => break actions,
+				Some(actions) => break actions.into_iter().collect(),
 				_ => continue,
 			}
 		}
