@@ -1,4 +1,6 @@
 use crate::cards::{card::Card, card_set::CardSet};
+use crate::game::game::PlayerAction::{self, Play, Rearrange};
+use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
 pub struct Player {
@@ -22,14 +24,6 @@ impl Player {
 		for card in cards {
 			self.hand.add(card);
 		}
-	}
-
-	pub fn hand(&self) -> Vec<&Card> {
-		self.hand.cards()
-	}
-
-	pub fn played(&self) -> Vec<&Card> {
-		self.played.cards()
 	}
 
 	pub fn play_card_at(&mut self, position: usize) {
@@ -60,4 +54,44 @@ impl Player {
 			println!("{}: {}", i, card);
 		}
 	}
+
+    // TODO: Handle duplicate card numbers and max plays of 3
+	pub fn read_actions(&self) -> Vec<PlayerAction> {
+		loop {
+			match input("> ")
+				.trim()
+				.split(" ")
+				.map(|s| self.process_action_str(s))
+				.collect::<Option<Vec<PlayerAction>>>()
+			{
+				Some(actions) => break actions,
+				_ => continue,
+			}
+		}
+	}
+
+	fn process_action_str(&self, action: &str) -> Option<PlayerAction> {
+		if action.is_empty() {
+			return None;
+		}
+
+		match (&action[0..1], &action[1..].parse::<u8>()) {
+			("p", Ok(n)) if *n < self.hand.len() => Some(Play(*n)),
+			("r", _) => Some(Rearrange),
+			_ => None,
+		}
+	}
+}
+
+fn input(prompt: &str) -> String {
+	let mut input = String::new();
+
+	print!("{}", prompt);
+	stdout().flush().expect("Couldn't flush :<");
+
+	stdin()
+		.read_line(&mut input)
+		.expect("Couldn't read from `stdin` :<");
+
+	return input;
 }

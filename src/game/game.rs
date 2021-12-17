@@ -3,8 +3,7 @@ use crate::{
 	game::player::Player,
 };
 
-use std::collections::{HashSet, VecDeque};
-use std::io::{stdin, stdout, Write};
+use std::collections::VecDeque;
 
 #[derive(Debug)]
 pub struct Game {
@@ -15,7 +14,7 @@ pub struct Game {
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]
-enum PlayerAction {
+pub enum PlayerAction {
 	Play(u8),
 	Rearrange,
 }
@@ -83,24 +82,12 @@ impl Game {
 	fn handle_player_action(&mut self, player: &mut Player) {
 		player.print_numbered_hand();
 
-		// TODO Bounds checking on the index entered (< the number of cards in hand)
-		let actions = loop {
-			match input("> ")
-				.trim()
-				.split(" ")
-				.map(process_action_str)
-				.collect::<Option<Vec<PlayerAction>>>()
-			{
-				Some(actions) => break actions,
-				_ => continue,
-			}
-		};
-
+		let actions = player.read_actions();
 		let mut card_positions = Vec::new();
 
-		for action in actions.iter() {
+		for action in actions {
 			match action {
-				Play(position) => card_positions.push(*position),
+				Play(n) => card_positions.push(n),
 				Rearrange => todo!(),
 			}
 		}
@@ -144,33 +131,4 @@ fn get_mock_players(count: u8) -> Vec<Player> {
 		.enumerate()
 		.map(|(i, name)| Player::new(i, String::from(*name)))
 		.collect()
-}
-
-fn input(prompt: &str) -> String {
-	let mut input = String::new();
-
-	print!("{}", prompt);
-	stdout().flush().expect("Couldn't flush :<");
-
-	stdin()
-		.read_line(&mut input)
-		.expect("Couldn't read from `stdin` :<");
-
-	return input;
-}
-
-fn process_action_str(action: &str) -> Option<PlayerAction> {
-	if action.is_empty() {
-		return None;
-	}
-
-	let number = match &action[1..].parse::<u8>() {
-		Ok(n) => *n,
-		_ => return None,
-	};
-
-	match &action[0..1] {
-		"p" => Some(Play(number)),
-		_ => None,
-	}
 }
