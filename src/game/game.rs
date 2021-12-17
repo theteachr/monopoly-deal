@@ -83,7 +83,7 @@ impl Game {
 	fn handle_player_action(&mut self, player: &mut Player) {
 		player.print_numbered_hand();
 
-        // TODO Bounds checking on the index entered (< the number of cards in hand)
+		// TODO Bounds checking on the index entered (< the number of cards in hand)
 		let actions = loop {
 			match input("> ")
 				.trim()
