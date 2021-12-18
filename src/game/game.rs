@@ -79,7 +79,6 @@ impl Game {
 			let mut card_positions = Vec::new();
 			let actions = player.read_actions();
 
-			// TODO: Handle max plays of 3
 			for action in actions {
 				match action {
 					Play(n) => card_positions.push(n),
