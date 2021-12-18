@@ -1,11 +1,9 @@
 use crate::{
-	cards::card::Card,
 	deck::{Deck, DrawCount},
-	game::player::Player,
+	game::player::{Player, PlayerAction::*},
 };
 
 use std::collections::VecDeque;
-use std::io::{stdin, stdout, Write};
 
 #[derive(Debug)]
 pub struct Game {
@@ -14,22 +12,6 @@ pub struct Game {
 	players: VecDeque<Player>,
 	player_count: u8,
 }
-
-const ACTION_TEXTS: [&str; 3] = ["Play a card", "Pass", "Rearrange"];
-
-enum PlayerAction {
-	Play,
-	Pass,
-	Rearrange,
-}
-
-enum PlayerInputState {
-	Continue(PlayerAction),
-	Stop,
-}
-
-use PlayerAction::*;
-use PlayerInputState::*;
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {
@@ -79,53 +61,41 @@ impl Game {
 			player.update_hand(cards_drawn);
 
 			println!("{}'s turn.", player.name);
-
 			self.table();
-			println!(
-				"{}'s assets: {}",
-				player.name,
-				cards_to_string(player.played())
-			);
-			println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
 
-			self.handle_player_action(&mut player, &mut 1);
+			// TODO: Use a struct to maintain the states needed for a turn?
+
+			self.handle_player_action(&mut player);
 			self.handle_excess_cards(&mut player);
 
 			self.players.push_back(player);
 		}
 	}
 
-	fn handle_player_action(&mut self, player: &mut Player, cards_played: &mut u8) {
-		while let Ok(state) = read_action(cards_played) {
-			match state {
-				Continue(action) => match action {
-					Play => self.handle_play(player),
-					Pass => return,
+	fn handle_player_action(&mut self, player: &mut Player) {
+		player.print_numbered_hand();
+
+		let card_positions = loop {
+			let mut card_positions = Vec::new();
+			let actions = player.read_actions();
+
+			// TODO: Handle max plays of 3
+			for action in actions {
+				match action {
+					Play(n) => card_positions.push(n),
 					Rearrange => todo!(),
-				},
-				Stop => return,
+				}
 			}
-		}
 
-		println!("{}, you can't do that :o", player.name);
-		self.handle_player_action(player, cards_played);
-	}
+			if card_positions.len() > 3 {
+				println!("You can't play more than 3 cards on a turn.");
+				continue;
+			}
 
-	fn handle_play(&mut self, player: &mut Player) {
-		print_numbered_cards(&player.hand());
+			break card_positions;
+		};
 
-		let card_position: usize = choose_card(player.hand.len());
-
-		// XXX read numbers of all cards the user wants to play (will require the numbers be
-		// sorted in descending order)
-
-		player.play_card_at(card_position);
-		println!(
-			"{}'s assets: {}",
-			player.name,
-			cards_to_string(player.played())
-		);
-		println!("{}'s hand: {}", player.name, cards_to_string(player.hand()));
+		player.play_cards_at(card_positions);
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
@@ -141,9 +111,9 @@ impl Game {
 		println!("You need to discard {}.", to_be_discarded);
 
 		for _ in 0..to_be_discarded {
-			print_numbered_cards(&player.hand());
-			let card = player.hand.remove(choose_card(player.hand.len()));
-			self.discard_pile.add(card);
+			player.print_hand();
+			// let card = player.hand.remove(read_card_numbers(player.hand.len()));
+			// self.discard_pile.add(card);
 		}
 	}
 
@@ -151,12 +121,7 @@ impl Game {
 		for _ in 1..self.player_count {
 			let player = self.players.pop_front().unwrap();
 
-			println!(
-				"{}'s assets: {}",
-				player.name,
-				cards_to_string(player.played())
-			);
-
+			player.print_assets();
 			self.players.push_back(player);
 		}
 	}
@@ -169,72 +134,4 @@ fn get_mock_players(count: u8) -> Vec<Player> {
 		.enumerate()
 		.map(|(i, name)| Player::new(i, String::from(*name)))
 		.collect()
-}
-
-fn print_numbered_cards(cards: &Vec<&Card>) {
-	for (i, card) in cards.iter().enumerate() {
-		println!("{}: {}", i, card);
-	}
-}
-
-fn read_action(cards_played: &mut u8) -> Result<PlayerInputState, &str> {
-	if *cards_played > 3 {
-		return Ok(Stop);
-	}
-
-	let prompt = format!("({}) What do you want to do? ", *cards_played);
-
-	for (i, action_text) in ACTION_TEXTS.iter().enumerate() {
-		println!("{}: {}", i, action_text);
-	}
-
-	let (action, update) = match input(&prompt).trim().parse() {
-		Ok(0) => (Play, *cards_played + 1),
-		Ok(1) => (Pass, *cards_played),
-		Ok(2) => (Rearrange, *cards_played),
-		_ => return Err("You can't do that :o"),
-	};
-
-	*cards_played = update;
-
-	return Ok(Continue(action));
-}
-
-fn input(prompt: &str) -> String {
-	let mut input = String::new();
-
-	print!("{}", prompt);
-	stdout().flush().expect("Couldn't flush :<");
-
-	stdin()
-		.read_line(&mut input)
-		.expect("Couldn't read from `stdin` :<");
-
-	return input;
-}
-
-fn cards_to_string(cards: Vec<&Card>) -> String {
-	format!(
-		"[{}]",
-		cards
-			.iter()
-			.map(|card| card.to_string())
-			.collect::<Vec<String>>()
-			.join("; ")
-	)
-}
-
-fn choose_card(card_count: usize) -> usize {
-	if let Ok(n) = input("Choose card: ").trim().parse() {
-		if n < card_count {
-			return n;
-		}
-	}
-
-	println!(
-		"That can't be chosen, please enter a number between 0 and {}.",
-		card_count - 1
-	);
-
-	return choose_card(card_count);
 }
