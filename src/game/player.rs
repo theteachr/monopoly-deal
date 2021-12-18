@@ -85,10 +85,22 @@ impl Player {
 		}
 
 		match (&action[0..1], &action[1..].parse::<u8>()) {
-			("p", Ok(n)) if *n < self.hand.len() => Some(Play(*n)),
+			("p", Ok(n)) => {
+				if *n >= self.hand.len() {
+					println!(
+						"Invalid card number: {}, should be in {}..={}.",
+						n,
+						0,
+						self.hand.len() - 1
+					);
+
+					return None;
+				}
+				return Some(Play(*n));
+			}
 			("r", _) => Some(Rearrange),
 			_ => {
-				println!("Couldn't parse action: {}", action);
+				println!("Couldn't parse action: {}, should be one of (p, r)", action);
 				return None;
 			}
 		}
