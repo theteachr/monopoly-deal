@@ -1,6 +1,6 @@
 use crate::{
 	deck::{Deck, DrawCount},
-	game::player::Player,
+	game::player::{Player, PlayerAction::*},
 };
 
 use std::collections::VecDeque;
@@ -12,14 +12,6 @@ pub struct Game {
 	players: VecDeque<Player>,
 	player_count: u8,
 }
-
-#[derive(Debug, Hash, Eq, PartialEq)]
-pub enum PlayerAction {
-	Play(u8),
-	Rearrange,
-}
-
-use PlayerAction::*;
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {

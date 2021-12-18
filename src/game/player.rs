@@ -1,8 +1,15 @@
 use crate::cards::{card::Card, card_set::CardSet};
-use crate::game::game::PlayerAction::{self, Play, Rearrange};
 
 use std::collections::HashSet;
 use std::io::{stdin, stdout, Write};
+
+#[derive(Debug, Hash, Eq, PartialEq)]
+pub enum PlayerAction {
+	Play(u8),
+	Rearrange,
+}
+
+use PlayerAction::*;
 
 #[derive(Debug)]
 pub struct Player {
