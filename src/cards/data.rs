@@ -1,6 +1,6 @@
 use crate::color::Color;
 
-pub const PROPERTIES: [(u8, Color, &[&str]); 10] = [
+pub const PROPERTY_CARDS: [(u8, Color, &[&str]); 10] = [
 	(
 		1,
 		Color::LightRed,
@@ -54,4 +54,4 @@ pub const PROPERTIES: [(u8, Color, &[&str]); 10] = [
 	),
 ];
 
-pub const MONIES: [(u8, u8); 6] = [(10, 1), (1, 6), (2, 5), (3, 3), (4, 3), (5, 2)];
+pub const MONEY_CARDS: [(u8, u8); 6] = [(10, 1), (1, 6), (2, 5), (3, 3), (4, 3), (5, 2)];
