@@ -74,16 +74,25 @@ impl Game {
 	fn handle_player_action(&mut self, player: &mut Player) {
 		player.print_numbered_hand();
 
-		let actions = player.read_actions();
-		let mut card_positions = Vec::new();
+		let card_positions = loop {
+			let mut card_positions = Vec::new();
+			let actions = player.read_actions();
 
-		// TODO: Handle max plays of 3
-		for action in actions {
-			match action {
-				Play(n) => card_positions.push(n),
-				Rearrange => todo!(),
+			// TODO: Handle max plays of 3
+			for action in actions {
+				match action {
+					Play(n) => card_positions.push(n),
+					Rearrange => todo!(),
+				}
 			}
-		}
+
+			if card_positions.len() > 3 {
+				println!("You can't play more than 3 cards on a turn.");
+				continue;
+			}
+
+			break card_positions;
+		};
 
 		player.play_cards_at(card_positions);
 	}

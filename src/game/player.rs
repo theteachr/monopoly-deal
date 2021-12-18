@@ -87,7 +87,10 @@ impl Player {
 		match (&action[0..1], &action[1..].parse::<u8>()) {
 			("p", Ok(n)) if *n < self.hand.len() => Some(Play(*n)),
 			("r", _) => Some(Rearrange),
-			_ => None,
+			_ => {
+				println!("Couldn't parse action: {}", action);
+				return None;
+			}
 		}
 	}
 }
