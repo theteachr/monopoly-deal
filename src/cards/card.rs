@@ -140,13 +140,11 @@ impl fmt::Display for Card {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		use Card::*;
 
-		let string = match self {
-			Property(c) => c.to_string(),
-			Money(c) => c.to_string(),
-			Action(c) => c.to_string(),
-		};
-
-		write!(f, "{}", string)
+		match self {
+			Property(c) => c.fmt(f),
+			Money(c) => c.fmt(f),
+			Action(c) => c.fmt(f),
+		}
 	}
 }
 
