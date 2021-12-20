@@ -14,7 +14,7 @@ const COLLECTIONS: [&[u8]; 10] = [
 	&[2, 4, 6],
 ];
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Eq, PartialEq, Copy)]
 pub struct RentVec {
 	rents: &'static [u8],
 }

@@ -4,8 +4,8 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use crossterm::style::Stylize;
 use crate::{cards::rent_vec::RentVec, color::Color};
+use crossterm::style::Stylize;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum Card {
@@ -13,7 +13,7 @@ pub enum Card {
 	Money(MoneyCard),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq)]
 pub struct PropertyCard {
 	value: u8,
 	pub name: &'static str,
@@ -48,8 +48,6 @@ impl PartialEq for PropertyCard {
 		self.name == other.name
 	}
 }
-
-impl Eq for PropertyCard {}
 
 impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -121,4 +119,3 @@ impl fmt::Display for Card {
 		write!(f, "{}", string)
 	}
 }
-
