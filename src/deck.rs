@@ -1,8 +1,9 @@
 use crate::cards::{
-	card::Card::{self, Money, Property},
+	card::{
+		Card::{self, Money, Property},
+		MoneyCard, PropertyCard,
+	},
 	data::{MONEY_CARDS, PROPERTY_CARDS},
-	money_card::MoneyCard,
-	property_card::PropertyCard,
 	rent_vec::RentVec,
 };
 
