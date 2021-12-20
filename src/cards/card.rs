@@ -11,6 +11,32 @@ use crossterm::style::Stylize;
 pub enum Card {
 	Property(PropertyCard),
 	Money(MoneyCard),
+	Action(ActionCard),
+}
+
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
+#[repr(u8)]
+enum Denomination {
+	One = 1,
+	Two = 2,
+	Three = 3,
+	Four = 4,
+	Five = 5,
+	Ten = 10,
+}
+
+#[derive(Debug, Hash, Eq, PartialEq)]
+enum Action {
+	Birthday,
+	DealBreaker,
+	DebtCollector,
+	DoubleTheRent,
+	ForcedDeal,
+	Hotel,
+	House,
+	JustSayNo,
+	PassGo,
+	SlyDeal,
 }
 
 #[derive(Debug, Eq)]
@@ -24,6 +50,12 @@ pub struct PropertyCard {
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct MoneyCard {
 	denomination: Denomination,
+}
+
+#[derive(Debug, Hash, Eq, PartialEq)]
+pub struct ActionCard {
+	value: u8,
+	action: Action,
 }
 
 impl PropertyCard {
@@ -70,17 +102,6 @@ impl fmt::Display for PropertyCard {
 	}
 }
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
-#[repr(u8)]
-enum Denomination {
-	One = 1,
-	Two = 2,
-	Three = 3,
-	Four = 4,
-	Five = 5,
-	Ten = 10,
-}
-
 impl From<u8> for Denomination {
 	fn from(value: u8) -> Self {
 		match value {
@@ -112,8 +133,9 @@ impl fmt::Display for MoneyCard {
 impl fmt::Display for Card {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		let string = match self {
-			Card::Property(p) => p.to_string(),
-			Card::Money(m) => m.to_string(),
+			Card::Property(c) => c.to_string(),
+			Card::Money(c) => c.to_string(),
+			Card::Action(c) => todo!(),
 		};
 
 		write!(f, "{}", string)
