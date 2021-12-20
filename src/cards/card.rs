@@ -25,8 +25,8 @@ enum Denomination {
 	Ten = 10,
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
-enum Action {
+#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
+pub enum Action {
 	Birthday,
 	DealBreaker,
 	DebtCollector,
@@ -124,6 +124,12 @@ impl MoneyCard {
 	}
 }
 
+impl ActionCard {
+	pub fn new(value: u8, action: Action) -> Self {
+		Self { value, action }
+	}
+}
+
 impl fmt::Display for MoneyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "{}M", self.denomination as u8)
@@ -132,10 +138,39 @@ impl fmt::Display for MoneyCard {
 
 impl fmt::Display for Card {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		use Card::*;
+
 		let string = match self {
-			Card::Property(c) => c.to_string(),
-			Card::Money(c) => c.to_string(),
-			Card::Action(c) => todo!(),
+			Property(c) => c.to_string(),
+			Money(c) => c.to_string(),
+			Action(c) => c.to_string(),
+		};
+
+		write!(f, "{}", string)
+	}
+}
+
+impl fmt::Display for ActionCard {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "{}", self.action)
+	}
+}
+
+impl fmt::Display for Action {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		use Action::*;
+
+		let string = match self {
+			Birthday => "Birthday",
+			DealBreaker => "Deal Breaker",
+			DebtCollector => "Debt Collector",
+			DoubleTheRent => "Double The Rent",
+			ForcedDeal => "Forced Deal",
+			Hotel => "Hotel",
+			House => "House",
+			JustSayNo => "Just Say No",
+			PassGo => "Pass Go",
+			SlyDeal => "Sly Deal",
 		};
 
 		write!(f, "{}", string)
