@@ -16,9 +16,9 @@ pub enum Card {
 #[derive(Debug, Eq)]
 pub struct PropertyCard {
 	value: u8,
-	pub name: &'static str,
-	pub color: Color,
-	pub rents: RentVec,
+	name: &'static str,
+	color: Color,
+	rents: RentVec,
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]
