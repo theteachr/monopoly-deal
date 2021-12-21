@@ -72,12 +72,21 @@ pub const ACTION_CARDS: [(u8, Action, u8); 10] = [
 pub const MONEY_CARDS: [(u8, u8); 6] = [(10, 1), (1, 6), (2, 5), (3, 3), (4, 3), (5, 2)];
 
 pub const PROPERTY_WILD_CARDS: [(u8, MultiColor, u8); 8] = [
+	(0, MultiColor::All, 2),
 	(4, MultiColor::Two(Blue, Green), 1),
 	(1, MultiColor::Two(LightBlue, LightRed), 1),
-	(0, MultiColor::All, 2),
 	(2, MultiColor::Two(LightYellow, LightMagenta), 2),
 	(4, MultiColor::Two(Green, Magenta), 1),
 	(4, MultiColor::Two(LightBlue, Magenta), 1),
 	(2, MultiColor::Two(LightGreen, Magenta), 1),
 	(3, MultiColor::Two(Yellow, Red), 2),
+];
+
+pub const RENT_CARDS: [(u8, MultiColor, u8); 6] = [
+	(3, MultiColor::All, 3),
+	(1, MultiColor::Two(LightBlue, LightRed), 2),
+	(1, MultiColor::Two(LightYellow, LightMagenta), 2),
+	(1, MultiColor::Two(Green, Blue), 2),
+	(1, MultiColor::Two(LightGreen, Magenta), 2),
+	(1, MultiColor::Two(Yellow, Red), 2),
 ];

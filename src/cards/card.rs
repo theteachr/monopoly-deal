@@ -12,7 +12,7 @@ pub enum Card {
 	Property(PropertyCard),
 	Money(MoneyCard),
 	Action(ActionCard),
-    PropertyWild(PropertyWildCard),
+	Wild(MultiColorCard),
 }
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
@@ -61,14 +61,21 @@ pub struct ActionCard {
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub enum MultiColor {
-    Two(Color, Color),
-    All,
+	Two(Color, Color),
+	All,
 }
 
 #[derive(Debug, PartialEq, Hash, Eq)]
-pub struct PropertyWildCard {
-    value: u8,
-    colors: MultiColor,
+pub enum MultiColorCardType {
+	Rent,
+	Property,
+}
+
+#[derive(Debug, PartialEq, Hash, Eq)]
+pub struct MultiColorCard {
+	value: u8,
+	colors: MultiColor,
+	card_type: MultiColorCardType,
 }
 
 impl PropertyCard {
@@ -109,7 +116,8 @@ impl fmt::Display for PropertyCard {
 			LightMagenta => self.name.magenta(),
 			LightRed => self.name.red(),
 			LightYellow => self.name.yellow(),
-		}.fmt(f)
+		}
+		.fmt(f)
 	}
 }
 
@@ -141,10 +149,14 @@ impl ActionCard {
 	}
 }
 
-impl PropertyWildCard {
-    pub fn new(value: u8, colors: MultiColor) -> Self {
-        Self { value, colors }
-    }
+impl MultiColorCard {
+	pub fn new(value: u8, colors: MultiColor, card_type: MultiColorCardType) -> Self {
+		Self {
+			value,
+			colors,
+			card_type,
+		}
+	}
 }
 
 impl fmt::Display for MoneyCard {
@@ -161,7 +173,7 @@ impl fmt::Display for Card {
 			Property(c) => c.fmt(f),
 			Money(c) => c.fmt(f),
 			Action(c) => c.fmt(f),
-			PropertyWild(c) => c.fmt(f),
+			Wild(c) => c.fmt(f),
 		}
 	}
 }
@@ -187,13 +199,13 @@ impl fmt::Display for Action {
 			JustSayNo => "Just Say No",
 			PassGo => "Pass Go",
 			SlyDeal => "Sly Deal",
-		}.fmt(f)
+		}
+		.fmt(f)
 	}
 }
 
-impl fmt::Display for PropertyWildCard {
+impl fmt::Display for MultiColorCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "{:?}", self.colors)
 	}
 }
-
