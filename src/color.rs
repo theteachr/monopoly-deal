@@ -1,6 +1,4 @@
-// TODO use terminal friendly colors
-
-#[derive(Debug, Eq, PartialEq, Copy, Clone)]
+#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 pub enum Color {
 	Blue,
 	Green,

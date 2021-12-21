@@ -1,10 +1,10 @@
 use crate::cards::{
 	card::{
 		ActionCard,
-		Card::{self, Action, Money, Property},
-		MoneyCard, PropertyCard,
+		Card::{self, *},
+		MoneyCard, PropertyCard, PropertyWildCard,
 	},
-	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS},
+	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS},
 	rent_vec::RentVec,
 };
 
@@ -46,6 +46,12 @@ impl Deck {
 		for (value, action, count) in ACTION_CARDS.iter() {
 			for _ in 0..*count {
 				cards.push(Action(ActionCard::new(*value, *action)));
+			}
+		}
+
+		for (value, colors, count) in PROPERTY_WILD_CARDS.iter() {
+			for _ in 0..*count {
+				cards.push(PropertyWild(PropertyWildCard::new(*value, *colors)));
 			}
 		}
 

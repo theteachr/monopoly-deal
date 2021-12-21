@@ -12,6 +12,7 @@ pub enum Card {
 	Property(PropertyCard),
 	Money(MoneyCard),
 	Action(ActionCard),
+    PropertyWild(PropertyWildCard),
 }
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
@@ -58,6 +59,18 @@ pub struct ActionCard {
 	action: Action,
 }
 
+#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
+pub enum MultiColor {
+    Two(Color, Color),
+    All,
+}
+
+#[derive(Debug, PartialEq, Hash, Eq)]
+pub struct PropertyWildCard {
+    value: u8,
+    colors: MultiColor,
+}
+
 impl PropertyCard {
 	pub fn new(value: u8, name: &'static str, color: Color, rents: RentVec) -> Self {
 		Self {
@@ -85,7 +98,7 @@ impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		use Color::*;
 
-		let text = match self.color {
+		match self.color {
 			Blue => self.name.dark_blue(),
 			Green => self.name.dark_green(),
 			Magenta => self.name.dark_magenta(),
@@ -96,9 +109,7 @@ impl fmt::Display for PropertyCard {
 			LightMagenta => self.name.magenta(),
 			LightRed => self.name.red(),
 			LightYellow => self.name.yellow(),
-		};
-
-		write!(f, "{}", text)
+		}.fmt(f)
 	}
 }
 
@@ -130,6 +141,12 @@ impl ActionCard {
 	}
 }
 
+impl PropertyWildCard {
+    pub fn new(value: u8, colors: MultiColor) -> Self {
+        Self { value, colors }
+    }
+}
+
 impl fmt::Display for MoneyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "{}M", self.denomination as u8)
@@ -144,6 +161,7 @@ impl fmt::Display for Card {
 			Property(c) => c.fmt(f),
 			Money(c) => c.fmt(f),
 			Action(c) => c.fmt(f),
+			PropertyWild(c) => c.fmt(f),
 		}
 	}
 }
@@ -158,7 +176,7 @@ impl fmt::Display for Action {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		use Action::*;
 
-		let string = match self {
+		match self {
 			Birthday => "Birthday",
 			DealBreaker => "Deal Breaker",
 			DebtCollector => "Debt Collector",
@@ -169,8 +187,13 @@ impl fmt::Display for Action {
 			JustSayNo => "Just Say No",
 			PassGo => "Pass Go",
 			SlyDeal => "Sly Deal",
-		};
-
-		write!(f, "{}", string)
+		}.fmt(f)
 	}
 }
+
+impl fmt::Display for PropertyWildCard {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "{:?}", self.colors)
+	}
+}
+
