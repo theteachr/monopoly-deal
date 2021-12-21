@@ -4,7 +4,10 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use crate::{cards::rent_vec::RentVec, color::Color};
+use crate::{
+	cards::rent_vec::RentVec,
+	color::{colored_text, Color},
+};
 use crossterm::style::Stylize;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -103,21 +106,7 @@ impl PartialEq for PropertyCard {
 
 impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		use Color::*;
-
-		match self.color {
-			Blue => self.name.dark_blue(),
-			Green => self.name.dark_green(),
-			Magenta => self.name.dark_magenta(),
-			Red => self.name.dark_red(),
-			Yellow => self.name.dark_yellow(),
-			LightBlue => self.name.blue(),
-			LightGreen => self.name.green(),
-			LightMagenta => self.name.magenta(),
-			LightRed => self.name.red(),
-			LightYellow => self.name.yellow(),
-		}
-		.fmt(f)
+		write!(f, "{}", colored_text(self.name, self.color))
 	}
 }
 
@@ -206,6 +195,14 @@ impl fmt::Display for Action {
 
 impl fmt::Display for MultiColorCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{:?}", self.colors)
+		use MultiColorCardType::*;
+
+		let block = "██";
+		let card_string = match self.card_type {
+			Rent => "Rent",
+			Property => "Property",
+		};
+
+		write!(f, "{}Card {:?}", self.colors)
 	}
 }
