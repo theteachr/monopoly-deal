@@ -32,3 +32,5 @@ pub fn colored_text(text: &'static str, color: Color) -> String {
 
 	return colorizer(text).to_string();
 }
+
+// XXX: Implement `Iterator`?

@@ -8,7 +8,6 @@ use crate::{
 	cards::rent_vec::RentVec,
 	color::{colored_text, Color},
 };
-use crossterm::style::Stylize;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum Card {
@@ -195,14 +194,37 @@ impl fmt::Display for Action {
 
 impl fmt::Display for MultiColorCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		use Color::*;
 		use MultiColorCardType::*;
 
 		let block = "██";
 		let card_string = match self.card_type {
 			Rent => "Rent",
-			Property => "Property",
+			Property => "Property Wild",
 		};
 
-		write!(f, "{}Card {:?}", self.colors)
+		let colors = match self.colors {
+			MultiColor::Two(c, d) => vec![c, d],
+			MultiColor::All => vec![
+				Blue,
+				Green,
+				Magenta,
+				Red,
+				Yellow,
+				LightBlue,
+				LightGreen,
+				LightMagenta,
+				LightRed,
+				LightYellow,
+			],
+		};
+
+		let colored_blocks = colors
+			.iter()
+			.map(|&color| colored_text(block, color))
+			.collect::<Vec<String>>()
+			.join("");
+
+		write!(f, "{}Card {}", card_string, colored_blocks)
 	}
 }
