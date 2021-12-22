@@ -4,8 +4,8 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use crate::color::{Color, colored_text};
 use crate::cards::RentVec;
+use crate::color::{colored_text, Color};
 
 #[derive(Debug, Eq)]
 pub struct PropertyCard {

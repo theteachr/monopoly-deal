@@ -1,8 +1,4 @@
-use std::{
-	cmp::PartialEq,
-	fmt,
-	hash::Hash,
-};
+use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 #[repr(u8)]

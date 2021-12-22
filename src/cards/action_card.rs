@@ -1,8 +1,4 @@
-use std::{
-	cmp::PartialEq,
-	fmt,
-	hash::Hash,
-};
+use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub enum Action {
