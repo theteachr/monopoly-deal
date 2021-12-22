@@ -1,11 +1,8 @@
 use crate::cards::{
-	card::{
-		ActionCard,
-		Card::{self, *},
-		MoneyCard, MultiColorCard, MultiColorCardType, PropertyCard,
-	},
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	rent_vec::RentVec,
+	ActionCard,
+	Card::{self, *},
+	MoneyCard, MultiColorCard, MultiColorCardType, PropertyCard, RentVec,
 };
 
 use rand::seq::SliceRandom;

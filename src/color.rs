@@ -15,22 +15,31 @@ pub enum Color {
 }
 
 pub fn colored_text(text: &'static str, color: Color) -> String {
-	use Color::*;
-
 	let colorizer = match color {
-		Blue => Stylize::dark_blue,
-		Green => Stylize::dark_green,
-		Magenta => Stylize::dark_magenta,
-		Red => Stylize::dark_red,
-		Yellow => Stylize::dark_yellow,
-		LightBlue => Stylize::blue,
-		LightGreen => Stylize::green,
-		LightMagenta => Stylize::magenta,
-		LightRed => Stylize::red,
-		LightYellow => Stylize::yellow,
+		Color::Blue => Stylize::dark_blue,
+		Color::Green => Stylize::dark_green,
+		Color::Magenta => Stylize::dark_magenta,
+		Color::Red => Stylize::dark_red,
+		Color::Yellow => Stylize::dark_yellow,
+		Color::LightBlue => Stylize::blue,
+		Color::LightGreen => Stylize::green,
+		Color::LightMagenta => Stylize::magenta,
+		Color::LightRed => Stylize::red,
+		Color::LightYellow => Stylize::yellow,
 	};
 
 	return colorizer(text).to_string();
 }
 
-// XXX: Implement `Iterator`?
+pub const COLORS: [Color; 10] = [
+	Color::Blue,
+	Color::Green,
+	Color::Magenta,
+	Color::Red,
+	Color::Yellow,
+	Color::LightBlue,
+	Color::LightGreen,
+	Color::LightMagenta,
+	Color::LightRed,
+	Color::LightYellow,
+];

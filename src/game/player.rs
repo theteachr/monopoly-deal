@@ -1,4 +1,4 @@
-use crate::cards::{card::Card, card_set::CardSet};
+use crate::cards::{Card, CardSet};
 
 use std::collections::HashSet;
 use std::io::{stdin, stdout, Write};
@@ -37,6 +37,7 @@ impl Player {
 
 	pub fn play_card_at(&mut self, position: usize) {
 		let selected_card = self.hand.remove(position);
+
 		println!("Played {}.", selected_card);
 		self.played.add(selected_card);
 	}

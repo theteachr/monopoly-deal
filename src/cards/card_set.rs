@@ -1,4 +1,4 @@
-use crate::cards::card::Card;
+use crate::cards::Card;
 use std::fmt;
 
 #[derive(Debug)]
