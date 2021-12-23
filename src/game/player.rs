@@ -12,7 +12,7 @@ pub enum PlayerAction {
 
 use PlayerAction::*;
 
-// FIXME: Increase tightness 
+// FIXME: Increase tightness
 #[derive(Debug)]
 pub struct Assets {
 	bank: CardSet,
