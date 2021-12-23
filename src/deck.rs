@@ -84,8 +84,4 @@ impl Deck {
 	pub fn len(&self) -> u8 {
 		self.cards.len() as u8
 	}
-
-	pub fn add(&mut self, card: Card) {
-		self.cards.push(card);
-	}
 }

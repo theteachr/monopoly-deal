@@ -33,12 +33,6 @@ impl Assets {
 		}
 	}
 
-	// XXX: Use a different name other than `len` because it usually returns a `usize`
-	// or make it return a `usize`
-	pub fn len(&self) -> u8 {
-		self.bank.len() + self.props.len()
-	}
-
 	pub fn add(&mut self, card: Card) {
 		let slot = match card {
 			Card::Money(_) => &mut self.bank,
@@ -71,21 +65,6 @@ impl Player {
 	pub fn update_hand(&mut self, cards: Vec<Card>) {
 		for card in cards {
 			self.hand.add(card);
-		}
-	}
-
-	pub fn play_card_at(&mut self, position: usize) {
-		let selected_card = self.hand.remove(position);
-
-		println!("Played {}.", selected_card);
-		self.played.add(selected_card);
-	}
-
-	pub fn play_cards_at(&mut self, mut card_positions: Vec<u8>) {
-		card_positions.sort_by_key(|k| std::cmp::Reverse(*k));
-
-		for pos in card_positions {
-			self.play_card_at(pos.into());
 		}
 	}
 
