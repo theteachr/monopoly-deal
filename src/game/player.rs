@@ -12,6 +12,7 @@ pub enum PlayerAction {
 
 use PlayerAction::*;
 
+// FIXME: Increase tightness 
 #[derive(Debug)]
 pub struct Assets {
 	bank: CardSet,
@@ -39,7 +40,7 @@ impl Assets {
 	}
 
 	pub fn add(&mut self, card: Card) {
-		let mut slot = match card {
+		let slot = match card {
 			Card::Money(_) => &mut self.bank,
 			Card::Property(_) => &mut self.props,
 			_ => unreachable!(),
