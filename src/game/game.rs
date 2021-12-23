@@ -1,4 +1,5 @@
 use crate::{
+	cards::Card,
 	deck::{Deck, DrawCount},
 	game::player::{Player, PlayerAction::*},
 };
@@ -75,7 +76,7 @@ impl Game {
 	fn handle_player_action(&mut self, player: &mut Player) {
 		player.print_numbered_hand();
 
-		let card_positions = loop {
+		let mut card_positions = loop {
 			let mut card_positions = Vec::new();
 			let actions = player.read_actions();
 
@@ -94,7 +95,18 @@ impl Game {
 			break card_positions;
 		};
 
-		player.play_cards_at(card_positions);
+		// FIXME Sorting is necessary, but this place doesn't feel right.
+		card_positions.sort_by_key(|k| std::cmp::Reverse(*k));
+
+		for pos in card_positions {
+			let selected_card = player.hand.remove(pos.into());
+
+			match selected_card {
+				Card::Property(_) | Card::Money(_) => player.played.add(selected_card),
+				Card::Action(a) => println!("Action Card impl to be done: {}", a),
+				Card::Wild(w) => println!("Wild Card impl to be done: {}", w),
+			};
+		}
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {

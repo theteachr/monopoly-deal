@@ -1,6 +1,7 @@
 use crate::cards::{Card, CardSet};
 
 use std::collections::HashSet;
+use std::fmt;
 use std::io::{stdin, stdout, Write};
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -12,11 +13,48 @@ pub enum PlayerAction {
 use PlayerAction::*;
 
 #[derive(Debug)]
+pub struct Assets {
+	bank: CardSet,
+	props: CardSet,
+}
+
+impl fmt::Display for Assets {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "Bank: {} Properties: {}", self.bank, self.props)
+	}
+}
+
+impl Assets {
+	pub fn new() -> Self {
+		Self {
+			bank: CardSet::new(),
+			props: CardSet::new(),
+		}
+	}
+
+	// XXX: Use a different name other than `len` because it usually returns a `usize`
+	// or make it return a `usize`
+	pub fn len(&self) -> u8 {
+		self.bank.len() + self.props.len()
+	}
+
+	pub fn add(&mut self, card: Card) {
+		let mut slot = match card {
+			Card::Money(_) => &mut self.bank,
+			Card::Property(_) => &mut self.props,
+			_ => unreachable!(),
+		};
+
+		slot.add(card);
+	}
+}
+
+#[derive(Debug)]
 pub struct Player {
 	pub id: usize,
 	pub name: String,
 	pub hand: CardSet,
-	pub played: CardSet,
+	pub played: Assets,
 }
 
 impl Player {
@@ -25,7 +63,7 @@ impl Player {
 			id,
 			name,
 			hand: CardSet::new(),
-			played: CardSet::new(),
+			played: Assets::new(),
 		}
 	}
 
