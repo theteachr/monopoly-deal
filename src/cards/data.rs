@@ -1,9 +1,9 @@
-use crate::cards::{
-	Action::{self, *},
+use crate::cards::Action::{self, *};
+
+use crate::color::{
+	Color::{self, *},
 	MultiColor,
 };
-
-use crate::color::Color::{self, *};
 
 //  Brown   LightRed
 //  Orange  LightYellow

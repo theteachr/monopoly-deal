@@ -1,8 +1,6 @@
 use crate::cards::{
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	ActionCard,
-	Card::{self, *},
-	MoneyCard, MultiColorCard, MultiColorCardType, PropertyCard, RentVec,
+	Card, RentVec,
 };
 
 use rand::seq::SliceRandom;
@@ -25,44 +23,36 @@ impl Deck {
 
 		for (value, color, names) in PROPERTY_CARDS.iter() {
 			for name in *names {
-				cards.push(Property(PropertyCard::new(
+				cards.push(Card::new_property_card(
 					*value,
 					name,
 					*color,
 					RentVec::new(*color),
-				)));
+				));
 			}
 		}
 
 		for (value, count) in MONEY_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Money(MoneyCard::new(*value)));
+				cards.push(Card::new_money_card(*value));
 			}
 		}
 
 		for (value, action, count) in ACTION_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Action(ActionCard::new(*value, *action)));
+				cards.push(Card::new_action_card(*value, *action));
 			}
 		}
 
 		for (value, colors, count) in PROPERTY_WILD_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Wild(MultiColorCard::new(
-					*value,
-					*colors,
-					MultiColorCardType::Property,
-				)));
+				cards.push(Card::new_property_wild_card(*value, *colors));
 			}
 		}
 
 		for (value, colors, count) in RENT_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Wild(MultiColorCard::new(
-					*value,
-					*colors,
-					MultiColorCardType::Rent,
-				)));
+				cards.push(Card::new_rent_card(*value, *colors));
 			}
 		}
 

@@ -35,9 +35,8 @@ impl Assets {
 
 	pub fn add(&mut self, card: Card) {
 		let slot = match card {
-			Card::Money(_) => &mut self.bank,
+			Card::Bankable(_) => &mut self.bank,
 			Card::Property(_) => &mut self.props,
-			_ => unreachable!(),
 		};
 
 		slot.add(card);
