@@ -45,8 +45,8 @@ impl<T: fmt::Display> fmt::Display for CardSet<T> {
 			.iter()
 			.map(|card| card.to_string())
 			.collect::<Vec<String>>()
-			.join("; ");
+			.join(" ; ");
 
-		write!(f, "[{}]", string)
+		write!(f, "[ {} ]", string)
 	}
 }
