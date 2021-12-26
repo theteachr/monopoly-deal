@@ -45,7 +45,11 @@ impl fmt::Display for PropertyWildCard {
 			None => Color::White,
 		};
 
-		colored_text("Property Wild Card", color).fmt(f)
+		write!(
+			f, "{} {}",
+			colored_text("PropertyWildCard", color),
+			self.available_colors,
+		)
 	}
 }
 
