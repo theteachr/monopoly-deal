@@ -42,7 +42,7 @@ impl fmt::Display for PropertyWildCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		let color = match self.selected_color {
 			Some(c) => c,
-			None => Color::Yellow, // FIXME: Use white
+			None => Color::White,
 		};
 
 		colored_text("Property Wild Card", color).fmt(f)

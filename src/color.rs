@@ -13,6 +13,7 @@ pub enum Color {
 	LightMagenta,
 	LightRed,
 	LightYellow,
+	White,
 }
 
 pub const COLORS: [Color; 10] = [
@@ -64,6 +65,7 @@ pub fn colored_text(text: &'static str, color: Color) -> String {
 		Color::LightMagenta => Stylize::magenta,
 		Color::LightRed => Stylize::red,
 		Color::LightYellow => Stylize::yellow,
+		Color::White => Stylize::white,
 	};
 
 	return colorizer(text).to_string();
