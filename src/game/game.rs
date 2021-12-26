@@ -1,5 +1,4 @@
 use crate::{
-	cards::Card,
 	deck::{Deck, DrawCount},
 	game::player::{Player, PlayerAction::*},
 };
@@ -100,12 +99,7 @@ impl Game {
 
 		for pos in card_positions {
 			let selected_card = player.hand.remove(pos.into());
-
-			match selected_card {
-				Card::Property(_) | Card::Money(_) => player.played.add(selected_card),
-				Card::Action(a) => println!("Action Card impl to be done: {}", a),
-				Card::Wild(w) => println!("Wild Card impl to be done: {}", w),
-			};
+			player.played.add(selected_card);
 		}
 	}
 

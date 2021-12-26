@@ -1,4 +1,4 @@
-use crate::cards::{Card, CardSet};
+use crate::cards::{Card, CardSet, EBankableCard, EPropertyCard};
 
 use std::collections::HashSet;
 use std::fmt;
@@ -15,8 +15,8 @@ use PlayerAction::*;
 // FIXME: Increase tightness
 #[derive(Debug)]
 pub struct Assets {
-	bank: CardSet,
-	props: CardSet,
+	bank: CardSet<EBankableCard>,
+	props: CardSet<EPropertyCard>,
 }
 
 impl fmt::Display for Assets {
@@ -34,13 +34,10 @@ impl Assets {
 	}
 
 	pub fn add(&mut self, card: Card) {
-		let slot = match card {
-			Card::Money(_) => &mut self.bank,
-			Card::Property(_) => &mut self.props,
-			_ => unreachable!(),
+		match card {
+			Card::Bankable(b) => self.bank.add(b),
+			Card::Property(p) => self.props.add(p),
 		};
-
-		slot.add(card);
 	}
 }
 
@@ -48,7 +45,7 @@ impl Assets {
 pub struct Player {
 	pub id: usize,
 	pub name: String,
-	pub hand: CardSet,
+	pub hand: CardSet<Card>,
 	pub played: Assets,
 }
 

@@ -1,4 +1,5 @@
 use crossterm::style::Stylize;
+use std::fmt;
 
 #[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 pub enum Color {
@@ -12,6 +13,43 @@ pub enum Color {
 	LightMagenta,
 	LightRed,
 	LightYellow,
+}
+
+pub const COLORS: [Color; 10] = [
+	Color::Blue,
+	Color::Green,
+	Color::Magenta,
+	Color::Red,
+	Color::Yellow,
+	Color::LightBlue,
+	Color::LightGreen,
+	Color::LightMagenta,
+	Color::LightRed,
+	Color::LightYellow,
+];
+
+pub const BLOCK: &'static str = "⬤";
+
+#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
+pub enum MultiColor {
+	Two(Color, Color),
+	All,
+}
+
+impl fmt::Display for MultiColor {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		let colors = match self {
+			MultiColor::Two(c, d) => vec![*c, *d],
+			MultiColor::All => COLORS.to_vec(),
+		};
+
+		colors
+			.iter()
+			.map(|&color| colored_text(BLOCK, color))
+			.collect::<Vec<String>>()
+			.join(" ")
+			.fmt(f)
+	}
 }
 
 pub fn colored_text(text: &'static str, color: Color) -> String {
@@ -30,16 +68,3 @@ pub fn colored_text(text: &'static str, color: Color) -> String {
 
 	return colorizer(text).to_string();
 }
-
-pub const COLORS: [Color; 10] = [
-	Color::Blue,
-	Color::Green,
-	Color::Magenta,
-	Color::Red,
-	Color::Yellow,
-	Color::LightBlue,
-	Color::LightGreen,
-	Color::LightMagenta,
-	Color::LightRed,
-	Color::LightYellow,
-];
