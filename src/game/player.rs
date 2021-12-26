@@ -97,6 +97,7 @@ impl Player {
 
 	fn process_action_str(&self, action: &str) -> Option<PlayerAction> {
 		if action.is_empty() {
+			// FIXME: Don't display this when the user enters nothing.
 			println!("You might have an extra space between the actions.");
 			return None;
 		}
