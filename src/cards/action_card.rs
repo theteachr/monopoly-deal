@@ -1,4 +1,4 @@
-use crate::color::MultiColor;
+use crate::cards::multi_color_card::RentCard;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
@@ -21,22 +21,10 @@ pub struct ActionCard {
 	action: Action,
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
-pub struct RentCard {
-	value: u8,
-	colors: MultiColor,
-}
-
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub enum EActionCard {
 	Action(ActionCard),
 	Rent(RentCard),
-}
-
-impl RentCard {
-	pub fn new(value: u8, colors: MultiColor) -> Self {
-		Self { value, colors }
-	}
 }
 
 impl ActionCard {
@@ -75,11 +63,5 @@ impl fmt::Display for EActionCard {
 impl fmt::Display for ActionCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		self.action.fmt(f)
-	}
-}
-
-impl fmt::Display for RentCard {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "RentCard {}", self.colors)
 	}
 }

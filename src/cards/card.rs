@@ -1,8 +1,8 @@
 use std::fmt;
 
 use crate::cards::{
-	Action, ActionCard, EActionCard, EPropertyCard, MoneyCard, PropertyCard, PropertyWildCard,
-	RentCard, RentVec,
+	multi_color_card::{PropertyWildCard, RentCard},
+	Action, ActionCard, EActionCard, EPropertyCard, MoneyCard, PropertyCard, RentVec,
 };
 use crate::color::{Color, MultiColor};
 
