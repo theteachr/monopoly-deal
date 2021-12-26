@@ -97,6 +97,7 @@ impl Player {
 
 	fn process_action_str(&self, action: &str) -> Option<PlayerAction> {
 		if action.is_empty() {
+			println!("You might have an extra space between the actions.");
 			return None;
 		}
 
@@ -116,7 +117,10 @@ impl Player {
 			}
 			("r", _) => Some(Rearrange),
 			_ => {
-				println!("Couldn't parse action: {}, should be one of (p, r)", action);
+				println!(
+					"Couldn't parse action: {}, should be one of (p, r).",
+					action
+				);
 				return None;
 			}
 		}
