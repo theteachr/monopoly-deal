@@ -16,7 +16,7 @@ pub struct PropertyCard {
 }
 
 #[derive(Debug, Eq, PartialEq, Hash)]
-pub enum EPropertyCard {
+pub enum PropertyCardKind {
 	Single(PropertyCard),
 	Wild(PropertyWildCard),
 }
@@ -50,7 +50,7 @@ impl fmt::Display for PropertyCard {
 	}
 }
 
-impl fmt::Display for EPropertyCard {
+impl fmt::Display for PropertyCardKind {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
 			Self::Single(s) => s.fmt(f),

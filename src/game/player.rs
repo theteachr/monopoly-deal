@@ -1,4 +1,4 @@
-use crate::cards::{Card, CardSet, EBankableCard, EPropertyCard};
+use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind};
 
 use std::collections::HashSet;
 use std::fmt;
@@ -15,8 +15,8 @@ use PlayerAction::*;
 // FIXME: Increase tightness
 #[derive(Debug)]
 pub struct Assets {
-	bank: CardSet<EBankableCard>,
-	props: CardSet<EPropertyCard>,
+	bank: CardSet<BankableCardKind>,
+	props: CardSet<PropertyCardKind>,
 }
 
 impl fmt::Display for Assets {

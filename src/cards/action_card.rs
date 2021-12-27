@@ -22,7 +22,7 @@ pub struct ActionCard {
 }
 
 #[derive(Debug, Eq, PartialEq, Hash)]
-pub enum EActionCard {
+pub enum ActionCardKind {
 	Action(ActionCard),
 	Rent(RentCard),
 }
@@ -51,7 +51,7 @@ impl fmt::Display for Action {
 	}
 }
 
-impl fmt::Display for EActionCard {
+impl fmt::Display for ActionCardKind {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
 			Self::Action(a) => a.fmt(f),
