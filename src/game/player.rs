@@ -1,4 +1,5 @@
 use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind};
+use crate::game::Playable;
 
 use std::collections::HashSet;
 use std::fmt;
@@ -33,11 +34,12 @@ impl Assets {
 		}
 	}
 
-	pub fn add(&mut self, card: Card) {
-		match card {
-			Card::Bankable(b) => self.bank.add(b),
-			Card::Property(p) => self.props.add(p),
-		};
+	pub fn add_money(&mut self, card: BankableCardKind) {
+		self.bank.add(card);
+	}
+
+	pub fn add_property(&mut self, card: PropertyCardKind) {
+		self.props.add(card);
 	}
 }
 
@@ -63,6 +65,10 @@ impl Player {
 		for card in cards {
 			self.hand.add(card);
 		}
+	}
+
+	pub fn play(&mut self, card: Card) {
+		card.play(self);
 	}
 
 	pub fn print_assets(&self) {

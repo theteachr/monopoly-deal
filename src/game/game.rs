@@ -5,6 +5,10 @@ use crate::{
 
 use std::collections::VecDeque;
 
+pub trait Playable {
+	fn play(self, player: &mut Player);
+}
+
 #[derive(Debug)]
 pub struct Game {
 	draw_pile: Deck,
@@ -99,7 +103,7 @@ impl Game {
 
 		for pos in card_positions {
 			let selected_card = player.hand.remove(pos.into());
-			player.played.add(selected_card);
+			player.play(selected_card);
 		}
 	}
 

@@ -1,6 +1,8 @@
 use crate::cards::multi_color_card::RentCard;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
+use crate::game::{Playable, player::Player};
+
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub enum Action {
 	Birthday,
@@ -30,6 +32,12 @@ pub enum ActionCardKind {
 impl ActionCard {
 	pub fn new(value: u8, action: Action) -> Self {
 		Self { value, action }
+	}
+}
+
+impl Playable for ActionCardKind {
+	fn play(self, _player: &mut Player) {
+		println!("`Playable` yet to be implemented for `ActionCard`s");
 	}
 }
 

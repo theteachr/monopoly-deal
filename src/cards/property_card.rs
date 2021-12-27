@@ -4,7 +4,7 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use crate::cards::{multi_color_card::PropertyWildCard, RentVec};
+use crate::{cards::{multi_color_card::PropertyWildCard, RentVec}, game::{player::Player, Playable}};
 use crate::color::{colored_text, Color};
 
 #[derive(Debug, Eq)]
@@ -29,6 +29,12 @@ impl PropertyCard {
 			color,
 			rents,
 		}
+	}
+}
+
+impl Playable for PropertyCardKind {
+	fn play(self, player: &mut Player) {
+		player.played.add_property(self);
 	}
 }
 
