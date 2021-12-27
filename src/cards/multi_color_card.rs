@@ -1,7 +1,7 @@
 use crate::color::{colored_text, Color, MultiColor};
 use std::fmt;
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, Copy, Clone, PartialEq, Hash)]
 struct MultiColorCard {
 	text: &'static str,
 	value: u8,
@@ -9,12 +9,12 @@ struct MultiColorCard {
 	selected_color: Option<Color>,
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
+#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub struct RentCard {
 	card: MultiColorCard,
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
+#[derive(Debug, Hash, Copy, Clone, Eq, PartialEq)]
 pub struct PropertyWildCard {
 	card: MultiColorCard,
 }

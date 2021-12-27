@@ -7,7 +7,7 @@ use std::{
 use crate::cards::{multi_color_card::PropertyWildCard, RentVec};
 use crate::color::{colored_text, Color};
 
-#[derive(Debug, Eq)]
+#[derive(Debug, Clone, Copy, Eq)]
 pub struct PropertyCard {
 	value: u8,
 	name: &'static str,
@@ -15,7 +15,7 @@ pub struct PropertyCard {
 	rents: RentVec,
 }
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, Clone, Copy, PartialEq, Hash)]
 pub enum PropertyCardKind {
 	Single(PropertyCard),
 	Wild(PropertyWildCard),

@@ -6,13 +6,13 @@ use crate::cards::{
 };
 use crate::color::{Color, MultiColor};
 
-#[derive(Debug, Hash, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub enum Card {
 	Bankable(BankableCardKind),
 	Property(PropertyCardKind),
 }
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, Clone, Copy, PartialEq, Hash)]
 pub enum BankableCardKind {
 	Money(MoneyCard),
 	Action(ActionCardKind),
