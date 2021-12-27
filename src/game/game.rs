@@ -99,7 +99,7 @@ impl Game {
 
 		for pos in card_positions {
 			let selected_card = player.hand.remove(pos.into());
-			player.played.add(selected_card);
+			player.play(selected_card);
 		}
 	}
 

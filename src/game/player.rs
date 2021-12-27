@@ -4,6 +4,10 @@ use std::collections::HashSet;
 use std::fmt;
 use std::io::{stdin, stdout, Write};
 
+pub trait Playable {
+	fn play(&self, player: &mut Player);
+}
+
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum PlayerAction {
 	Play(u8),
@@ -32,13 +36,6 @@ impl Assets {
 			props: CardSet::new(),
 		}
 	}
-
-	pub fn add(&mut self, card: Card) {
-		match card {
-			Card::Bankable(b) => self.bank.add(b),
-			Card::Property(p) => self.props.add(p),
-		};
-	}
 }
 
 #[derive(Debug)]
@@ -63,6 +60,10 @@ impl Player {
 		for card in cards {
 			self.hand.add(card);
 		}
+	}
+
+	pub fn play(&mut self, card: Card) {
+		card.play(self);
 	}
 
 	pub fn print_assets(&self) {
@@ -125,6 +126,18 @@ impl Player {
 				return None;
 			}
 		}
+	}
+}
+
+impl Playable for Card {
+	fn play(&self, player: &mut Player) {
+		match self {
+			Card::Bankable(b) => match b {
+				BankableCardKind::Money(_) => player.played.bank.add(*b),
+				BankableCardKind::Action(_) => todo!(),
+			},
+			Card::Property(p) => player.played.props.add(*p),
+		};
 	}
 }
 
