@@ -17,13 +17,13 @@ pub enum Action {
 	SlyDeal,
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
+#[derive(Debug, Hash, Copy, Clone, Eq, PartialEq)]
 pub struct ActionCard {
 	value: u8,
 	action: Action,
 }
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, Copy, Clone, PartialEq, Hash)]
 pub enum ActionCardKind {
 	Action(ActionCard),
 	Rent(RentCard),

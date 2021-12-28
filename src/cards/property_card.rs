@@ -10,7 +10,7 @@ use crate::{
 	game::{player::Player, Playable},
 };
 
-#[derive(Debug, Eq)]
+#[derive(Debug, Clone, Copy, Eq)]
 pub struct PropertyCard {
 	value: u8,
 	name: &'static str,
@@ -18,7 +18,7 @@ pub struct PropertyCard {
 	rents: RentVec,
 }
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, Clone, Copy, PartialEq, Hash)]
 pub enum PropertyCardKind {
 	Single(PropertyCard),
 	Wild(PropertyWildCard),

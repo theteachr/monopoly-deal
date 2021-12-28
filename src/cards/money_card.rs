@@ -25,7 +25,7 @@ impl From<u8> for Denomination {
 	}
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct MoneyCard {
 	denomination: Denomination,
 }
