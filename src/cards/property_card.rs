@@ -55,7 +55,13 @@ impl PartialEq for PropertyCard {
 
 impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		colored_text(self.name, self.color).fmt(f)
+		write!(
+			f,
+			"{} ({}) {:?}",
+			colored_text(self.name, self.color),
+			self.value,
+			self.rents
+		)
 	}
 }
 

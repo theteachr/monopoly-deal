@@ -1,4 +1,5 @@
 use crate::{
+	cards::{BankableCardKind, Card},
 	deck::{Deck, DrawCount},
 	game::player::{Player, PlayerAction::*},
 };
@@ -103,6 +104,11 @@ impl Game {
 
 		for pos in card_positions {
 			let selected_card = player.hand.remove(pos.into());
+
+			if let Card::Bankable(BankableCardKind::Action(_)) = selected_card {
+				self.discard_pile.push_back(selected_card);
+			}
+
 			player.play(selected_card);
 		}
 	}

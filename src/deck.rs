@@ -71,6 +71,10 @@ impl Deck {
 		return cards;
 	}
 
+	pub fn push_back(&mut self, card: Card) {
+		self.cards.push(card);
+	}
+
 	pub fn len(&self) -> u8 {
 		self.cards.len() as u8
 	}
