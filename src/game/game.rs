@@ -5,6 +5,10 @@ use crate::{
 
 use std::collections::VecDeque;
 
+pub trait Playable {
+	fn play(self, player: &mut Player);
+}
+
 #[derive(Debug)]
 pub struct Game {
 	draw_pile: Deck,

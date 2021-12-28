@@ -1,4 +1,4 @@
 mod game;
-mod player;
+pub mod player;
 
-pub use crate::game::game::Game;
+pub use crate::game::game::{Game, Playable};
