@@ -4,8 +4,11 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use crate::{cards::{multi_color_card::PropertyWildCard, RentVec}, game::{player::Player, Playable}};
 use crate::color::{colored_text, Color};
+use crate::{
+	cards::{multi_color_card::PropertyWildCard, RentVec},
+	game::{player::Player, Playable},
+};
 
 #[derive(Debug, Eq)]
 pub struct PropertyCard {

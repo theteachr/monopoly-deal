@@ -1,7 +1,7 @@
 use crate::cards::multi_color_card::RentCard;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
-use crate::game::{Playable, player::Player};
+use crate::game::{player::Player, Playable};
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub enum Action {
