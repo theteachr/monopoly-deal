@@ -37,14 +37,18 @@ pub enum MultiColor {
 	All,
 }
 
-impl fmt::Display for MultiColor {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		let colors = match self {
+impl MultiColor {
+	pub fn colors(&self) -> Vec<Color> {
+		match self {
 			MultiColor::Two(c, d) => vec![*c, *d],
 			MultiColor::All => COLORS.to_vec(),
-		};
+		}
+	}
+}
 
-		colors
+impl fmt::Display for MultiColor {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		self.colors()
 			.iter()
 			.map(|&color| colored_text(BLOCK, color))
 			.collect::<Vec<String>>()
