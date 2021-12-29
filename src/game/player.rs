@@ -1,9 +1,9 @@
 use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind};
+use crate::common::input;
 use crate::game::Playable;
 
 use std::collections::HashSet;
 use std::fmt;
-use std::io::{stdin, stdout, Write};
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum PlayerAction {
@@ -132,17 +132,4 @@ impl Player {
 			}
 		}
 	}
-}
-
-fn input(prompt: &str) -> String {
-	let mut input = String::new();
-
-	print!("{}", prompt);
-	stdout().flush().expect("Couldn't flush :<");
-
-	stdin()
-		.read_line(&mut input)
-		.expect("Couldn't read from `stdin` :<");
-
-	return input;
 }
