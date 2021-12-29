@@ -12,11 +12,19 @@ pub struct MultiColorCard {
 impl MultiColorCard {
 	pub fn new(text: &'static str, value: u8, colors: MultiColor) -> Self {
 		Self {
-			text: text,
+			text,
 			value,
 			available_colors: colors,
 			selected_color: None,
 		}
+	}
+
+	pub fn set_color(&mut self, color: Color) {
+		self.selected_color = Some(color);
+	}
+
+	pub fn colors(&self) -> Vec<Color> {
+		self.available_colors.colors()
 	}
 }
 

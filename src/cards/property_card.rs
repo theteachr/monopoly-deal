@@ -5,6 +5,7 @@ use std::{
 };
 
 use crate::color::{colored_text, Color, MultiColor};
+use crate::common::input;
 use crate::{
 	cards::{MultiColorCard, RentVec},
 	game::{Playable, Player},
@@ -46,11 +47,51 @@ impl PropertyWildCard {
 			card: MultiColorCard::new("PropertyWildCard", value, colors),
 		}
 	}
+
+	pub fn set_color(&mut self, color: Color) {
+		self.card.set_color(color);
+	}
+
+	pub fn read_color(&self) -> Color {
+		let colors = self.card.colors();
+
+		for (i, color) in colors.iter().enumerate() {
+			println!("{}: {:?}", i, color);
+		}
+
+		// FIXME: Smell -> repeating pattern of looping until
+		// right input
+		loop {
+			if let Ok(n) = input("Choose color: ").trim().parse::<u8>() {
+				break colors[n as usize];
+			}
+
+			println!("Invalid color number, please try again.");
+			continue;
+		}
+	}
+}
+
+impl Playable for PropertyCard {
+	fn play(self, player: &mut Player) {
+		player.played.add_property(PropertyCardKind::Single(self));
+	}
+}
+
+impl Playable for PropertyWildCard {
+	fn play(mut self, player: &mut Player) {
+		let color_chosen = self.read_color();
+		self.set_color(color_chosen);
+		player.played.add_property(PropertyCardKind::Wild(self));
+	}
 }
 
 impl Playable for PropertyCardKind {
 	fn play(self, player: &mut Player) {
-		player.played.add_property(self);
+		match self {
+			Self::Single(s) => s.play(player),
+			Self::Wild(w) => w.play(player),
+		}
 	}
 }
 
