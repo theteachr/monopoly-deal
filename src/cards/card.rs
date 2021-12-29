@@ -1,11 +1,11 @@
 use std::fmt;
 
 use crate::cards::{
-	multi_color_card::{PropertyWildCard, RentCard},
-	Action, ActionCard, ActionCardKind, MoneyCard, PropertyCard, PropertyCardKind, RentVec,
+	Action, ActionCard, ActionCardKind, MoneyCard, PropertyCard, PropertyCardKind,
+	PropertyWildCard, RentCard, RentVec,
 };
 use crate::color::{Color, MultiColor};
-use crate::game::{player::Player, Playable};
+use crate::game::{Playable, Player};
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub enum Card {

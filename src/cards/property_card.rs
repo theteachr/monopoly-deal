@@ -4,10 +4,10 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use crate::color::{colored_text, Color};
+use crate::color::{colored_text, Color, MultiColor};
 use crate::{
-	cards::{multi_color_card::PropertyWildCard, RentVec},
-	game::{player::Player, Playable},
+	cards::{MultiColorCard, RentVec},
+	game::{Playable, Player},
 };
 
 #[derive(Debug, Clone, Copy, Eq)]
@@ -16,6 +16,11 @@ pub struct PropertyCard {
 	name: &'static str,
 	color: Color,
 	rents: RentVec,
+}
+
+#[derive(Debug, Hash, Copy, Clone, Eq, PartialEq)]
+pub struct PropertyWildCard {
+	card: MultiColorCard,
 }
 
 #[derive(Debug, Eq, Clone, Copy, PartialEq, Hash)]
@@ -31,6 +36,14 @@ impl PropertyCard {
 			name,
 			color,
 			rents,
+		}
+	}
+}
+
+impl PropertyWildCard {
+	pub fn new(value: u8, colors: MultiColor) -> Self {
+		Self {
+			card: MultiColorCard::new("PropertyWildCard", value, colors),
 		}
 	}
 }
@@ -62,6 +75,12 @@ impl fmt::Display for PropertyCard {
 			self.value,
 			self.rents
 		)
+	}
+}
+
+impl fmt::Display for PropertyWildCard {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		self.card.fmt(f)
 	}
 }
 
