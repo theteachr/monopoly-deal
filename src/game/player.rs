@@ -4,12 +4,12 @@ use crate::game::Playable;
 use std::fmt;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
-pub enum PlayerAction {
+pub enum PlayerCmd {
 	Play(u8),
 	Rearrange,
 }
 
-use PlayerAction::*;
+use PlayerCmd::*;
 
 // FIXME: Increase tightness
 #[derive(Debug)]
@@ -85,8 +85,8 @@ impl Player {
 		}
 	}
 
-	pub fn process_command(&self, action: &str) -> Option<PlayerAction> {
-		match (&action[0..1], &action[1..].parse::<u8>()) {
+	pub fn process_command(&self, command: &str) -> Option<PlayerCmd> {
+		match (&command[0..1], &command[1..].parse::<u8>()) {
 			("p", Ok(n)) => {
 				if *n >= self.hand.len() {
 					println!(
@@ -102,11 +102,8 @@ impl Player {
 			}
 			("r", _) => Some(Rearrange),
 			_ => {
-				println!(
-					"Couldn't parse action: {}, should be one of (p, r).",
-					action
-				);
-				None
+				println!("Couldn't parse command <{}>.", command);
+				return None;
 			}
 		}
 	}

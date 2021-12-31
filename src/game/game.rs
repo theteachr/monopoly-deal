@@ -1,11 +1,14 @@
 use crate::{
 	cards::{BankableCardKind, Card},
-	deck::{Deck, DrawCount},
-	game::player::{Player, PlayerAction::{self, *}},
 	common::input,
+	deck::{Deck, DrawCount},
+	game::player::{
+		Player,
+		PlayerCmd::{self, *},
+	},
 };
 
-use std::collections::{VecDeque, HashSet};
+use std::collections::{HashSet, VecDeque};
 
 pub trait Playable {
 	fn play(self, player: &mut Player);
@@ -143,13 +146,13 @@ impl Game {
 	}
 }
 
-fn read_player_commands(player: &Player) -> Vec<PlayerAction> {
+fn read_player_commands(player: &Player) -> Vec<PlayerCmd> {
 	loop {
 		match input("> ")
 			.trim()
 			.split_whitespace()
 			.map(|cmd| player.process_command(cmd))
-			.collect::<Option<HashSet<PlayerAction>>>()
+			.collect::<Option<HashSet<PlayerCmd>>>()
 		{
 			Some(actions) => break actions.into_iter().collect(),
 			_ => continue,
