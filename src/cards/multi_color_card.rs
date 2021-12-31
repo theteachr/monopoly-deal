@@ -37,7 +37,7 @@ impl fmt::Display for MultiColorCard {
 
 		write!(
 			f,
-			"{} {}",
+			"{} {} ",
 			colored_text(self.text, color),
 			self.available_colors,
 		)
