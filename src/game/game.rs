@@ -68,7 +68,7 @@ impl Game {
 			player.update_hand(cards_drawn);
 
 			println!("{}'s turn.", player.name);
-			self.table();
+			self.print_table();
 
 			// TODO: Use a struct to maintain the states needed for a turn?
 
@@ -134,7 +134,7 @@ impl Game {
 		}
 	}
 
-	fn table(&mut self) {
+	fn print_table(&mut self) {
 		for _ in 1..self.player_count {
 			let player = self.players.pop_front().unwrap();
 
