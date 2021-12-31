@@ -91,7 +91,7 @@ impl Player {
 		loop {
 			match input("> ")
 				.trim()
-				.split(" ")
+				.split_whitespace()
 				.map(|s| self.process_action_str(s))
 				.collect::<Option<HashSet<PlayerAction>>>()
 			{
@@ -102,12 +102,6 @@ impl Player {
 	}
 
 	fn process_action_str(&self, action: &str) -> Option<PlayerAction> {
-		if action.is_empty() {
-			// FIXME: Don't display this when the user enters nothing.
-			println!("You might have an extra space between the actions.");
-			return None;
-		}
-
 		match (&action[0..1], &action[1..].parse::<u8>()) {
 			("p", Ok(n)) => {
 				if *n >= self.hand.len() {
@@ -120,7 +114,7 @@ impl Player {
 
 					return None;
 				}
-				return Some(Play(*n));
+				Some(Play(*n))
 			}
 			("r", _) => Some(Rearrange),
 			_ => {
@@ -128,7 +122,7 @@ impl Player {
 					"Couldn't parse action: {}, should be one of (p, r).",
 					action
 				);
-				return None;
+				None
 			}
 		}
 	}
