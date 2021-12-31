@@ -25,6 +25,10 @@ impl<T> CardSet<T> {
 		self.size += 1;
 	}
 
+	pub fn is_empty(&self) -> bool {
+		self.len() == 0
+	}
+
 	pub fn cards(&self) -> Vec<&T> {
 		self.cards.iter().collect()
 	}
