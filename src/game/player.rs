@@ -88,6 +88,7 @@ impl Player {
 	}
 
 	pub fn read_actions(&self) -> Vec<PlayerAction> {
+		// FIXME: Move this inside game loop
 		loop {
 			match input("> ")
 				.trim()
