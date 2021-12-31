@@ -57,6 +57,12 @@ impl fmt::Display for MultiColor {
 	}
 }
 
+impl fmt::Display for Color {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		colored_text(BLOCK, *self).fmt(f)
+	}
+}
+
 pub fn colored_text(text: &'static str, color: Color) -> String {
 	let colorizer = match color {
 		Color::Blue => Stylize::dark_blue,

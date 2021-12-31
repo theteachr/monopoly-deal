@@ -56,7 +56,7 @@ impl PropertyWildCard {
 		let colors = self.card.colors();
 
 		for (i, color) in colors.iter().enumerate() {
-			println!("{}: {:?}", i, color);
+			println!("{}: {}", i, color);
 		}
 
 		// FIXME: Smell -> repeating pattern of looping until
