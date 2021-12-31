@@ -26,7 +26,7 @@ impl<T> CardSet<T> {
 	}
 
 	pub fn is_empty(&self) -> bool {
-		self.len() == 0
+		self.size == 0
 	}
 
 	pub fn cards(&self) -> Vec<&T> {
