@@ -1,8 +1,6 @@
 use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind};
-use crate::common::input;
 use crate::game::Playable;
 
-use std::collections::HashSet;
 use std::fmt;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -87,22 +85,7 @@ impl Player {
 		}
 	}
 
-	pub fn read_actions(&self) -> Vec<PlayerAction> {
-		// FIXME: Move this inside game loop
-		loop {
-			match input("> ")
-				.trim()
-				.split_whitespace()
-				.map(|s| self.process_action_str(s))
-				.collect::<Option<HashSet<PlayerAction>>>()
-			{
-				Some(actions) => break actions.into_iter().collect(),
-				_ => continue,
-			}
-		}
-	}
-
-	fn process_action_str(&self, action: &str) -> Option<PlayerAction> {
+	pub fn process_command(&self, action: &str) -> Option<PlayerAction> {
 		match (&action[0..1], &action[1..].parse::<u8>()) {
 			("p", Ok(n)) => {
 				if *n >= self.hand.len() {
