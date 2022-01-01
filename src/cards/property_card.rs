@@ -54,6 +54,7 @@ impl PropertyWildCard {
 
 	pub fn read_color(&self) -> Color {
 		let colors = self.card.colors();
+		let max_choose_num = colors.len();
 
 		for (i, color) in colors.iter().enumerate() {
 			println!("{}: {}", i, color);
@@ -63,11 +64,15 @@ impl PropertyWildCard {
 		// right input
 		loop {
 			if let Ok(n) = input("Choose color: ").trim().parse::<u8>() {
-				break colors[n as usize];
+				if (n as usize) < max_choose_num {
+					break colors[n as usize];
+				}
 			}
 
-			println!("Invalid color number, please try again.");
-			continue;
+			println!(
+				"Invalid color number, entered value should be between 0..={}.",
+				max_choose_num
+			);
 		}
 	}
 }
@@ -75,8 +80,7 @@ impl PropertyWildCard {
 impl Playable for PropertyCardKind {
 	fn play(mut self, player: &mut Player) {
 		if let Self::Wild(wild_card) = &mut self {
-			let color_chosen = wild_card.read_color();
-			wild_card.set_color(color_chosen);
+			wild_card.set_color(wild_card.read_color());
 		}
 
 		player.add_property(self);
