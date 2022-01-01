@@ -72,26 +72,14 @@ impl PropertyWildCard {
 	}
 }
 
-impl Playable for PropertyCard {
-	fn play(self, player: &mut Player) {
-		player.played.add_property(PropertyCardKind::Single(self));
-	}
-}
-
-impl Playable for PropertyWildCard {
-	fn play(mut self, player: &mut Player) {
-		let color_chosen = self.read_color();
-		self.set_color(color_chosen);
-		player.played.add_property(PropertyCardKind::Wild(self));
-	}
-}
-
 impl Playable for PropertyCardKind {
-	fn play(self, player: &mut Player) {
-		match self {
-			Self::Single(s) => s.play(player),
-			Self::Wild(w) => w.play(player),
+	fn play(mut self, player: &mut Player) {
+		if let Self::Wild(wild_card) = &mut self {
+			let color_chosen = wild_card.read_color();
+			wild_card.set_color(color_chosen);
 		}
+
+		player.played.add_property(self);
 	}
 }
 
