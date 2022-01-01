@@ -51,7 +51,7 @@ impl Playable for Card {
 	fn play(self, player: &mut Player) {
 		match self {
 			Self::Bankable(b) => match b {
-				BankableCardKind::Money(_) => player.played.add_money(b),
+				BankableCardKind::Money(_) => player.add_money(b),
 				BankableCardKind::Action(a) => a.play(player),
 			},
 			Self::Property(p) => p.play(player),

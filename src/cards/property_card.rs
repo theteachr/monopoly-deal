@@ -79,7 +79,7 @@ impl Playable for PropertyCardKind {
 			wild_card.set_color(color_chosen);
 		}
 
-		player.played.add_property(self);
+		player.add_property(self);
 	}
 }
 

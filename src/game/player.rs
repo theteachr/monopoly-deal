@@ -65,6 +65,14 @@ impl Player {
 		}
 	}
 
+	pub fn add_money(&mut self, card: BankableCardKind) {
+		self.played.add_money(card);
+	}
+
+	pub fn add_property(&mut self, card: PropertyCardKind) {
+		self.played.add_property(card);
+	}
+
 	pub fn play(&mut self, card: Card) {
 		card.play(self);
 	}
