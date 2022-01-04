@@ -4,7 +4,7 @@ use crate::cards::{
 	Action, ActionCard, ActionCardKind, MoneyCard, PropertyCard, PropertyCardKind,
 	PropertyWildCard, RentCard, RentVec,
 };
-use crate::color::{Color, MultiColor};
+use crate::color::{CardColor, MultiColor};
 use crate::game::{Playable, Player};
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
@@ -20,7 +20,7 @@ pub enum BankableCardKind {
 }
 
 impl Card {
-	pub fn new_property_card(value: u8, name: &'static str, color: Color, rents: RentVec) -> Self {
+	pub fn new_property_card(value: u8, name: &'static str, color: CardColor, rents: RentVec) -> Self {
 		Self::Property(PropertyCardKind::Single(PropertyCard::new(
 			value, name, color, rents,
 		)))

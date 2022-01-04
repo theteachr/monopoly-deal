@@ -4,7 +4,7 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use crate::color::{colored_text, Color, MultiColor};
+use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::input;
 use crate::{
 	cards::{MultiColorCard, RentVec},
@@ -15,7 +15,7 @@ use crate::{
 pub struct PropertyCard {
 	value: u8,
 	name: &'static str,
-	color: Color,
+	color: CardColor,
 	rents: RentVec,
 }
 
@@ -31,7 +31,7 @@ pub enum PropertyCardKind {
 }
 
 impl PropertyCard {
-	pub fn new(value: u8, name: &'static str, color: Color, rents: RentVec) -> Self {
+	pub fn new(value: u8, name: &'static str, color: CardColor, rents: RentVec) -> Self {
 		Self {
 			value,
 			name,
@@ -48,11 +48,11 @@ impl PropertyWildCard {
 		}
 	}
 
-	pub fn set_color(&mut self, color: Color) {
+	pub fn set_color(&mut self, color: CardColor) {
 		self.card.set_color(color);
 	}
 
-	pub fn read_color(&self) -> Color {
+	pub fn read_color(&self) -> CardColor {
 		let colors = self.card.colors();
 		let max_choose_num = colors.len();
 

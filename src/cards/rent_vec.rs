@@ -1,4 +1,4 @@
-use crate::color::Color;
+use crate::color::CardColor;
 use std::fmt;
 
 const COLLECTIONS: [&[u8]; 10] = [
@@ -20,7 +20,7 @@ pub struct RentVec {
 }
 
 impl RentVec {
-	pub fn new(color: Color) -> Self {
+	pub fn new(color: CardColor) -> Self {
 		Self {
 			rents: COLLECTIONS[color as usize],
 		}

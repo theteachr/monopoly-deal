@@ -1,4 +1,4 @@
-use crate::color::{colored_text, Color, MultiColor};
+use crate::color::{colored_text, CardColor, MultiColor};
 use std::fmt;
 
 #[derive(Debug, Eq, Copy, Clone, PartialEq, Hash)]
@@ -6,7 +6,7 @@ pub struct MultiColorCard {
 	text: &'static str,
 	value: u8,
 	available_colors: MultiColor,
-	selected_color: Option<Color>,
+	selected_color: Option<CardColor>,
 }
 
 impl MultiColorCard {
@@ -19,11 +19,11 @@ impl MultiColorCard {
 		}
 	}
 
-	pub fn set_color(&mut self, color: Color) {
+	pub fn set_color(&mut self, color: CardColor) {
 		self.selected_color = Some(color);
 	}
 
-	pub fn colors(&self) -> Vec<Color> {
+	pub fn colors(&self) -> Vec<CardColor> {
 		self.available_colors.colors()
 	}
 }
@@ -32,7 +32,7 @@ impl fmt::Display for MultiColorCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		let color = match self.selected_color {
 			Some(c) => c,
-			None => Color::White,
+			None => CardColor::Default,
 		};
 
 		write!(

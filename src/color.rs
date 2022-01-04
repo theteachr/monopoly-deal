@@ -1,44 +1,66 @@
-use crossterm::style::Stylize;
 use std::fmt;
 
 #[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
-pub enum Color {
+#[repr(u8)]
+pub enum CardColor {
+	Black,
 	Blue,
+	Brown,
 	Green,
 	Magenta,
+	Orange,
 	Red,
+	SkyBlue,
+	Turquoise,
 	Yellow,
-	LightBlue,
-	LightGreen,
-	LightMagenta,
-	LightRed,
-	LightYellow,
-	White,
+	Default,
 }
 
-pub const COLORS: [Color; 10] = [
-	Color::Blue,
-	Color::Green,
-	Color::Magenta,
-	Color::Red,
-	Color::Yellow,
-	Color::LightBlue,
-	Color::LightGreen,
-	Color::LightMagenta,
-	Color::LightRed,
-	Color::LightYellow,
+type Color = (u8, u8, u8);
+
+const RGB_TRIPLES: [Color; 11] = [
+	(13, 24, 33),       // Black
+	(10, 147, 150),     // Blue
+	(155, 34, 38),      // Brown
+	(83, 221, 108),     // Green
+	(214, 122, 177),    // Magenta
+	(255, 120, 79),     // Orange
+	(232, 49, 81),      // Red
+	(132, 218, 235),    // SkyBlue
+	(148, 210, 189),    // Turquoise
+	(244, 157, 55),     // Yellow
+	(255, 255, 255),    // Default
+];
+
+pub const COLORS: [CardColor; 10] = [
+	CardColor::Black,
+	CardColor::Blue,
+	CardColor::Brown,
+	CardColor::Green,
+	CardColor::Magenta,
+	CardColor::Orange,
+	CardColor::Red,
+	CardColor::SkyBlue,
+	CardColor::Turquoise,
+	CardColor::Yellow,
 ];
 
 pub const BLOCK: &'static str = "⬤";
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub enum MultiColor {
-	Two(Color, Color),
+	Two(CardColor, CardColor),
 	All,
 }
 
+impl CardColor {
+	pub fn to_rgb(self) -> Color {
+		RGB_TRIPLES[self as usize]
+	}
+}
+
 impl MultiColor {
-	pub fn colors(&self) -> Vec<Color> {
+	pub fn colors(&self) -> Vec<CardColor> {
 		match self {
 			MultiColor::Two(c, d) => vec![*c, *d],
 			MultiColor::All => COLORS.to_vec(),
@@ -57,26 +79,14 @@ impl fmt::Display for MultiColor {
 	}
 }
 
-impl fmt::Display for Color {
+impl fmt::Display for CardColor {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		colored_text(BLOCK, *self).fmt(f)
 	}
 }
 
-pub fn colored_text(text: &'static str, color: Color) -> String {
-	let colorizer = match color {
-		Color::Blue => Stylize::dark_blue,
-		Color::Green => Stylize::dark_green,
-		Color::Magenta => Stylize::dark_magenta,
-		Color::Red => Stylize::dark_red,
-		Color::Yellow => Stylize::dark_yellow,
-		Color::LightBlue => Stylize::blue,
-		Color::LightGreen => Stylize::green,
-		Color::LightMagenta => Stylize::magenta,
-		Color::LightRed => Stylize::red,
-		Color::LightYellow => Stylize::yellow,
-		Color::White => Stylize::white,
-	};
+pub fn colored_text(text: &'static str, color: CardColor) -> String {
+	let (r, g, b) = color.to_rgb();
 
-	return colorizer(text).to_string();
+	return format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text);
 }
