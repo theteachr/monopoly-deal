@@ -5,4 +5,4 @@ edition = "2018"
 
 [dependencies]
 rand = "0.8.3"
-crossterm = "0.22.1"
+crossterm = "0.22.1" # FIXME Delete dependency, write your own
