@@ -20,7 +20,12 @@ pub enum BankableCardKind {
 }
 
 impl Card {
-	pub fn new_property_card(value: u8, name: &'static str, color: CardColor, rents: RentVec) -> Self {
+	pub fn new_property_card(
+		value: u8,
+		name: &'static str,
+		color: CardColor,
+		rents: RentVec,
+	) -> Self {
 		Self::Property(PropertyCardKind::Single(PropertyCard::new(
 			value, name, color, rents,
 		)))
