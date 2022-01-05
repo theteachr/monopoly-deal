@@ -92,27 +92,4 @@ impl Player {
 			println!("{}: {}", i, card);
 		}
 	}
-
-	pub fn process_command(&self, command: &str) -> Option<PlayerCmd> {
-		match (&command[0..1], &command[1..].parse::<u8>()) {
-			("p", Ok(n)) => {
-				if *n >= self.hand.len() {
-					println!(
-						"Invalid card number: {}, should be in {}..={}.",
-						n,
-						0,
-						self.hand.len() - 1
-					);
-
-					return None;
-				}
-				Some(Play(*n))
-			}
-			("r", _) => Some(Rearrange),
-			_ => {
-				println!("Couldn't parse command <{}>.", command);
-				return None;
-			}
-		}
-	}
 }

@@ -8,6 +8,7 @@ use crate::{
 	},
 };
 
+use std::cmp::Ordering::{Equal, Greater};
 use std::collections::{HashSet, VecDeque};
 
 pub trait Playable {
@@ -83,22 +84,14 @@ impl Game {
 		player.print_numbered_hand();
 
 		let mut card_positions = loop {
-			let mut card_positions = Vec::new();
-			let actions = read_player_commands(&player);
+			let nums = read_card_numbers(&player);
 
-			for action in actions {
-				match action {
-					Play(n) => card_positions.push(n),
-					Rearrange => todo!(),
-				}
-			}
-
-			if card_positions.len() > 3 {
+			if nums.len() > 3 {
 				println!("You can't play more than 3 cards on a turn.");
 				continue;
 			}
 
-			break card_positions;
+			break nums;
 		};
 
 		// FIXME Sorting is necessary, but this place doesn't feel right.
@@ -144,16 +137,25 @@ impl Game {
 	}
 }
 
-fn read_player_commands(player: &Player) -> Vec<PlayerCmd> {
+fn read_card_numbers(player: &Player) -> Vec<u8> {
+	let max_card_num = player.hand.len() - 1;
+
 	loop {
 		match input("> ")
 			.trim()
 			.split_whitespace()
-			.map(|cmd| player.process_command(cmd))
-			.collect::<Option<HashSet<PlayerCmd>>>()
+			.map(|n| {
+				n.parse::<u8>()
+					.ok()
+					.and_then(|x| match max_card_num.cmp(&x) {
+						Greater | Equal => Some(x),
+						_ => None,
+					})
+			})
+			.collect::<Option<HashSet<u8>>>()
 		{
-			Some(actions) => break actions.into_iter().collect(),
-			_ => continue,
+			Some(nums) => break nums.into_iter().collect(),
+			None => continue,
 		}
 	}
 }
