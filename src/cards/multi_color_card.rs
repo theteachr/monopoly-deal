@@ -30,16 +30,11 @@ impl MultiColorCard {
 
 impl fmt::Display for MultiColorCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		let color = match self.selected_color {
-			Some(c) => c,
-			None => CardColor::Default,
+		let text = match self.selected_color {
+			Some(color) => colored_text(self.text, color),
+			None => String::from(self.text),
 		};
 
-		write!(
-			f,
-			"{} {} ",
-			colored_text(self.text, color),
-			self.available_colors,
-		)
+		write!(f, "{} {} ", text, self.available_colors)
 	}
 }

@@ -13,12 +13,11 @@ pub enum CardColor {
 	SkyBlue,
 	Turquoise,
 	Yellow,
-	Default,
 }
 
 type Color = (u8, u8, u8);
 
-const RGB_TRIPLES: [Color; 11] = [
+const RGB_TRIPLES: [Color; 10] = [
 	(13, 24, 33),       // Black
 	(10, 147, 150),     // Blue
 	(155, 34, 38),      // Brown
@@ -29,7 +28,6 @@ const RGB_TRIPLES: [Color; 11] = [
 	(132, 218, 235),    // SkyBlue
 	(148, 210, 189),    // Turquoise
 	(244, 157, 55),     // Yellow
-	(255, 255, 255),    // Default
 ];
 
 pub const COLORS: [CardColor; 10] = [
