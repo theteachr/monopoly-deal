@@ -18,16 +18,16 @@ pub enum CardColor {
 type Color = (u8, u8, u8);
 
 const RGB_TRIPLES: [Color; 10] = [
-	(13, 24, 33),       // Black
-	(10, 147, 150),     // Blue
-	(155, 34, 38),      // Brown
-	(83, 221, 108),     // Green
-	(214, 122, 177),    // Magenta
-	(255, 120, 79),     // Orange
-	(232, 49, 81),      // Red
-	(132, 218, 235),    // SkyBlue
-	(148, 210, 189),    // Turquoise
-	(244, 157, 55),     // Yellow
+	(013, 024, 033), // Black
+	(010, 147, 150), // Blue
+	(155, 034, 038), // Brown
+	(083, 221, 108), // Green
+	(214, 122, 177), // Magenta
+	(255, 120, 079), // Orange
+	(232, 049, 081), // Red
+	(132, 218, 235), // SkyBlue
+	(148, 210, 189), // Turquoise
+	(244, 157, 055), // Yellow
 ];
 
 pub const COLORS: [CardColor; 10] = [
