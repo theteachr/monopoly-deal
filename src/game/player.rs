@@ -3,15 +3,6 @@ use crate::game::Playable;
 
 use std::fmt;
 
-#[derive(Debug, Hash, Eq, PartialEq)]
-pub enum PlayerCmd {
-	Play(u8),
-	Rearrange,
-}
-
-use PlayerCmd::*;
-
-// FIXME: Increase tightness
 #[derive(Debug)]
 pub struct Assets {
 	bank: CardSet<BankableCardKind>,
