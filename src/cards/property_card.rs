@@ -7,7 +7,7 @@ use std::{
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::input;
 use crate::{
-	cards::{MultiColorCard, RentVec},
+	cards::{MultiColorCard, MultiColorCardKind, RentVec},
 	game::{Playable, Player},
 };
 
@@ -44,7 +44,7 @@ impl PropertyCard {
 impl PropertyWildCard {
 	pub fn new(value: u8, colors: MultiColor) -> Self {
 		Self {
-			card: MultiColorCard::new("PropertyWildCard", value, colors),
+			card: MultiColorCard::new(MultiColorCardKind::PropertyWildCard, value, colors),
 		}
 	}
 

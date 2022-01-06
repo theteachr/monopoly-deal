@@ -1,4 +1,4 @@
-use crate::cards::MultiColorCard;
+use crate::cards::{MultiColorCard, MultiColorCardKind};
 use crate::color::MultiColor;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
@@ -44,7 +44,7 @@ impl ActionCard {
 impl RentCard {
 	pub fn new(value: u8, colors: MultiColor) -> Self {
 		Self {
-			card: MultiColorCard::new("RentCard", value, colors),
+			card: MultiColorCard::new(MultiColorCardKind::RentCard, value, colors),
 		}
 	}
 }
