@@ -97,12 +97,15 @@ impl Game {
 		for pos in card_positions {
 			let selected_card = player.hand.remove(pos.into());
 
+			// FIXME should be part of Playable impl?
 			if let Card::Bankable(BankableCardKind::Action(_)) = selected_card {
 				self.discard_pile.push_back(selected_card);
 			}
 
 			player.play(selected_card);
 		}
+
+		self.handle_excess_cards(player);
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
@@ -111,18 +114,33 @@ impl Game {
 		let card_count = player.hand.len();
 		let to_be_discarded: i8 = card_count as i8 - 7;
 
+		// Nothing to be discarded, return.
 		if to_be_discarded <= 0 {
 			return;
 		}
 
 		println!("You need to discard {}.", to_be_discarded);
+		player.print_numbered_hand();
 
-		for _ in 0..to_be_discarded {
-			player.print_hand();
-			// let card = player.hand.remove(read_card_numbers(player.hand.len()));
-			// self.discard_pile.add(card);
+		let discard_numbers = loop {
+			let nums = read_card_numbers(player);
+
+			if nums.len() != to_be_discarded as usize {
+				println!("You need to discard exactly {}.", to_be_discarded);
+				continue;
+			}
+
+			break nums;
+		};
+
+		// Remove cards from player's hand and put them in the discard pile.
+		for num in discard_numbers {
+			let card = player.hand.remove(num.into());
+			self.discard_pile.push_back(card);
 		}
 	}
+
+	// fn play<T: Playable>(&mut self, card: T, player: &mut Player) {}
 
 	fn print_table(&mut self) {
 		for _ in 1..self.player_count {
