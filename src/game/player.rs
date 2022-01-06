@@ -72,10 +72,6 @@ impl Player {
 		println!("{}'s assets: {}", self.name, self.played);
 	}
 
-	pub fn print_hand(&self) {
-		println!("{}'s hand: {}", self.name, self.hand);
-	}
-
 	pub fn print_numbered_hand(&self) {
 		println!("{}'s hand:", self.name);
 
