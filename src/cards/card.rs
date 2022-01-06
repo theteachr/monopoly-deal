@@ -42,7 +42,7 @@ impl Card {
 	}
 
 	pub fn new_rent_card(value: u8, colors: MultiColor) -> Self {
-		Card::Bankable(BankableCardKind::Action(ActionCardKind::Rent(
+		Self::Bankable(BankableCardKind::Action(ActionCardKind::Rent(
 			RentCard::new(value, colors),
 		)))
 	}
