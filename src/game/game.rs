@@ -1,5 +1,5 @@
 use crate::{
-	cards::{BankableCardKind, Card},
+	cards::Card,
 	common::input,
 	deck::{Deck, DrawCount},
 	game::player::Player,
@@ -68,7 +68,7 @@ impl Game {
 			println!("{}'s turn.", player.name);
 			self.print_table();
 
-			// TODO: Use a struct to maintain the states needed for a turn?
+			// XXX: Use a struct to maintain the states needed for a turn?
 
 			self.handle_player_action(&mut player);
 			self.handle_excess_cards(&mut player);
@@ -80,7 +80,7 @@ impl Game {
 	fn handle_player_action(&mut self, player: &mut Player) {
 		player.print_numbered_hand();
 
-		let mut card_positions = loop {
+		let card_positions = loop {
 			let nums = read_card_numbers(&player);
 
 			if nums.len() > 3 {
@@ -91,20 +91,7 @@ impl Game {
 			break nums;
 		};
 
-		// FIXME Sorting is necessary, but this place doesn't feel right.
-		card_positions.sort_by_key(|k| std::cmp::Reverse(*k));
-
-		for pos in card_positions {
-			let selected_card = player.hand.remove(pos.into());
-
-			// FIXME should be part of Playable impl?
-			if let Card::Bankable(BankableCardKind::Action(_)) = selected_card {
-				self.discard_pile.push_back(selected_card);
-			}
-
-			player.play(selected_card);
-		}
-
+		player.play_cards_at(card_positions);
 		self.handle_excess_cards(player);
 	}
 
@@ -140,7 +127,10 @@ impl Game {
 		}
 	}
 
-	// fn play<T: Playable>(&mut self, card: T, player: &mut Player) {}
+	fn play(&mut self, card: Card, player: &mut Player) {
+		println!("{} is playing {}...", player.name, card);
+		card.play(player);
+	}
 
 	fn print_table(&mut self) {
 		for _ in 1..self.player_count {

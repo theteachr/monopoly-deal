@@ -64,6 +64,15 @@ impl Player {
 		self.played.add_property(card);
 	}
 
+	pub fn play_cards_at(&mut self, mut card_positions: Vec<u8>) {
+		card_positions.sort_by_key(|k| std::cmp::Reverse(*k));
+
+		for pos in card_positions {
+			let selected_card = self.hand.remove(pos.into());
+			self.play(selected_card);
+		}
+	}
+
 	pub fn play(&mut self, card: Card) {
 		card.play(self);
 	}
