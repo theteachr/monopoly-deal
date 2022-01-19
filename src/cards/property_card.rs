@@ -60,7 +60,7 @@ impl PropertyWildCard {
 			println!("{}: {}", i, color);
 		}
 
-		// FIXME: Smell -> repeating pattern of looping until
+		// FIXME Smell -> repeating pattern of looping until
 		// right input
 		loop {
 			if let Ok(n) = input("Choose color: ").trim().parse::<u8>() {

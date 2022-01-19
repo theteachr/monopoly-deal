@@ -68,7 +68,7 @@ impl Game {
 			println!("{}'s turn.", player.name);
 			self.print_table();
 
-			// XXX: Use a struct to maintain the states needed for a turn?
+			// XXX Use a struct to maintain the states needed for a turn?
 
 			self.handle_player_action(&mut player);
 			self.handle_excess_cards(&mut player);
