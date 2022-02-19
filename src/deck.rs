@@ -1,6 +1,5 @@
 use crate::cards::{
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	property_card::RentVec,
 	ActionCard, Card, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
 };
 
@@ -20,9 +19,9 @@ impl Deck {
 	pub fn new() -> Self {
 		let mut cards = Vec::<Card>::new();
 
-		for (value, color, names) in PROPERTY_CARDS.iter() {
+		for (color, names) in PROPERTY_CARDS.iter() {
 			for name in *names {
-				cards.push(PropertyCard::new(*value, name, *color, RentVec::new(*color)).into());
+				cards.push(PropertyCard::new(name, *color).into());
 			}
 		}
 

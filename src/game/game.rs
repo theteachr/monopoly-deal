@@ -1,5 +1,5 @@
 use crate::{
-	cards::{Card, Colored},
+	cards::{Card, Colored, data, property_card::PropertyCollection},
 	color::CardColor,
 	common::input,
 	deck::Deck,
@@ -60,6 +60,7 @@ pub struct Game {
 	discard_pile: Deck,
 	players: VecDeque<Player>,
 	player_count: u8,
+	property_collection: PropertyCollection,
 }
 
 impl Game {
@@ -90,6 +91,7 @@ impl Game {
 			discard_pile: Deck::new(),
 			players: VecDeque::from(players),
 			player_count,
+			property_collection: PropertyCollection::from_array_of_triples(data::COLLECTIONS)
 		}
 	}
 

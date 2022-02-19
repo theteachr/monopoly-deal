@@ -6,11 +6,10 @@ use crate::color::{
 };
 
 //  TODO Use correct color sets
-pub const PROPERTY_CARDS: [(u8, CardColor, &[&str]); 10] = [
-	(1, Brown, &["Baltic Avenue", "Mediterranean Avenue"]),
-	(4, Blue, &["Broadwalk", "Park Place"]),
+pub const PROPERTY_CARDS: [(CardColor, &[&str]); 10] = [
+	(Brown, &["Baltic Avenue", "Mediterranean Avenue"]),
+	(Blue, &["Broadwalk", "Park Place"]),
 	(
-		4,
 		Green,
 		&[
 			"North Carolina Avenue",
@@ -19,22 +18,18 @@ pub const PROPERTY_CARDS: [(u8, CardColor, &[&str]); 10] = [
 		],
 	),
 	(
-		1,
 		SkyBlue,
 		&["Connecticut Avenue", "Oriental Avenue", "Vermont Avenue"],
 	),
 	(
-		2,
 		Orange,
 		&["New York Avenue", "St. James Place", "Tennesse Avenue"],
 	),
 	(
-		2,
 		Magenta,
 		&["St. Charles Place", "Virginia Avenue", "States Avenue"],
 	),
 	(
-		2,
 		Black,
 		&[
 			"Short Line",
@@ -44,13 +39,11 @@ pub const PROPERTY_CARDS: [(u8, CardColor, &[&str]); 10] = [
 		],
 	),
 	(
-		3,
 		Red,
 		&["Kentucky Avenue", "Indiana Avenue", "Illinois Avenue"],
 	),
-	(2, Turquoise, &["Water Works", "Electric Company"]),
+	(Turquoise, &["Water Works", "Electric Company"]),
 	(
-		3,
 		Yellow,
 		&["Ventor Avenue", "Marvin Gardens", "Atlantic Avenue"],
 	),
@@ -89,4 +82,17 @@ pub const RENT_CARDS: [(u8, MultiColor, u8); 6] = [
 	(1, MultiColor::Two(Green, Blue), 2),
 	(1, MultiColor::Two(Orange, Magenta), 2),
 	(1, MultiColor::Two(Yellow, Red), 2),
+];
+
+pub const COLLECTIONS: [(CardColor, u8, &[u8]); 10] = [
+	(Brown, 1, &[1, 2]),
+	(Blue, 4, &[3, 8]),
+	(Green, 4, &[2, 4, 7]),
+	(SkyBlue, 1, &[1, 2, 3]),
+	(Orange, 2, &[1, 3, 5]),
+	(Magenta, 2, &[1, 2, 4]),
+	(Black, 2, &[1, 2, 3, 4]),
+	(Red, 3, &[2, 3, 6]),
+	(Turquoise, 2, &[1, 2]),
+	(Yellow, 3, &[2, 4, 6]),
 ];

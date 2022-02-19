@@ -4,25 +4,21 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use super::{PropertyCardKind, RentVec};
+use super::PropertyCardKind;
 use crate::color::{colored_text, CardColor};
 use crate::player::Player;
 
 #[derive(Debug, Eq)]
 pub struct PropertyCard {
-	pub value: u8,
 	pub name: &'static str,
 	pub color: CardColor,
-	pub rents: RentVec,
 }
 
 impl PropertyCard {
-	pub fn new(value: u8, name: &'static str, color: CardColor, rents: RentVec) -> Self {
+	pub fn new(name: &'static str, color: CardColor) -> Self {
 		Self {
-			value,
 			name,
 			color,
-			rents,
 		}
 	}
 
@@ -53,10 +49,8 @@ impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(
 			f,
-			"{} ({}) {:?}",
+			"{}",
 			colored_text(self.name, self.color),
-			self.value,
-			self.rents
 		)
 	}
 }
