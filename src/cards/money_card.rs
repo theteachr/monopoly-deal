@@ -28,15 +28,11 @@ impl From<u8> for Denomination {
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]
-pub struct MoneyCard {
-	denomination: Denomination,
-}
+pub struct MoneyCard(Denomination);
 
 impl MoneyCard {
 	pub fn new(value: u8) -> Self {
-		Self {
-			denomination: value.into(),
-		}
+		Self(value.into())
 	}
 
 	pub fn play(self, player: &mut Player) {
@@ -46,12 +42,12 @@ impl MoneyCard {
 
 impl Card for MoneyCard {
 	fn value(&self) -> u8 {
-		self.denomination as u8
+		self.0 as u8
 	}
 }
 
 impl fmt::Display for MoneyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{}M", self.denomination as u8)
+		write!(f, "{}M", self.0 as u8)
 	}
 }
