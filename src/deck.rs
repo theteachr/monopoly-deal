@@ -1,13 +1,13 @@
 use crate::cards::{
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	ActionCard, Card, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
+	ActionCard, CardKind, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
 };
 
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
 #[derive(Debug)]
-pub struct Deck(Vec<Card>);
+pub struct Deck(Vec<CardKind>);
 
 #[repr(u8)]
 pub enum DrawCount {
@@ -17,7 +17,7 @@ pub enum DrawCount {
 
 impl Deck {
 	pub fn new() -> Self {
-		let mut cards = Vec::<Card>::new();
+		let mut cards: Vec<CardKind> = Vec::new();
 
 		for (color, names) in PROPERTY_CARDS.iter() {
 			for name in *names {
@@ -54,7 +54,7 @@ impl Deck {
 		Self(cards)
 	}
 
-	pub fn draw(&mut self, count: DrawCount) -> Vec<Card> {
+	pub fn draw(&mut self, count: DrawCount) -> Vec<CardKind> {
 		let mut cards = Vec::new();
 
 		for _ in 0..count as u8 {
@@ -64,7 +64,7 @@ impl Deck {
 		return cards;
 	}
 
-	pub fn push_back(&mut self, card: Card) {
+	pub fn push_back(&mut self, card: CardKind) {
 		self.0.push(card);
 	}
 

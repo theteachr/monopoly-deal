@@ -21,7 +21,6 @@ impl RentCard {
 			selected_color: None,
 		}
 	}
-
 }
 
 // TODO Allow play only if the player owns at least one property whose color is on the `RentCard`

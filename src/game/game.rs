@@ -1,5 +1,5 @@
 use crate::{
-	cards::{Card, Colored},
+	cards::{CardKind, Colored},
 	color::CardColor,
 	common::input,
 	deck::Deck,
@@ -25,7 +25,7 @@ impl Turn {
 		}
 	}
 
-	fn read_card(&mut self) -> Option<Card> {
+	fn read_card(&mut self) -> Option<CardKind> {
 		if self.num_cards_played == 3 {
 			return None;
 		}

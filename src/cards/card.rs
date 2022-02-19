@@ -15,7 +15,7 @@ pub trait Colored {
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]
-pub enum Card {
+pub enum CardKind {
 	PropertyCard(PropertyCard),
 	ActionCard(ActionCard),
 	MoneyCard(MoneyCard),
@@ -24,13 +24,13 @@ pub enum Card {
 }
 
 #[derive(Debug, Eq, PartialEq, Hash)]
-pub enum BankableCard {
+pub enum BankableCardKind {
 	MoneyCard(MoneyCard),
 	ActionCard(ActionCard),
 	RentCard(RentCard),
 }
 
-impl Card {
+impl CardKind {
 	pub fn play(self, table: &mut VecDeque<Player>, player: &mut Player) {
 		match self {
 			Self::ActionCard(c) => c.play(table, player),
@@ -47,37 +47,37 @@ fn play_colored_card<T: Colored>(card: T, player: &mut Player) {
 	card.play(color, player);
 }
 
-impl From<PropertyCard> for Card {
+impl From<PropertyCard> for CardKind {
 	fn from(property_card: PropertyCard) -> Self {
 		Self::PropertyCard(property_card)
 	}
 }
 
-impl From<ActionCard> for Card {
+impl From<ActionCard> for CardKind {
 	fn from(action_card: ActionCard) -> Self {
 		Self::ActionCard(action_card)
 	}
 }
 
-impl From<MoneyCard> for Card {
+impl From<MoneyCard> for CardKind {
 	fn from(money_card: MoneyCard) -> Self {
 		Self::MoneyCard(money_card)
 	}
 }
 
-impl From<RentCard> for Card {
+impl From<RentCard> for CardKind {
 	fn from(rent_card: RentCard) -> Self {
 		Self::RentCard(rent_card)
 	}
 }
 
-impl From<PropertyWildCard> for Card {
+impl From<PropertyWildCard> for CardKind {
 	fn from(property_wild_card: PropertyWildCard) -> Self {
 		Self::PropertyWildCard(property_wild_card)
 	}
 }
 
-impl fmt::Display for Card {
+impl fmt::Display for CardKind {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::ActionCard(c) => c.fmt(f),
@@ -89,25 +89,25 @@ impl fmt::Display for Card {
 	}
 }
 
-impl From<MoneyCard> for BankableCard {
+impl From<MoneyCard> for BankableCardKind {
 	fn from(money_card: MoneyCard) -> Self {
 		Self::MoneyCard(money_card)
 	}
 }
 
-impl From<ActionCard> for BankableCard {
+impl From<ActionCard> for BankableCardKind {
 	fn from(action_card: ActionCard) -> Self {
 		Self::ActionCard(action_card)
 	}
 }
 
-impl From<RentCard> for BankableCard {
+impl From<RentCard> for BankableCardKind {
 	fn from(rent_card: RentCard) -> Self {
 		Self::RentCard(rent_card)
 	}
 }
 
-impl fmt::Display for BankableCard {
+impl fmt::Display for BankableCardKind {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::ActionCard(c) => c.fmt(f),

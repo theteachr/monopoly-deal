@@ -1,10 +1,10 @@
 use std::fmt;
 
-use crate::cards::{BankableCard, CardSet, PropertyCardKind, PropertySets};
+use crate::cards::{BankableCardKind, CardSet, PropertyCardKind, PropertySets};
 
 #[derive(Debug)]
 pub struct Assets {
-	pub bank: CardSet<BankableCard>,
+	pub bank: CardSet<BankableCardKind>,
 	pub property_sets: PropertySets,
 }
 
@@ -16,7 +16,7 @@ impl Assets {
 		}
 	}
 
-	pub fn add_money(&mut self, card: BankableCard) {
+	pub fn add_money(&mut self, card: BankableCardKind) {
 		self.bank.add(card);
 	}
 

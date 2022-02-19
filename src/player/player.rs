@@ -1,4 +1,4 @@
-use crate::cards::{BankableCard, Card, CardSet, PropertyCardKind};
+use crate::cards::{BankableCardKind, CardKind, CardSet, PropertyCardKind};
 use crate::deck::{Deck, DrawCount};
 use crate::player::Assets;
 
@@ -9,7 +9,7 @@ use crate::player::Assets;
 pub struct Player {
 	pub id: usize,
 	pub name: String,
-	pub hand: CardSet<Card>,
+	pub hand: CardSet<CardKind>,
 	pub played: Assets,
 }
 
@@ -35,7 +35,7 @@ impl Player {
 		}
 	}
 
-	pub fn add_money(&mut self, card: BankableCard) {
+	pub fn add_money(&mut self, card: BankableCardKind) {
 		self.played.add_money(card);
 	}
 
@@ -43,7 +43,7 @@ impl Player {
 		self.played.add_property(card);
 	}
 
-	pub fn remove_card_at(&mut self, card_position: u8) -> Option<Card> {
+	pub fn remove_card_at(&mut self, card_position: u8) -> Option<CardKind> {
 		self.hand.remove(card_position.into())
 	}
 
