@@ -1,15 +1,57 @@
 use crate::{
-	cards::Card,
+	cards::{Card, Colored},
+	color::CardColor,
 	common::input,
-	deck::{Deck, DrawCount},
-	game::player::Player,
+	deck::Deck,
+	player::Player,
 };
 
-use std::cmp::Ordering::{Equal, Greater};
 use std::collections::{HashSet, VecDeque};
+use std::{
+	cmp::Ordering::{Equal, Greater},
+	fmt::Debug,
+};
 
-pub trait Playable {
-	fn play(self, player: &mut Player);
+struct Turn {
+	player: Player,
+	num_cards_played: u8,
+}
+
+impl Turn {
+	pub fn new(player: Player) -> Self {
+		Self {
+			player,
+			num_cards_played: 0,
+		}
+	}
+
+	fn read_card(&mut self) -> Option<Card> {
+		if self.num_cards_played == 3 {
+			return None;
+		}
+
+		self.player.print_assets();
+		self.player.print_numbered_hand();
+
+		loop {
+			match input("> ")
+				.trim()
+				.parse::<u8>()
+				.ok()
+				.and_then(|i| self.player.remove_card_at(i))
+			{
+				Some(card) => {
+					self.num_cards_played += 1;
+					break Some(card);
+				}
+				None => continue,
+			}
+		}
+	}
+
+	fn terminate(self) -> Player {
+		self.player
+	}
 }
 
 #[derive(Debug)]
@@ -40,8 +82,7 @@ impl Game {
 
 		// distribute cards
 		for player in &mut players {
-			let cards_drawn = draw_pile.draw(DrawCount::Five);
-			player.update_hand(cards_drawn);
+			player.draw(&mut draw_pile);
 		}
 
 		Self {
@@ -57,42 +98,24 @@ impl Game {
 
 		loop {
 			let mut player = self.players.pop_front().unwrap();
-			let cards_drawn = self.draw_pile.draw(if player.hand.is_empty() {
-				DrawCount::Five
-			} else {
-				DrawCount::Two
-			});
 
-			player.update_hand(cards_drawn);
-
+			player.draw(&mut self.draw_pile);
 			println!("{}'s turn.", player.name);
 			self.print_table();
 
-			// XXX Use a struct to maintain the states needed for a turn?
-
-			self.handle_player_action(&mut player);
-			self.handle_excess_cards(&mut player);
-
-			self.players.push_back(player);
+			self.handle_turn(Turn::new(player));
 		}
 	}
 
-	fn handle_player_action(&mut self, player: &mut Player) {
-		player.print_numbered_hand();
+	fn handle_turn(&mut self, mut turn: Turn) {
+		while let Some(card) = turn.read_card() {
+			card.play(&mut self.players, &mut turn.player);
+		}
 
-		let card_positions = loop {
-			let nums = read_card_numbers(&player);
+		let mut player = turn.terminate();
 
-			if nums.len() > 3 {
-				println!("You can't play more than 3 cards on a turn.");
-				continue;
-			}
-
-			break nums;
-		};
-
-		player.play_cards_at(card_positions);
-		self.handle_excess_cards(player);
+		self.handle_excess_cards(&mut player);
+		self.players.push_back(player);
 	}
 
 	fn handle_excess_cards(&mut self, player: &mut Player) {
@@ -122,14 +145,9 @@ impl Game {
 
 		// Remove cards from player's hand and put them in the discard pile.
 		for num in discard_numbers {
-			let card = player.hand.remove(num.into());
-			self.discard_pile.push_back(card);
+			self.discard_pile
+				.push_back(player.hand.remove(num.into()).unwrap());
 		}
-	}
-
-	fn play(&mut self, card: Card, player: &mut Player) {
-		println!("{} is playing {}...", player.name, card);
-		card.play(player);
 	}
 
 	fn print_table(&mut self) {
@@ -170,6 +188,29 @@ fn get_mock_players(count: u8) -> Vec<Player> {
 		.iter()
 		.take(count as usize)
 		.enumerate()
-		.map(|(i, name)| Player::new(i, String::from(*name)))
+		.map(|(i, &name)| Player::new(i, String::from(name)))
 		.collect()
+}
+
+pub fn read_color<T: Colored>(card: &T) -> CardColor {
+	let colors = card.colors();
+	let max_choose_num = colors.len();
+
+	for (i, color) in colors.iter().enumerate() {
+		println!("{}: {}", i, color);
+	}
+
+	// FIXME: Smell -> repeating pattern of looping until right input
+	loop {
+		if let Ok(n) = input("Choose color: ").trim().parse::<u8>() {
+			if (n as usize) < max_choose_num {
+				break colors[n as usize];
+			}
+		}
+
+		println!(
+			"Invalid color number, entered value should be between 0..={}.",
+			max_choose_num
+		);
+	}
 }

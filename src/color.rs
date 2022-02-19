@@ -18,7 +18,7 @@ pub enum CardColor {
 type Color = (u8, u8, u8);
 
 const RGB_TRIPLES: [Color; 10] = [
-	(013, 024, 033), // Black
+	(000, 000, 000), // Black
 	(010, 147, 150), // Blue
 	(155, 034, 038), // Brown
 	(083, 221, 108), // Green
@@ -57,10 +57,10 @@ impl CardColor {
 	}
 }
 
-impl MultiColor {
-	pub fn colors(&self) -> Vec<CardColor> {
-		match self {
-			MultiColor::Two(c, d) => vec![*c, *d],
+impl std::convert::From<MultiColor> for Vec<CardColor> {
+	fn from(colors: MultiColor) -> Self {
+		match colors {
+			MultiColor::Two(c, d) => vec![c, d],
 			MultiColor::All => COLORS.to_vec(),
 		}
 	}
@@ -68,7 +68,7 @@ impl MultiColor {
 
 impl fmt::Display for MultiColor {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		self.colors()
+		Vec::from(*self)
 			.iter()
 			.map(|&color| colored_text(BLOCK, color))
 			.collect::<Vec<String>>()

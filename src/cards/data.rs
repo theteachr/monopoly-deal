@@ -5,13 +5,9 @@ use crate::color::{
 	MultiColor,
 };
 
-//  Brown   LightRed
-//  Orange  LightYellow
-//  Pink    LightMagenta
-//  Black   Magenta
-
+//  TODO Use correct color sets
 pub const PROPERTY_CARDS: [(u8, CardColor, &[&str]); 10] = [
-	(1, Black, &["Baltic Avenue", "Mediterranean Avenue"]),
+	(1, Brown, &["Baltic Avenue", "Mediterranean Avenue"]),
 	(4, Blue, &["Broadwalk", "Park Place"]),
 	(
 		4,
@@ -24,22 +20,22 @@ pub const PROPERTY_CARDS: [(u8, CardColor, &[&str]); 10] = [
 	),
 	(
 		1,
-		Turquoise,
+		SkyBlue,
 		&["Connecticut Avenue", "Oriental Avenue", "Vermont Avenue"],
 	),
 	(
 		2,
-		SkyBlue,
+		Orange,
 		&["New York Avenue", "St. James Place", "Tennesse Avenue"],
 	),
 	(
 		2,
-		Brown,
+		Magenta,
 		&["St. Charles Place", "Virginia Avenue", "States Avenue"],
 	),
 	(
 		2,
-		Magenta,
+		Black,
 		&[
 			"Short Line",
 			"B. & O. Railroad",
@@ -47,8 +43,12 @@ pub const PROPERTY_CARDS: [(u8, CardColor, &[&str]); 10] = [
 			"Pennsylvania Railroad",
 		],
 	),
-	(3, Red, &["Kentucky Avenue", "Indiana Avenue", "Illinois"]),
-	(2, Orange, &["Water Works", "Electric Company"]),
+	(
+		3,
+		Red,
+		&["Kentucky Avenue", "Indiana Avenue", "Illinois Avenue"],
+	),
+	(2, Turquoise, &["Water Works", "Electric Company"]),
 	(
 		3,
 		Yellow,

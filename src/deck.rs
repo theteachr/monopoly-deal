@@ -1,6 +1,7 @@
 use crate::cards::{
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	Card, RentVec,
+	ActionCard, Card, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
+	property_card::RentVec,
 };
 
 use rand::seq::SliceRandom;
@@ -19,40 +20,35 @@ pub enum DrawCount {
 
 impl Deck {
 	pub fn new() -> Self {
-		let mut cards = Vec::new();
+		let mut cards = Vec::<Card>::new();
 
 		for (value, color, names) in PROPERTY_CARDS.iter() {
 			for name in *names {
-				cards.push(Card::new_property_card(
-					*value,
-					name,
-					*color,
-					RentVec::new(*color),
-				));
+				cards.push(PropertyCard::new(*value, name, *color, RentVec::new(*color)).into());
 			}
 		}
 
 		for (value, count) in MONEY_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Card::new_money_card(*value));
+				cards.push(MoneyCard::new(*value).into());
 			}
 		}
 
 		for (value, action, count) in ACTION_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Card::new_action_card(*value, *action));
+				cards.push(ActionCard::new(*value, *action).into());
 			}
 		}
 
 		for (value, colors, count) in PROPERTY_WILD_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Card::new_property_wild_card(*value, *colors));
+				cards.push(PropertyWildCard::new(*value, *colors).into());
 			}
 		}
 
 		for (value, colors, count) in RENT_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(Card::new_rent_card(*value, *colors));
+				cards.push(RentCard::new(*value, *colors).into());
 			}
 		}
 

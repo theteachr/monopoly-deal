@@ -1,5 +1,4 @@
 mod game;
-mod player;
 
-pub use game::{Game, Playable};
-pub use player::Player;
+pub use game::read_color;
+pub use game::Game;

@@ -33,12 +33,15 @@ impl<T> CardSet<T> {
 		self.cards.iter().collect()
 	}
 
-	pub fn remove(&mut self, position: usize) -> T {
-		// swap card at `postion` with the last card, then pop
-		self.cards.swap(position, self.size - 1);
+	pub fn remove(&mut self, position: usize) -> Option<T> {
+		if position >= self.size {
+			return None;
+		}
+
+		let removed = self.cards.swap_remove(position);
 		self.size -= 1;
 
-		return self.cards.pop().unwrap();
+		return Some(removed);
 	}
 }
 

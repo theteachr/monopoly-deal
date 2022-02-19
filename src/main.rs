@@ -3,6 +3,7 @@ mod color;
 mod common;
 mod deck;
 mod game;
+mod player;
 
 use game::Game;
 

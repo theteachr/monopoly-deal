@@ -1,6 +1,6 @@
 use std::io::{stdin, stdout, Write};
 
-pub fn input(prompt: &str) -> String {
+pub(crate) fn input(prompt: &str) -> String {
 	let mut input = String::new();
 
 	print!("{}", prompt);
