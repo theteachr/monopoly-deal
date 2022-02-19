@@ -8,9 +8,7 @@ use rand::seq::SliceRandom;
 use rand::thread_rng;
 
 #[derive(Debug)]
-pub struct Deck {
-	cards: Vec<Card>,
-}
+pub struct Deck(Vec<Card>);
 
 #[repr(u8)]
 pub enum DrawCount {
@@ -54,24 +52,24 @@ impl Deck {
 
 		cards.shuffle(&mut thread_rng());
 
-		Self { cards }
+		Self(cards)
 	}
 
 	pub fn draw(&mut self, count: DrawCount) -> Vec<Card> {
 		let mut cards = Vec::new();
 
 		for _ in 0..count as u8 {
-			cards.push(self.cards.pop().unwrap());
+			cards.push(self.0.pop().unwrap());
 		}
 
 		return cards;
 	}
 
 	pub fn push_back(&mut self, card: Card) {
-		self.cards.push(card);
+		self.0.push(card);
 	}
 
 	pub fn len(&self) -> u8 {
-		self.cards.len() as u8
+		self.0.len() as u8
 	}
 }
