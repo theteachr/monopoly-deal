@@ -5,7 +5,7 @@ use crate::cards::Colored;
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::player::Player;
 
-#[derive(Debug, Hash, Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Hash, Eq, PartialEq)]
 pub struct PropertyWildCard {
 	pub value: u8,
 	pub available_colors: MultiColor,

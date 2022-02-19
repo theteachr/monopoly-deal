@@ -13,7 +13,7 @@ pub trait Colored {
 	fn colors(&self) -> Vec<CardColor>;
 }
 
-#[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
+#[derive(Debug, Hash, Eq, PartialEq)]
 pub enum Card {
 	PropertyCard(PropertyCard),
 	ActionCard(ActionCard),
@@ -22,7 +22,7 @@ pub enum Card {
 	PropertyWildCard(PropertyWildCard),
 }
 
-#[derive(Debug, Eq, Clone, Copy, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Hash)]
 pub enum BankableCard {
 	MoneyCard(MoneyCard),
 	ActionCard(ActionCard),
@@ -35,8 +35,14 @@ impl Card {
 			Self::ActionCard(c) => c.play(table, player),
 			Self::MoneyCard(c) => c.play(player),
 			Self::PropertyCard(c) => c.play(player),
-			Self::PropertyWildCard(c) => c.play(read_color(&c), player),
-			Self::RentCard(c) => c.play(read_color(&c), player),
+			Self::PropertyWildCard(c) => {
+				let color = read_color(&c);
+				c.play(color, player);
+			},
+			Self::RentCard(c) => {
+				let color = read_color(&c);
+				c.play(color, player);
+			}
 		}
 	}
 }

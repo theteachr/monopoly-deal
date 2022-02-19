@@ -22,8 +22,8 @@ impl Assets {
 
 	pub fn add_property(&mut self, card: PropertyCardKind) {
 		let color = match card {
-			PropertyCardKind::Single(c) => c.color,
-			PropertyCardKind::Wild(c) => c.selected_color.unwrap(),
+			PropertyCardKind::Single(ref c) => c.color,
+			PropertyCardKind::Wild(ref c) => c.selected_color.unwrap(),
 		};
 
 		self.property_sets

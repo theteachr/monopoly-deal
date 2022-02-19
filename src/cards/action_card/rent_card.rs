@@ -6,7 +6,7 @@ use crate::{
 	player::Player,
 };
 
-#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
+#[derive(Debug, Hash, Eq, PartialEq)]
 pub struct RentCard {
 	value: u8,
 	available_colors: MultiColor,

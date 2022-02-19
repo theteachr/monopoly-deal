@@ -8,7 +8,7 @@ use super::{PropertyCardKind, RentVec};
 use crate::color::{colored_text, CardColor};
 use crate::player::Player;
 
-#[derive(Debug, Clone, Copy, Eq)]
+#[derive(Debug, Eq)]
 pub struct PropertyCard {
 	pub value: u8,
 	pub name: &'static str,

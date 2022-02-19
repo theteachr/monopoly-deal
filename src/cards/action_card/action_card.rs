@@ -3,7 +3,7 @@ use crate::player::Player;
 use std::collections::VecDeque;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
-#[derive(Debug, Hash, Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Hash, Eq, PartialEq)]
 pub struct ActionCard {
 	value: u8,
 	action: Action,
