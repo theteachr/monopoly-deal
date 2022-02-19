@@ -1,7 +1,7 @@
+use super::Action;
 use crate::player::Player;
 use std::collections::VecDeque;
 use std::{cmp::PartialEq, fmt, hash::Hash};
-use super::Action;
 
 #[derive(Debug, Hash, Copy, Clone, Eq, PartialEq)]
 pub struct ActionCard {

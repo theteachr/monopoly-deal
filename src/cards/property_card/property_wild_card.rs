@@ -1,7 +1,7 @@
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
+use super::PropertyCardKind;
 use crate::cards::Colored;
-use super::{PropertyCardKind};
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::player::Player;
 

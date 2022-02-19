@@ -1,6 +1,10 @@
 use std::fmt;
 
-use crate::{color::{CardColor, MultiColor}, player::Player, cards::Colored};
+use crate::{
+	cards::Colored,
+	color::{CardColor, MultiColor},
+	player::Player,
+};
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub struct RentCard {

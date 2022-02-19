@@ -1,7 +1,7 @@
 use crate::cards::{
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	ActionCard, Card, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
 	property_card::RentVec,
+	ActionCard, Card, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
 };
 
 use rand::seq::SliceRandom;
