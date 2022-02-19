@@ -22,15 +22,12 @@ impl RentCard {
 		}
 	}
 
-	// TODO Allow play only if the player owns at least one property whose color is on the `RentCard`
-
-	// FIXME Only All color wild cards need to ask for player selection
-	// Dual color cards should request money from the rest of the players
-	pub fn play(self, color: CardColor, player: &mut Player) {
-		todo!()
-	}
 }
 
+// TODO Allow play only if the player owns at least one property whose color is on the `RentCard`
+
+// FIXME Only All color wild cards need to ask for player selection
+// Dual color cards should request money from the rest of the players
 impl Colored for RentCard {
 	fn set_color(&mut self, color: CardColor) {
 		self.selected_color = Some(color);
@@ -38,6 +35,10 @@ impl Colored for RentCard {
 
 	fn colors(&self) -> Vec<CardColor> {
 		Vec::from(self.available_colors)
+	}
+
+	fn play(self, color: CardColor, player: &mut Player) {
+		todo!()
 	}
 }
 

@@ -11,6 +11,7 @@ use crate::player::Player;
 pub trait Colored {
 	fn set_color(&mut self, color: CardColor);
 	fn colors(&self) -> Vec<CardColor>;
+	fn play(self, color: CardColor, player: &mut Player);
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -35,16 +36,15 @@ impl Card {
 			Self::ActionCard(c) => c.play(table, player),
 			Self::MoneyCard(c) => c.play(player),
 			Self::PropertyCard(c) => c.play(player),
-			Self::PropertyWildCard(c) => {
-				let color = read_color(&c);
-				c.play(color, player);
-			},
-			Self::RentCard(c) => {
-				let color = read_color(&c);
-				c.play(color, player);
-			}
+			Self::PropertyWildCard(c) => play_colored_card(c, player),
+			Self::RentCard(c) => play_colored_card(c, player),
 		}
 	}
+}
+
+fn play_colored_card<T: Colored>(card: T, player: &mut Player) {
+	let color = read_color(&card);
+	card.play(color, player);
 }
 
 impl From<PropertyCard> for Card {

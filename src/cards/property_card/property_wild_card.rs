@@ -20,11 +20,6 @@ impl PropertyWildCard {
 			selected_color: None,
 		}
 	}
-
-	pub fn play(mut self, color: CardColor, player: &mut Player) {
-		self.set_color(color);
-		player.add_property(self.into());
-	}
 }
 
 impl Colored for PropertyWildCard {
@@ -34,6 +29,11 @@ impl Colored for PropertyWildCard {
 
 	fn colors(&self) -> Vec<CardColor> {
 		Vec::from(self.available_colors)
+	}
+
+	fn play(mut self, color: CardColor, player: &mut Player) {
+		self.set_color(color);
+		player.add_property(self.into());
 	}
 }
 
