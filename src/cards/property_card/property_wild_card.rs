@@ -1,7 +1,7 @@
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 use super::PropertyCardKind;
-use crate::cards::Colored;
+use crate::cards::{Card, Colored};
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::player::Player;
 
@@ -19,6 +19,12 @@ impl PropertyWildCard {
 			available_colors: colors,
 			selected_color: None,
 		}
+	}
+}
+
+impl Card for PropertyWildCard {
+	fn value(&self) -> u8 {
+		self.value
 	}
 }
 

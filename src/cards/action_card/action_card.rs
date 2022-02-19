@@ -1,5 +1,6 @@
 use super::Action;
 use crate::player::Player;
+use crate::cards::Card;
 use std::collections::VecDeque;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
@@ -17,6 +18,12 @@ impl ActionCard {
 	pub fn play(self, table: &mut VecDeque<Player>, _player: &mut Player) {
 		// TODO Ask whether to bank it or play it
 		println!("Implementing `Playable` for ActionCard...");
+	}
+}
+
+impl Card for ActionCard {
+	fn value(&self) -> u8 {
+		self.value
 	}
 }
 

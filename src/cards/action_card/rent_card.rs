@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::{
-	cards::Colored,
+	cards::{Card, Colored},
 	color::{CardColor, MultiColor},
 	player::Player,
 };
@@ -20,6 +20,12 @@ impl RentCard {
 			available_colors: colors,
 			selected_color: None,
 		}
+	}
+}
+
+impl Card for RentCard {
+	fn value(&self) -> u8 {
+		self.value
 	}
 }
 

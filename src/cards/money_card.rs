@@ -1,4 +1,5 @@
 use crate::player::Player;
+use crate::cards::Card;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
@@ -40,6 +41,12 @@ impl MoneyCard {
 
 	pub fn play(self, player: &mut Player) {
 		player.add_money(self.into());
+	}
+}
+
+impl Card for MoneyCard {
+	fn value(&self) -> u8 {
+		self.denomination as u8
 	}
 }
 

@@ -5,7 +5,7 @@ use std::{
 };
 
 use super::PropertyCardKind;
-use crate::cards::data::COLLECTIONS;
+use crate::cards::{Card, data::COLLECTIONS};
 use crate::color::{colored_text, CardColor};
 use crate::player::Player;
 
@@ -24,12 +24,14 @@ impl PropertyCard {
 		player.add_property(self.into());
 	}
 
-	pub fn value(&self) -> u8 {
-		COLLECTIONS[self.color as usize].0
-	}
-
 	pub fn rent(&self, num_cards: u8) -> u8 {
 		COLLECTIONS[self.color as usize].1[num_cards as usize]
+	}
+}
+
+impl Card for PropertyCard {
+	fn value(&self) -> u8 {
+		COLLECTIONS[self.color as usize].0
 	}
 }
 

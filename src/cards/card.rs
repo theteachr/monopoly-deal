@@ -14,6 +14,10 @@ pub trait Colored {
 	fn play(self, color: CardColor, player: &mut Player);
 }
 
+pub trait Card {
+	fn value(&self) -> u8;
+}
+
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum CardKind {
 	PropertyCard(PropertyCard),
