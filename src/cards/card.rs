@@ -81,18 +81,6 @@ impl From<PropertyWildCard> for CardKind {
 	}
 }
 
-impl fmt::Display for CardKind {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		match self {
-			Self::ActionCard(c) => c.fmt(f),
-			Self::MoneyCard(c) => c.fmt(f),
-			Self::PropertyCard(c) => c.fmt(f),
-			Self::PropertyWildCard(c) => c.fmt(f),
-			Self::RentCard(c) => c.fmt(f),
-		}
-	}
-}
-
 impl From<MoneyCard> for BankableCardKind {
 	fn from(money_card: MoneyCard) -> Self {
 		Self::MoneyCard(money_card)
@@ -111,21 +99,24 @@ impl From<RentCard> for BankableCardKind {
 	}
 }
 
+impl fmt::Display for CardKind {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		match self {
+			Self::ActionCard(c) => c.fmt(f),
+			Self::MoneyCard(c) => c.fmt(f),
+			Self::PropertyCard(c) => c.fmt(f),
+			Self::PropertyWildCard(c) => c.fmt(f),
+			Self::RentCard(c) => c.fmt(f),
+		}
+	}
+}
+
 impl fmt::Display for BankableCardKind {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::ActionCard(c) => c.fmt(f),
 			Self::MoneyCard(c) => c.fmt(f),
 			Self::RentCard(c) => c.fmt(f),
-		}
-	}
-}
-
-impl fmt::Display for PropertyCardKind {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		match self {
-			Self::Single(c) => c.fmt(f),
-			Self::Wild(c) => c.fmt(f),
 		}
 	}
 }

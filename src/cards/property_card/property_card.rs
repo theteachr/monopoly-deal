@@ -5,7 +5,7 @@ use std::{
 };
 
 use super::PropertyCardKind;
-use crate::cards::{Card, data::COLLECTIONS};
+use crate::cards::{data::COLLECTIONS, Card};
 use crate::color::{colored_text, CardColor};
 use crate::player::Player;
 
@@ -56,5 +56,14 @@ impl std::convert::From<PropertyCard> for PropertyCardKind {
 impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "{}", colored_text(self.name, self.color),)
+	}
+}
+
+impl fmt::Display for PropertyCardKind {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		match self {
+			Self::Single(c) => c.fmt(f),
+			Self::Wild(c) => c.fmt(f),
+		}
 	}
 }

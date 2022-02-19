@@ -1,6 +1,6 @@
 use super::Action;
-use crate::player::Player;
 use crate::cards::Card;
+use crate::player::Player;
 use std::collections::VecDeque;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 

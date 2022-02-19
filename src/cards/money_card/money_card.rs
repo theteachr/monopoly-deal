@@ -1,7 +1,7 @@
-use crate::player::Player;
-use crate::cards::Card;
-use std::{cmp::PartialEq, fmt, hash::Hash};
 use super::denomination::Denomination;
+use crate::cards::Card;
+use crate::player::Player;
+use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct MoneyCard(Denomination);
