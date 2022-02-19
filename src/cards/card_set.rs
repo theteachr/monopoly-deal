@@ -6,8 +6,6 @@ pub struct CardSet<T> {
 	size: usize,
 }
 
-// XXX: Implement `Iterator`?
-
 impl<T> CardSet<T> {
 	pub fn new() -> Self {
 		Self {
@@ -23,6 +21,10 @@ impl<T> CardSet<T> {
 	pub fn add(&mut self, card: T) {
 		self.cards.push(card);
 		self.size += 1;
+	}
+
+	pub fn iter(&self) -> impl Iterator<Item = &T> {
+		self.cards.iter()
 	}
 
 	pub fn is_empty(&self) -> bool {
