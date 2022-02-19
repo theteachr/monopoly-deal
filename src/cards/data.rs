@@ -84,15 +84,15 @@ pub const RENT_CARDS: [(u8, MultiColor, u8); 6] = [
 	(1, MultiColor::Two(Yellow, Red), 2),
 ];
 
-pub const COLLECTIONS: [(CardColor, u8, &[u8]); 10] = [
-	(Brown, 1, &[1, 2]),
-	(Blue, 4, &[3, 8]),
-	(Green, 4, &[2, 4, 7]),
-	(SkyBlue, 1, &[1, 2, 3]),
-	(Orange, 2, &[1, 3, 5]),
-	(Magenta, 2, &[1, 2, 4]),
-	(Black, 2, &[1, 2, 3, 4]),
-	(Red, 3, &[2, 3, 6]),
-	(Turquoise, 2, &[1, 2]),
-	(Yellow, 3, &[2, 4, 6]),
+pub const COLLECTIONS: [(u8, &[u8]); 10] = [
+	(2, &[1, 2, 3, 4]), // Black
+	(4, &[3, 8]),       // Blue
+	(1, &[1, 2]),       // Brown
+	(4, &[2, 4, 7]),    // Green
+	(2, &[1, 2, 4]),    // Magenta
+	(2, &[1, 3, 5]),    // Orange
+	(3, &[2, 3, 6]),    // Red
+	(1, &[1, 2, 3]),    // SkyBlue
+	(2, &[1, 2]),       // Turquoise
+	(3, &[2, 4, 6]),    // Yellow
 ];

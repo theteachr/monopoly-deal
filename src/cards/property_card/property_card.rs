@@ -5,6 +5,7 @@ use std::{
 };
 
 use super::PropertyCardKind;
+use crate::cards::data::COLLECTIONS;
 use crate::color::{colored_text, CardColor};
 use crate::player::Player;
 
@@ -16,14 +17,19 @@ pub struct PropertyCard {
 
 impl PropertyCard {
 	pub fn new(name: &'static str, color: CardColor) -> Self {
-		Self {
-			name,
-			color,
-		}
+		Self { name, color }
 	}
 
 	pub fn play(self, player: &mut Player) {
 		player.add_property(self.into());
+	}
+
+	pub fn value(&self) -> u8 {
+		COLLECTIONS[self.color as usize].0
+	}
+
+	pub fn rent(&self, num_cards: u8) -> u8 {
+		COLLECTIONS[self.color as usize].1[num_cards as usize]
 	}
 }
 
@@ -47,10 +53,6 @@ impl std::convert::From<PropertyCard> for PropertyCardKind {
 
 impl fmt::Display for PropertyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(
-			f,
-			"{}",
-			colored_text(self.name, self.color),
-		)
+		write!(f, "{}", colored_text(self.name, self.color),)
 	}
 }
