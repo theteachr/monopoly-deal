@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::cards::{BankableCardKind, CardSet, PropertyCardKind, PropertySets};
+use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind, PropertySets};
 
 #[derive(Debug)]
 pub struct Assets {
@@ -30,6 +30,14 @@ impl Assets {
 			.entry(color)
 			.or_insert(CardSet::new())
 			.add(card);
+	}
+
+	pub fn bank_value(&self) -> u8 {
+		self.bank.iter().map(Card::value).sum()
+	}
+
+	pub fn property_value(&self) -> u8 {
+		0
 	}
 }
 

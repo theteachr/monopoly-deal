@@ -1,9 +1,7 @@
 use std::collections::VecDeque;
 use std::fmt;
 
-use crate::cards::{
-	ActionCard, MoneyCard, PropertyCard, PropertyCardKind, PropertyWildCard, RentCard,
-};
+use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
 use crate::color::CardColor;
 use crate::game::read_color;
 use crate::player::Player;
@@ -32,6 +30,16 @@ pub enum BankableCardKind {
 	MoneyCard(MoneyCard),
 	ActionCard(ActionCard),
 	RentCard(RentCard),
+}
+
+impl Card for BankableCardKind {
+	fn value(&self) -> u8 {
+		match self {
+			Self::ActionCard(c) => c.value(),
+			Self::MoneyCard(c) => c.value(),
+			Self::RentCard(c) => c.value(),
+		}
+	}
 }
 
 impl CardKind {

@@ -5,7 +5,7 @@ use std::{
 
 use crate::color::CardColor;
 
-use crate::cards::{CardSet, PropertyCardKind};
+use crate::cards::{Card, CardSet, PropertyCardKind};
 
 #[derive(Debug)]
 pub struct PropertySets(HashMap<CardColor, CardSet<PropertyCardKind>>);
@@ -17,6 +17,20 @@ impl PropertySets {
 
 	pub fn entry(&mut self, color: CardColor) -> Entry<'_, CardColor, CardSet<PropertyCardKind>> {
 		self.0.entry(color)
+	}
+
+	pub fn value(&self, color: CardColor) -> u8 {
+		self.0
+			.get(&color)
+			.map(|cards| cards.iter().map(Card::value).sum())
+			.unwrap_or(0)
+	}
+
+	pub fn total_value(&self) -> u8 {
+		self.0
+			.values()
+			.map(|cards| cards.iter().map(Card::value).sum::<u8>())
+			.sum()
 	}
 }
 
