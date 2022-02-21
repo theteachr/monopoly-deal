@@ -22,10 +22,9 @@ impl Player {
 	}
 
 	pub fn draw(&mut self, deck: &mut Deck) {
-		let draw_count = if self.hand.is_empty() {
-			DrawCount::Five
-		} else {
-			DrawCount::Two
+		let draw_count = match self.hand.is_empty() {
+			true => DrawCount::Five,
+			false => DrawCount::Two,
 		};
 
 		for card in deck.draw(draw_count) {
