@@ -1,6 +1,9 @@
 use std::fmt;
 
-use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind, PropertySets};
+use crate::{
+	cards::{data::COLLECTIONS, BankableCardKind, Card, CardSet, PropertyCardKind, PropertySets},
+	color::CardColor,
+};
 
 #[derive(Debug)]
 pub struct Assets {
@@ -32,12 +35,19 @@ impl Assets {
 			.add(card);
 	}
 
+	pub fn rent(&self, color: CardColor) -> u8 {
+		match self.property_sets.cards(color).map(CardSet::len) {
+			Some(count) => COLLECTIONS[color as usize].1[(count - 1) as usize],
+			None => 0,
+		}
+	}
+
 	pub fn bank_value(&self) -> u8 {
 		self.bank.iter().map(Card::value).sum()
 	}
 
 	pub fn property_value(&self) -> u8 {
-		0
+		self.property_sets.total_value()
 	}
 }
 

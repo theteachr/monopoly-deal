@@ -23,10 +23,6 @@ impl PropertyCard {
 	pub fn play(self, player: &mut Player) {
 		player.add_property(self.into());
 	}
-
-	pub fn rent(&self, num_cards: u8) -> u8 {
-		COLLECTIONS[self.color as usize].1[num_cards as usize]
-	}
 }
 
 impl Card for PropertyCard {

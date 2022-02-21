@@ -19,6 +19,10 @@ impl PropertySets {
 		self.0.entry(color)
 	}
 
+	pub fn cards(&self, color: CardColor) -> Option<&CardSet<PropertyCardKind>> {
+		self.0.get(&color)
+	}
+
 	pub fn value(&self, color: CardColor) -> u8 {
 		self.0
 			.get(&color)

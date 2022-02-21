@@ -1,10 +1,8 @@
 use crate::cards::{BankableCardKind, CardKind, CardSet, PropertyCardKind};
+use crate::color::CardColor;
 use crate::deck::{Deck, DrawCount};
 use crate::player::Assets;
 
-// XXX Maintain a separate `CardSet` for playable cards.
-// Not all cards can be played. For instance, a player can own a `RentCard`,
-// and not have a property of any of those colors.
 #[derive(Debug)]
 pub struct Player {
 	pub id: usize,
@@ -45,6 +43,10 @@ impl Player {
 
 	pub fn remove_card_at(&mut self, card_position: u8) -> Option<CardKind> {
 		self.hand.remove(card_position.into())
+	}
+
+	pub fn rent(&self, color: CardColor) -> u8 {
+		self.played.rent(color)
 	}
 
 	pub fn print_assets(&self) {

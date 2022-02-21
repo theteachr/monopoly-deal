@@ -43,7 +43,7 @@ impl Colored for RentCard {
 	}
 
 	fn play(self, color: CardColor, player: &mut Player) {
-		todo!()
+		println!("Rent: {}", player.rent(color));
 	}
 }
 

@@ -15,7 +15,7 @@ impl ActionCard {
 		Self { value, action }
 	}
 
-	pub fn play(self, table: &mut VecDeque<Player>, _player: &mut Player) {
+	pub fn play(self, _table: &mut VecDeque<Player>, _player: &mut Player) {
 		// TODO Ask whether to bank it or play it
 		println!("Implementing `Playable` for ActionCard...");
 	}
