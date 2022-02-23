@@ -11,8 +11,10 @@ impl MoneyCard {
 		Self(value.into())
 	}
 
-	pub fn play(self, player: &mut Player) {
+	pub fn play(self, player: &mut Player) -> Option<u8> {
 		player.add_money(self.into());
+
+		Some(5)
 	}
 }
 

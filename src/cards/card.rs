@@ -9,7 +9,7 @@ use crate::player::Player;
 pub trait Colored {
 	fn set_color(&mut self, color: CardColor);
 	fn colors(&self) -> Vec<CardColor>;
-	fn play(self, color: CardColor, player: &mut Player);
+	fn play(self, color: CardColor, player: &mut Player) -> Option<u8>;
 }
 
 pub trait Card {
@@ -43,7 +43,7 @@ impl Card for BankableCardKind {
 }
 
 impl CardKind {
-	pub fn play(self, table: &mut VecDeque<Player>, player: &mut Player) {
+	pub fn play(self, table: &mut VecDeque<Player>, player: &mut Player) -> Option<u8> {
 		match self {
 			Self::ActionCard(c) => c.play(table, player),
 			Self::MoneyCard(c) => c.play(player),
@@ -54,9 +54,9 @@ impl CardKind {
 	}
 }
 
-fn play_colored_card<T: Colored>(card: T, player: &mut Player) {
+fn play_colored_card<T: Colored>(card: T, player: &mut Player) -> Option<u8> {
 	let color = read_color(&card);
-	card.play(color, player);
+	card.play(color, player)
 }
 
 impl From<PropertyCard> for CardKind {

@@ -20,8 +20,10 @@ impl PropertyCard {
 		Self { name, color }
 	}
 
-	pub fn play(self, player: &mut Player) {
+	pub fn play(self, player: &mut Player) -> Option<u8> {
 		player.add_property(self.into());
+
+		Some(2)
 	}
 }
 
