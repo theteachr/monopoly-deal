@@ -1,16 +1,7 @@
-use crate::{
-	cards::{Card, CardSet, Colored},
-	color::CardColor,
-	common::input,
-	deck::Deck,
-	player::Player,
-};
+use crate::{cards::Colored, color::CardColor, common::input, deck::Deck, player::Player};
 
-use std::collections::{HashSet, VecDeque};
-use std::{
-	cmp::Ordering::{Equal, Greater},
-	fmt::Debug,
-};
+use std::collections::VecDeque;
+use std::fmt::Debug;
 
 struct Turn {
 	player: Player,
@@ -131,8 +122,7 @@ impl Game {
 			}
 		}
 
-		let mut player = turn.terminate();
-
+		let player = turn.terminate();
 		self.players.push_back(player);
 	}
 
