@@ -158,8 +158,9 @@ impl Game {
 
 		// Remove cards from player's hand and put them in the discard pile.
 		for num in discard_numbers {
-			self.discard_pile
-				.push_back(player.hand.remove(num.into()).unwrap());
+			let discarded = player.hand.remove(num.into()).unwrap();
+			println!("{} went into the discard pile.", discarded);
+			self.discard_pile.push_back(discarded);
 		}
 	}
 
@@ -173,22 +174,20 @@ impl Game {
 	}
 }
 
-fn read_card_numbers(player: &Player) -> Vec<u8> {
-	let max_card_num = player.hand.len() - 1;
-
+fn read_card_numbers(player: &Player) -> Vec<usize> {
 	loop {
 		match input("> ")
 			.trim()
 			.split_whitespace()
 			.map(|n| {
-				n.parse::<u8>()
+				n.parse::<usize>()
 					.ok()
-					.and_then(|x| match max_card_num.cmp(&x) {
-						Greater | Equal => Some(x),
+					.and_then(|x| match player.hand.len().cmp(&x) {
+						Greater => Some(x),
 						_ => None,
 					})
 			})
-			.collect::<Option<HashSet<u8>>>()
+			.collect::<Option<HashSet<usize>>>()
 		{
 			Some(nums) => break nums.into_iter().collect(),
 			None => continue,

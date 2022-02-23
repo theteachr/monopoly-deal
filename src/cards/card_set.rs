@@ -14,8 +14,8 @@ impl<T> CardSet<T> {
 		}
 	}
 
-	pub fn len(&self) -> u8 {
-		self.size as u8
+	pub fn len(&self) -> usize {
+		self.size
 	}
 
 	pub fn add(&mut self, card: T) {
