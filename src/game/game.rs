@@ -56,8 +56,28 @@ impl Turn {
 		}
 	}
 
-	fn terminate(self) -> Player {
-		self.player
+	fn terminate(mut self, table: &mut VecDeque<Player>, discard_pile: &mut Deck) {
+		// A player is not allowed to have more than 7 cards in their hand at the end of a turn.
+		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
+		let mut to_be_discarded: i8 = self.player.hand.len() as i8 - 7;
+
+		println!("{} card(s) need to be discarded.", to_be_discarded);
+
+		while to_be_discarded > 0 {
+			self.player.hand.print_numbered();
+
+			if let Some(card) = input("> ")
+				.trim()
+				.parse::<u8>()
+				.ok()
+				.and_then(|i| self.player.remove_card_at(i))
+			{
+				discard_pile.push_back(card);
+                to_be_discarded -= 1;
+			}
+		}
+
+		table.push_back(self.player);
 	}
 }
 
@@ -122,8 +142,7 @@ impl Game {
 			}
 		}
 
-		let player = turn.terminate();
-		self.players.push_back(player);
+		turn.terminate(&mut self.players, &mut self.discard_pile);
 	}
 
 	fn print_table(&mut self) {
