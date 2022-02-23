@@ -42,11 +42,11 @@ impl<T: fmt::Display> CardSet<T> {
 		return Some(removed);
 	}
 
-    pub fn print_numbered(&self) {
+	pub fn print_numbered(&self) {
 		for (i, card) in self.cards.iter().enumerate() {
 			println!("{}: {}", i, card);
 		}
-    }
+	}
 }
 
 impl<T: fmt::Display> fmt::Display for CardSet<T> {
