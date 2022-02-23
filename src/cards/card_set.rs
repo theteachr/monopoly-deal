@@ -31,10 +31,6 @@ impl<T: fmt::Display> CardSet<T> {
 		self.size == 0
 	}
 
-	pub fn cards(&self) -> Vec<&T> {
-		self.cards.iter().collect()
-	}
-
 	pub fn remove(&mut self, position: usize) -> Option<T> {
 		if position >= self.size {
 			return None;
