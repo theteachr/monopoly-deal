@@ -1,10 +1,4 @@
-use crate::{
-	cards::{CardKind, Colored},
-	color::CardColor,
-	common::input,
-	deck::Deck,
-	player::Player,
-};
+use crate::{cards::Colored, color::CardColor, common::input, deck::Deck, player::Player};
 
 use std::collections::{HashSet, VecDeque};
 use std::{
@@ -17,6 +11,12 @@ struct Turn {
 	num_cards_played: u8,
 }
 
+enum PlayerAction {
+	Play(u8),
+	Pass,
+	// TODO Rearrange
+}
+
 impl Turn {
 	pub fn new(player: Player) -> Self {
 		Self {
@@ -25,27 +25,37 @@ impl Turn {
 		}
 	}
 
-	fn read_card(&mut self) -> Option<CardKind> {
+	pub fn read_action(&mut self) -> PlayerAction {
 		if self.num_cards_played == 3 {
-			return None;
+			return PlayerAction::Pass;
 		}
 
 		self.player.print_assets();
 		self.player.print_numbered_hand();
 
+		let user_input = input("> ");
+		let trimmed = user_input.trim();
+
+		if trimmed.is_empty() {
+			return PlayerAction::Pass;
+		}
+
 		loop {
-			match input("> ")
-				.trim()
-				.parse::<u8>()
-				.ok()
-				.and_then(|i| self.player.remove_card_at(i))
-			{
-				Some(card) => {
-					self.num_cards_played += 1;
-					break Some(card);
-				}
-				None => continue,
+			match trimmed.parse::<u8>() {
+				Ok(n) => break PlayerAction::Play(n),
+				Err(_) => continue,
 			}
+		}
+	}
+
+	fn play(&mut self, card_position: u8, table: &mut VecDeque<Player>) {
+		if let Some(n) = self
+			.player
+			.remove_card_at(card_position)
+			.and_then(|card| card.play(table, &mut self.player))
+		{
+			println!("{}", n);
+			self.num_cards_played += 1;
 		}
 	}
 
@@ -108,8 +118,11 @@ impl Game {
 	}
 
 	fn handle_turn(&mut self, mut turn: Turn) {
-		while let Some(card) = turn.read_card() {
-			card.play(&mut self.players, &mut turn.player);
+		loop {
+			match turn.read_action() {
+				PlayerAction::Play(n) => turn.play(n, &mut self.players),
+				PlayerAction::Pass => break,
+			}
 		}
 
 		let mut player = turn.terminate();
