@@ -51,12 +51,4 @@ impl Player {
 	pub fn print_assets(&self) {
 		println!("{}'s assets: {}", self.name, self.played);
 	}
-
-	pub fn print_numbered_hand(&self) {
-		println!("{}'s hand:", self.name);
-
-		for (i, card) in self.hand.cards().into_iter().enumerate() {
-			println!("{}: {}", i, card);
-		}
-	}
 }

@@ -6,7 +6,7 @@ pub struct CardSet<T> {
 	size: usize,
 }
 
-impl<T> CardSet<T> {
+impl<T: fmt::Display> CardSet<T> {
 	pub fn new() -> Self {
 		Self {
 			cards: Vec::new(),
@@ -45,6 +45,12 @@ impl<T> CardSet<T> {
 
 		return Some(removed);
 	}
+
+    pub fn print_numbered(&self) {
+		for (i, card) in self.cards.iter().enumerate() {
+			println!("{}: {}", i, card);
+		}
+    }
 }
 
 impl<T: fmt::Display> fmt::Display for CardSet<T> {
