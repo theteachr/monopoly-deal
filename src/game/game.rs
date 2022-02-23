@@ -1,4 +1,10 @@
-use crate::{cards::Colored, color::CardColor, common::input, deck::Deck, player::Player};
+use crate::{
+	cards::{Card, CardSet, Colored},
+	color::CardColor,
+	common::input,
+	deck::Deck,
+	player::Player,
+};
 
 use std::collections::{HashSet, VecDeque};
 use std::{
@@ -31,7 +37,7 @@ impl Turn {
 		}
 
 		self.player.print_assets();
-		self.player.print_numbered_hand();
+		self.player.hand.print_numbered();
 
 		let user_input = input("> ");
 		let trimmed = user_input.trim();
@@ -127,41 +133,7 @@ impl Game {
 
 		let mut player = turn.terminate();
 
-		self.handle_excess_cards(&mut player);
 		self.players.push_back(player);
-	}
-
-	fn handle_excess_cards(&mut self, player: &mut Player) {
-		// A player is not allowed to have more than 7 cards in their hand at the end of a turn.
-		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
-		let card_count = player.hand.len();
-		let to_be_discarded: i8 = card_count as i8 - 7;
-
-		// Nothing to be discarded, return.
-		if to_be_discarded <= 0 {
-			return;
-		}
-
-		println!("You need to discard {}.", to_be_discarded);
-		player.print_numbered_hand();
-
-		let discard_numbers = loop {
-			let nums = read_card_numbers(player);
-
-			if nums.len() != to_be_discarded as usize {
-				println!("You need to discard exactly {}.", to_be_discarded);
-				continue;
-			}
-
-			break nums;
-		};
-
-		// Remove cards from player's hand and put them in the discard pile.
-		for num in discard_numbers {
-			let discarded = player.hand.remove(num.into()).unwrap();
-			println!("{} went into the discard pile.", discarded);
-			self.discard_pile.push_back(discarded);
-		}
 	}
 
 	fn print_table(&mut self) {
@@ -170,27 +142,6 @@ impl Game {
 
 			player.print_assets();
 			self.players.push_back(player);
-		}
-	}
-}
-
-fn read_card_numbers(player: &Player) -> Vec<usize> {
-	loop {
-		match input("> ")
-			.trim()
-			.split_whitespace()
-			.map(|n| {
-				n.parse::<usize>()
-					.ok()
-					.and_then(|x| match player.hand.len().cmp(&x) {
-						Greater => Some(x),
-						_ => None,
-					})
-			})
-			.collect::<Option<HashSet<usize>>>()
-		{
-			Some(nums) => break nums.into_iter().collect(),
-			None => continue,
 		}
 	}
 }
