@@ -1,5 +1,5 @@
 use super::denomination::Denomination;
-use crate::cards::Card;
+use crate::cards::{Card, Play};
 use crate::player::Player;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
@@ -19,6 +19,12 @@ impl MoneyCard {
 impl Card for MoneyCard {
 	fn value(&self) -> u8 {
 		self.0 as u8
+	}
+}
+
+impl Play for MoneyCard {
+	fn can_play(&self, player: &Player) -> bool {
+        true
 	}
 }
 

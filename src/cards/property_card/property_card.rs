@@ -5,7 +5,7 @@ use std::{
 };
 
 use super::PropertyCardKind;
-use crate::cards::{data::COLLECTIONS, Card};
+use crate::cards::{data::COLLECTIONS, Card, Play};
 use crate::color::{colored_text, CardColor};
 use crate::player::Player;
 
@@ -40,6 +40,12 @@ impl Hash for PropertyCard {
 impl PartialEq for PropertyCard {
 	fn eq(&self, other: &Self) -> bool {
 		self.name == other.name
+	}
+}
+
+impl Play for PropertyCard {
+	fn can_play(&self, player: &Player) -> bool {
+        true
 	}
 }
 

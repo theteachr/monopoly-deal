@@ -16,6 +16,10 @@ pub trait Card {
 	fn value(&self) -> u8;
 }
 
+pub trait Play {
+    fn can_play(&self, player: &Player) -> bool;
+}
+
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum CardKind {
 	PropertyCard(PropertyCard),
@@ -38,6 +42,18 @@ impl Card for BankableCardKind {
 			Self::ActionCard(c) => c.value(),
 			Self::MoneyCard(c) => c.value(),
 			Self::RentCard(c) => c.value(),
+		}
+	}
+}
+
+impl Play for CardKind {
+	fn can_play(&self, player: &Player) -> bool {
+		match self {
+			Self::ActionCard(c) => c.can_play(player),
+			Self::MoneyCard(c) => c.can_play(player),
+			Self::RentCard(c) => c.can_play(player),
+			Self::PropertyCard(c) => c.can_play(player),
+			Self::PropertyWildCard(c) => c.can_play(player),
 		}
 	}
 }
