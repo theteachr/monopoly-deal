@@ -1,4 +1,4 @@
-use crate::cards::{BankableCardKind, CardKind, CardSet, PropertyCardKind};
+use crate::cards::{BankableCardKind, CardKind, CardSet, Play, PropertyCardKind};
 use crate::color::CardColor;
 use crate::deck::{Deck, DrawCount};
 use crate::player::Assets;
@@ -40,9 +40,14 @@ impl Player {
 		self.played.add_property(card);
 	}
 
-	pub fn remove_card_at(&mut self, card_position: u8) -> Option<CardKind> {
-		// FIXME Don't remove card if not playable
-		self.hand.remove(card_position.into())
+	pub fn remove_card_at(&mut self, card_position: usize) -> Option<CardKind> {
+		if let Some(card) = self.hand.card_at(card_position) {
+			if card.can_play(&self) {
+				return self.hand.remove(card_position);
+			}
+		}
+
+        None
 	}
 
 	pub fn owns_asset_of_color(&self, color: CardColor) -> bool {
