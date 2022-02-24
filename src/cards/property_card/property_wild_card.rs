@@ -29,7 +29,7 @@ impl Card for PropertyWildCard {
 }
 
 impl Play for PropertyWildCard {
-	fn can_play(&self, player: &Player) -> bool {
+	fn can_play(&self, _: &Player) -> bool {
         true
 	}
 }
