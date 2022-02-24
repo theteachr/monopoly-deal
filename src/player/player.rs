@@ -41,7 +41,12 @@ impl Player {
 	}
 
 	pub fn remove_card_at(&mut self, card_position: u8) -> Option<CardKind> {
+		// FIXME Don't remove card if not playable
 		self.hand.remove(card_position.into())
+	}
+
+	pub fn owns_asset_of_color(&self, color: CardColor) -> bool {
+		self.played.property_sets.exists(color)
 	}
 
 	pub fn rent(&self, color: CardColor) -> u8 {
