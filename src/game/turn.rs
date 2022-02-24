@@ -24,7 +24,6 @@ impl Turn {
 			return PlayerAction::Pass;
 		}
 
-		self.player.print_assets();
 		self.player.hand.print_numbered();
 
 		println!("Total Bank Value: {}", self.player.played.bank_value());

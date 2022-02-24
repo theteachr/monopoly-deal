@@ -59,6 +59,7 @@ impl Game {
 			println!("{}'s turn.", player.name);
 			self.print_table();
 
+			player.print_assets();
 			self.handle_turn(Turn::new(player));
 		}
 	}
@@ -73,6 +74,7 @@ impl Game {
 
 		let (mut player, cards_played, cards_discarded) = turn.terminate();
 
+		// FIXME Played cards are not updated at every turn
 		cards_played
 			.into_iter()
 			.for_each(|card| card.play(&mut self.players, &mut player));
@@ -81,6 +83,7 @@ impl Game {
 			.into_iter()
 			.for_each(|card| self.discard_pile.push_back(card));
 
+		player.print_assets();
 		self.players.push_back(player);
 	}
 
