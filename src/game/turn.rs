@@ -1,24 +1,26 @@
 use super::PlayerAction;
+use crate::cards::{CardKind, CardSet};
 use crate::common::input;
-use crate::deck::Deck;
 use crate::player::Player;
 use std::collections::VecDeque;
 
 pub(crate) struct Turn {
 	player: Player,
-	num_cards_played: u8,
+	cards_played: CardSet<CardKind>,
+	cards_discarded: CardSet<CardKind>,
 }
 
 impl Turn {
 	pub fn new(player: Player) -> Self {
 		Self {
 			player,
-			num_cards_played: 0,
+			cards_played: CardSet::new(),
+			cards_discarded: CardSet::new(),
 		}
 	}
 
 	pub fn read_action(&mut self) -> PlayerAction {
-		if self.num_cards_played == 3 {
+		if self.cards_played.len() == 3 {
 			return PlayerAction::Pass;
 		}
 
@@ -47,17 +49,15 @@ impl Turn {
 	}
 
 	pub fn play(&mut self, card_position: u8, table: &mut VecDeque<Player>) {
-		if let Some(n) = self
+		if let Some(card) = self
 			.player
 			.remove_card_at(card_position)
-			.and_then(|card| card.play(table, &mut self.player))
 		{
-			println!("{}", n);
-			self.num_cards_played += 1;
+			self.cards_played.add(card);
 		}
 	}
 
-	pub fn terminate(mut self, table: &mut VecDeque<Player>, discard_pile: &mut Deck) {
+	pub fn terminate(mut self) -> (Player, CardSet<CardKind>, CardSet<CardKind>) {
 		// A player is not allowed to have more than 7 cards in their hand at the end of a turn.
 		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
 		let mut to_be_discarded: i8 = self.player.hand.len() as i8 - 7;
@@ -73,11 +73,11 @@ impl Turn {
 				.ok()
 				.and_then(|i| self.player.remove_card_at(i))
 			{
-				discard_pile.push_back(card);
+				self.cards_discarded.add(card);
 				to_be_discarded -= 1;
 			}
 		}
-
-		table.push_back(self.player);
+	
+		(self.player, self.cards_played, self.cards_discarded)
 	}
 }
