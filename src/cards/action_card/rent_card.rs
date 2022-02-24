@@ -43,9 +43,11 @@ impl Colored for RentCard {
 	}
 
 	fn play(self, color: CardColor, player: &mut Player) -> Option<u8> {
-		println!("Rent: {}", player.rent(color));
+		if !player.owns_asset_of_color(color) {
+			return None;
+		}
 
-		Some(4)
+		Some(player.rent(color))
 	}
 }
 
