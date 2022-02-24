@@ -42,12 +42,8 @@ impl Colored for RentCard {
 		Vec::from(self.available_colors)
 	}
 
-	fn play(self, color: CardColor, player: &mut Player) -> Option<u8> {
-		if !player.owns_asset_of_color(color) {
-			return None;
-		}
-
-		Some(player.rent(color))
+	fn play(self, color: CardColor, player: &mut Player) {
+		println!("Playing a rent card: {}", player.rent(color));
 	}
 }
 
