@@ -1,6 +1,6 @@
 mod game;
 mod turn;
 
-pub use game::{read_color, Game};
 use game::PlayerAction;
+pub use game::{read_color, Game};
 use turn::Turn;
