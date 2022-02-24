@@ -1,5 +1,5 @@
-use crate::{cards::Colored, color::CardColor, common::input, deck::Deck, player::Player};
 use super::Turn;
+use crate::{cards::Colored, color::CardColor, common::input, deck::Deck, player::Player};
 
 use std::collections::VecDeque;
 use std::fmt::Debug;
@@ -71,7 +71,11 @@ impl Game {
 			}
 		}
 
-		turn.terminate(&mut self.players, &mut self.discard_pile);
+		let (mut player, cards_played, cards_discarded) = turn.terminate();
+
+		cards_played.into_iter().for_each(|card| card.play(&mut self.players, &mut player));
+
+		self.players.push_back(player);
 	}
 
 	fn print_table(&mut self) {
