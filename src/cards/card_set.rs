@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, ops::Index};
 
 #[derive(Debug)]
 pub struct CardSet<T> {
@@ -39,14 +39,30 @@ impl<T: fmt::Display> CardSet<T> {
 		let removed = self.cards.swap_remove(position);
 		self.size -= 1;
 
-		return Some(removed);
+		Some(removed)
 	}
+
+    pub fn card_at(&self, index: usize) -> Option<&T> {
+        if index >= self.size {
+            return None;
+        }
+
+        Some(&self.cards[index])
+    }
 
 	pub fn print_numbered(&self) {
 		for (i, card) in self.cards.iter().enumerate() {
 			println!("{}: {}", i, card);
 		}
 	}
+}
+
+impl<T> Index<usize> for CardSet<T> {
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.cards[index]
+    }
 }
 
 impl<T> Iterator for CardSet<T> {
