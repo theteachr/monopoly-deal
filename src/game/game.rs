@@ -73,7 +73,13 @@ impl Game {
 
 		let (mut player, cards_played, cards_discarded) = turn.terminate();
 
-		cards_played.into_iter().for_each(|card| card.play(&mut self.players, &mut player));
+		cards_played
+			.into_iter()
+			.for_each(|card| card.play(&mut self.players, &mut player));
+
+		cards_discarded
+			.into_iter()
+			.for_each(|card| self.discard_pile.push_back(card));
 
 		self.players.push_back(player);
 	}
