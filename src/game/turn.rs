@@ -41,14 +41,14 @@ impl Turn {
 		}
 
 		loop {
-			match trimmed.parse::<u8>() {
+			match trimmed.parse::<usize>() {
 				Ok(n) => break PlayerAction::Play(n),
 				Err(_) => continue,
 			}
 		}
 	}
 
-	pub fn play(&mut self, card_position: u8, table: &mut VecDeque<Player>) {
+	pub fn play(&mut self, card_position: usize, table: &mut VecDeque<Player>) {
 		if let Some(card) = self
 			.player
 			.remove_card_at(card_position)
@@ -69,7 +69,7 @@ impl Turn {
 
 			if let Some(card) = input("> ")
 				.trim()
-				.parse::<u8>()
+				.parse::<usize>()
 				.ok()
 				.and_then(|i| self.player.remove_card_at(i))
 			{

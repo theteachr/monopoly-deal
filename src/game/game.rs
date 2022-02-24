@@ -5,7 +5,7 @@ use std::collections::VecDeque;
 use std::fmt::Debug;
 
 pub(crate) enum PlayerAction {
-	Play(u8),
+	Play(usize),
 	Pass,
 	// TODO Rearrange
 }
