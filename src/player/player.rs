@@ -50,7 +50,7 @@ impl Player {
 		None
 	}
 
-	pub fn owns_asset_of_color(&self, color: CardColor) -> bool {
+	pub fn owns_property_of_color(&self, color: &CardColor) -> bool {
 		self.played.property_sets.exists(color)
 	}
 
