@@ -1,8 +1,8 @@
 use super::PlayerAction;
-use crate::player::Player;
 use crate::common::input;
-use std::collections::VecDeque;
 use crate::deck::Deck;
+use crate::player::Player;
+use std::collections::VecDeque;
 
 pub(crate) struct Turn {
 	player: Player,
@@ -24,6 +24,12 @@ impl Turn {
 
 		self.player.print_assets();
 		self.player.hand.print_numbered();
+
+		println!("Total Bank Value: {}", self.player.played.bank_value());
+		println!(
+			"Total Asset Value: {}",
+			self.player.played.total_property_value()
+		);
 
 		let user_input = input("> ");
 		let trimmed = user_input.trim();
