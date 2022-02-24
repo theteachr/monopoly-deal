@@ -23,18 +23,16 @@ impl PropertySets {
 		self.0.get(&color)
 	}
 
-	pub fn value(&self, color: CardColor) -> u8 {
-		self.0
-			.get(&color)
-			.map(|cards| cards.iter().map(Card::value).sum())
-			.unwrap_or(0)
+	fn set_value(cards: &CardSet<PropertyCardKind>) -> u8 {
+		cards.iter().map(Card::value).sum()
 	}
 
 	pub fn total_value(&self) -> u8 {
-		self.0
-			.values()
-			.map(|cards| cards.iter().map(Card::value).sum::<u8>())
-			.sum()
+		self.0.values().map(PropertySets::set_value).sum()
+	}
+
+	pub fn exists(&self, color: CardColor) -> bool {
+		self.0.contains_key(&color)
 	}
 }
 

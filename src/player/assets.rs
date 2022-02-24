@@ -46,7 +46,7 @@ impl Assets {
 		self.bank.iter().map(Card::value).sum()
 	}
 
-	pub fn property_value(&self) -> u8 {
+	pub fn total_property_value(&self) -> u8 {
 		self.property_sets.total_value()
 	}
 }
