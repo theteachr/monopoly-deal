@@ -24,7 +24,7 @@ impl Card for MoneyCard {
 
 impl Play for MoneyCard {
 	fn can_play(&self, _: &Player) -> bool {
-        true
+		true
 	}
 }
 

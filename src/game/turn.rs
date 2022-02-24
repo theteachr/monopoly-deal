@@ -49,10 +49,7 @@ impl Turn {
 	}
 
 	pub fn play(&mut self, card_position: usize, table: &mut VecDeque<Player>) {
-		if let Some(card) = self
-			.player
-			.remove_card_at(card_position)
-		{
+		if let Some(card) = self.player.remove_card_at(card_position) {
 			self.cards_played.add(card);
 		}
 	}
@@ -77,7 +74,7 @@ impl Turn {
 				to_be_discarded -= 1;
 			}
 		}
-	
+
 		(self.player, self.cards_played, self.cards_discarded)
 	}
 }

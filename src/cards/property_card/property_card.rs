@@ -45,7 +45,7 @@ impl PartialEq for PropertyCard {
 
 impl Play for PropertyCard {
 	fn can_play(&self, _: &Player) -> bool {
-        true
+		true
 	}
 }
 

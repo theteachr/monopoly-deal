@@ -42,13 +42,13 @@ impl<T: fmt::Display> CardSet<T> {
 		Some(removed)
 	}
 
-    pub fn card_at(&self, index: usize) -> Option<&T> {
-        if index >= self.size {
-            return None;
-        }
+	pub fn card_at(&self, index: usize) -> Option<&T> {
+		if index >= self.size {
+			return None;
+		}
 
-        Some(&self.cards[index])
-    }
+		Some(&self.cards[index])
+	}
 
 	pub fn print_numbered(&self) {
 		for (i, card) in self.cards.iter().enumerate() {
@@ -58,11 +58,11 @@ impl<T: fmt::Display> CardSet<T> {
 }
 
 impl<T> Index<usize> for CardSet<T> {
-    type Output = T;
+	type Output = T;
 
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.cards[index]
-    }
+	fn index(&self, index: usize) -> &Self::Output {
+		&self.cards[index]
+	}
 }
 
 impl<T> Iterator for CardSet<T> {

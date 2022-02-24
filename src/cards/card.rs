@@ -17,7 +17,7 @@ pub trait Card {
 }
 
 pub trait Play {
-    fn can_play(&self, player: &Player) -> bool;
+	fn can_play(&self, player: &Player) -> bool;
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]

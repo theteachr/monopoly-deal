@@ -47,7 +47,7 @@ impl Player {
 			}
 		}
 
-        None
+		None
 	}
 
 	pub fn owns_asset_of_color(&self, color: CardColor) -> bool {
