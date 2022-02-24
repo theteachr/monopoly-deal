@@ -49,6 +49,14 @@ impl<T: fmt::Display> CardSet<T> {
 	}
 }
 
+impl<T> Iterator for CardSet<T> {
+	type Item = T;
+
+	fn next(&mut self) -> Option<Self::Item> {
+		self.cards.pop()
+	}
+}
+
 impl<T: fmt::Display> fmt::Display for CardSet<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		let string = self
