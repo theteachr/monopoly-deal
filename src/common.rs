@@ -10,5 +10,5 @@ pub(crate) fn input(prompt: &str) -> String {
 		.read_line(&mut input)
 		.expect("Couldn't read from `stdin` :<");
 
-	return input;
+	return input.trim().to_string();
 }

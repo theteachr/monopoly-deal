@@ -1,6 +1,7 @@
 use super::denomination::Denomination;
-use crate::cards::Card;
-use crate::player::Player;
+use crate::cards::{Card, Play};
+use crate::game::Turn;
+use crate::player::Assets;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -10,17 +11,21 @@ impl MoneyCard {
 	pub fn new(value: u8) -> Self {
 		Self(value.into())
 	}
-
-	pub fn play(self, player: &mut Player) -> Option<u8> {
-		player.add_money(self.into());
-
-		Some(5)
-	}
 }
 
 impl Card for MoneyCard {
 	fn value(&self) -> u8 {
 		self.0 as u8
+	}
+}
+
+impl Play for MoneyCard {
+	fn can_play(&self, _: &Assets) -> bool {
+		true
+	}
+
+	fn play(self, turn: &mut Turn) {
+		turn.assets.add_money(self.into());
 	}
 }
 

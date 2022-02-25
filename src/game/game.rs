@@ -1,11 +1,17 @@
-use crate::{cards::Colored, color::CardColor, common::input, deck::Deck, player::Player};
 use super::Turn;
+use crate::{
+	cards::Colored,
+	color::CardColor,
+	common::input,
+	deck::Deck,
+	player::{Assets, Player},
+};
 
 use std::collections::VecDeque;
 use std::fmt::Debug;
 
-pub(crate) enum PlayerAction {
-	Play(u8),
+pub enum PlayerAction {
+	Play(usize),
 	Pass,
 	// TODO Rearrange
 }
@@ -14,13 +20,14 @@ pub(crate) enum PlayerAction {
 pub struct Game {
 	draw_pile: Deck,
 	discard_pile: Deck,
-	players: VecDeque<Player>,
+	table: VecDeque<(Player, Assets)>,
 	player_count: u8,
 }
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
+		let mut table = VecDeque::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
 
@@ -41,10 +48,14 @@ impl Game {
 			player.draw(&mut draw_pile);
 		}
 
+		players
+			.into_iter()
+			.for_each(|player| table.push_back((player, Assets::new())));
+
 		Self {
 			draw_pile,
 			discard_pile: Deck::new(),
-			players: VecDeque::from(players),
+			table,
 			player_count,
 		}
 	}
@@ -53,33 +64,42 @@ impl Game {
 		println!("The Deal has been initiated.");
 
 		loop {
-			let mut player = self.players.pop_front().unwrap();
+			let (mut player, assets) = self.table.pop_front().unwrap();
 
 			player.draw(&mut self.draw_pile);
-			println!("{}'s turn.", player.name);
+
+			println!("\n+++ Table +++\n");
 			self.print_table();
 
-			self.handle_turn(Turn::new(player));
+			println!("\n*** {}'s Turn ***\n", player.name);
+
+			self.handle_turn(Turn::new(player, assets));
 		}
 	}
 
 	fn handle_turn(&mut self, mut turn: Turn) {
 		loop {
 			match turn.read_action() {
-				PlayerAction::Play(n) => turn.play(n, &mut self.players),
+				PlayerAction::Play(n) => turn.play(n),
 				PlayerAction::Pass => break,
 			}
 		}
 
-		turn.terminate(&mut self.players, &mut self.discard_pile);
+		let (player, assets, cards_discarded) = turn.terminate();
+
+		cards_discarded
+			.into_iter()
+			.for_each(|card| self.discard_pile.push_back(card));
+
+		self.table.push_back((player, assets));
 	}
 
 	fn print_table(&mut self) {
 		for _ in 1..self.player_count {
-			let player = self.players.pop_front().unwrap();
+			let (player, assets) = self.table.pop_front().unwrap();
 
-			player.print_assets();
-			self.players.push_back(player);
+			println!("### Assets of {} ###\n\n{}\n", player.name, assets);
+			self.table.push_back((player, assets));
 		}
 	}
 }
@@ -103,7 +123,7 @@ pub fn read_color<T: Colored>(card: &T) -> CardColor {
 
 	// FIXME: Smell -> repeating pattern of looping until right input
 	loop {
-		if let Ok(n) = input("Choose color: ").trim().parse::<u8>() {
+		if let Ok(n) = input("Choose color: ").parse::<u8>() {
 			if (n as usize) < max_choose_num {
 				break colors[n as usize];
 			}

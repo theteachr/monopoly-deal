@@ -1,9 +1,10 @@
 use std::fmt;
 
 use crate::{
-	cards::{Card, Colored},
+	cards::{Card, Colored, Play},
 	color::{CardColor, MultiColor},
-	player::Player,
+	game::Turn,
+	player::Assets,
 };
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -29,6 +30,21 @@ impl Card for RentCard {
 	}
 }
 
+impl Play for RentCard {
+	fn can_play(&self, assets: &Assets) -> bool {
+		self.colors()
+			.iter()
+			.any(|color| assets.property_sets.exists(color))
+	}
+
+	fn play(self, turn: &mut Turn) {
+		println!(
+			"Playing a rent card: {}",
+			turn.assets.rent(self.selected_color.unwrap())
+		);
+	}
+}
+
 // TODO Allow play only if the player owns at least one property whose color is on the `RentCard`
 
 // FIXME Only All color wild cards need to ask for player selection
@@ -40,14 +56,6 @@ impl Colored for RentCard {
 
 	fn colors(&self) -> Vec<CardColor> {
 		Vec::from(self.available_colors)
-	}
-
-	fn play(self, color: CardColor, player: &mut Player) -> Option<u8> {
-		if !player.owns_asset_of_color(color) {
-			return None;
-		}
-
-		Some(player.rent(color))
 	}
 }
 

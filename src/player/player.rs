@@ -1,14 +1,11 @@
-use crate::cards::{BankableCardKind, CardKind, CardSet, PropertyCardKind};
-use crate::color::CardColor;
+use crate::cards::{CardKind, CardSet};
 use crate::deck::{Deck, DrawCount};
-use crate::player::Assets;
 
 #[derive(Debug)]
 pub struct Player {
 	pub id: usize,
 	pub name: String,
 	pub hand: CardSet<CardKind>,
-	pub played: Assets,
 }
 
 impl Player {
@@ -17,7 +14,6 @@ impl Player {
 			id,
 			name,
 			hand: CardSet::new(),
-			played: Assets::new(),
 		}
 	}
 
@@ -32,28 +28,7 @@ impl Player {
 		}
 	}
 
-	pub fn add_money(&mut self, card: BankableCardKind) {
-		self.played.add_money(card);
-	}
-
-	pub fn add_property(&mut self, card: PropertyCardKind) {
-		self.played.add_property(card);
-	}
-
-	pub fn remove_card_at(&mut self, card_position: u8) -> Option<CardKind> {
-		// FIXME Don't remove card if not playable
-		self.hand.remove(card_position.into())
-	}
-
-	pub fn owns_asset_of_color(&self, color: CardColor) -> bool {
-		self.played.property_sets.exists(color)
-	}
-
-	pub fn rent(&self, color: CardColor) -> u8 {
-		self.played.rent(color)
-	}
-
-	pub fn print_assets(&self) {
-		println!("{}'s assets: {}", self.name, self.played);
+	pub fn remove_card_at(&mut self, card_position: usize) -> CardKind {
+		return self.hand.remove(card_position);
 	}
 }

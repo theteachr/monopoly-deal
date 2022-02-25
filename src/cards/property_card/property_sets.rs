@@ -31,7 +31,7 @@ impl PropertySets {
 		self.0.values().map(PropertySets::set_value).sum()
 	}
 
-	pub fn exists(&self, color: CardColor) -> bool {
+	pub fn exists(&self, color: &CardColor) -> bool {
 		self.0.contains_key(&color)
 	}
 }
