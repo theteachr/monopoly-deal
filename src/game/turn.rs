@@ -25,11 +25,14 @@ impl Turn {
 			return PlayerAction::Pass;
 		}
 
-		println!("{}", self.assets);
+		println!("\n<<< Assets of {} >>>\n\n{}\n", self.player.name, self.assets);
+
 		self.player.hand.print_numbered();
 
+		println!();
 		println!("Total Bank Value: {}", self.assets.bank_value());
 		println!("Total Asset Value: {}", self.assets.total_property_value());
+		println!();
 
 		loop {
 			let user_input = input("> ");
@@ -46,6 +49,7 @@ impl Turn {
 	}
 
 	pub fn play(&mut self, card_position: usize) {
+		// FIXME
 		if let Some(card) = self.player.remove_card_at(card_position) {
 			if card.can_play(&self.assets) {
 				card.play(self);
@@ -61,9 +65,9 @@ impl Turn {
 		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
 		let mut to_be_discarded: i8 = self.player.hand.len() as i8 - 7;
 
-		println!("{} card(s) need to be discarded.", to_be_discarded);
-
 		while to_be_discarded > 0 {
+			println!("You need to discard {}.", to_be_discarded);
+
 			self.player.hand.print_numbered();
 
 			if let Some(card) = input("> ")

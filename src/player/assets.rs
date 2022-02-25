@@ -53,6 +53,6 @@ impl Assets {
 
 impl fmt::Display for Assets {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "Bank: {} Properties: {}", self.bank, self.property_sets)
+		write!(f, "Bank: {}\n\nProperties: {}", self.bank, self.property_sets)
 	}
 }

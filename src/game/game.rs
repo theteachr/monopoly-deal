@@ -67,10 +67,12 @@ impl Game {
 			let (mut player, assets) = self.table.pop_front().unwrap();
 
 			player.draw(&mut self.draw_pile);
-			println!("{}'s turn.", player.name);
 
+			println!("\n+++ Table +++\n");
 			self.print_table();
-			println!("{}", assets);
+
+			println!("\n*** {}'s Turn ***\n", player.name);
+
 			self.handle_turn(Turn::new(player, assets));
 		}
 	}
@@ -96,7 +98,7 @@ impl Game {
 		for _ in 1..self.player_count {
 			let (player, assets) = self.table.pop_front().unwrap();
 
-			println!("{}", assets);
+			println!("### Assets of {} ###\n\n{}\n", player.name, assets);
 			self.table.push_back((player, assets));
 		}
 	}
