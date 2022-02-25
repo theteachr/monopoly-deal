@@ -121,7 +121,7 @@ pub fn read_color<T: Colored>(card: &T) -> CardColor {
 
 	// FIXME: Smell -> repeating pattern of looping until right input
 	loop {
-		if let Ok(n) = input("Choose color: ").trim().parse::<u8>() {
+		if let Ok(n) = input("Choose color: ").parse::<u8>() {
 			if (n as usize) < max_choose_num {
 				break colors[n as usize];
 			}

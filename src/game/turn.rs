@@ -31,15 +31,14 @@ impl Turn {
 		println!("Total Bank Value: {}", self.assets.bank_value());
 		println!("Total Asset Value: {}", self.assets.total_property_value());
 
-		let user_input = input("> ");
-		let trimmed = user_input.trim();
-
-		if trimmed.is_empty() {
-			return PlayerAction::Pass;
-		}
-
 		loop {
-			match trimmed.parse::<usize>() {
+			let user_input = input("> ");
+
+			if user_input.is_empty() {
+				return PlayerAction::Pass;
+			}
+
+			match user_input.parse::<usize>() {
 				Ok(n) => break PlayerAction::Play(n),
 				Err(_) => continue,
 			}
