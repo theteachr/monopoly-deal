@@ -31,15 +31,11 @@ impl<T: fmt::Display> CardSet<T> {
 		self.size == 0
 	}
 
-	pub fn remove(&mut self, position: usize) -> Option<T> {
-		if position >= self.size {
-			return None;
-		}
-
+	pub fn remove(&mut self, position: usize) -> T {
 		let removed = self.cards.swap_remove(position);
 		self.size -= 1;
 
-		Some(removed)
+		removed
 	}
 
 	pub fn print_numbered(&self) {

@@ -28,7 +28,7 @@ impl Player {
 		}
 	}
 
-	pub fn remove_card_at(&mut self, card_position: usize) -> Option<CardKind> {
+	pub fn remove_card_at(&mut self, card_position: usize) -> CardKind {
 		return self.hand.remove(card_position);
 	}
 }

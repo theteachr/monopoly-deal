@@ -25,7 +25,10 @@ impl Turn {
 			return PlayerAction::Pass;
 		}
 
-		println!("\n<<< Assets of {} >>>\n\n{}\n", self.player.name, self.assets);
+		println!(
+			"\n<<< Assets of {} >>>\n\n{}\n",
+			self.player.name, self.assets
+		);
 
 		self.player.hand.print_numbered();
 
@@ -42,21 +45,21 @@ impl Turn {
 			}
 
 			match user_input.parse::<usize>() {
-				Ok(n) => break PlayerAction::Play(n),
-				Err(_) => continue,
+				Ok(n) if n < self.player.hand.len() => break PlayerAction::Play(n),
+				_ => continue,
 			}
 		}
 	}
 
 	pub fn play(&mut self, card_position: usize) {
 		// FIXME
-		if let Some(card) = self.player.remove_card_at(card_position) {
-			if card.can_play(&self.assets) {
-				card.play(self);
-				self.num_cards_played += 1;
-			} else {
-				self.player.hand.add(card);
-			}
+		let card = self.player.remove_card_at(card_position);
+
+		if card.can_play(&self.assets) {
+			card.play(self);
+			self.num_cards_played += 1;
+		} else {
+			self.player.hand.add(card);
 		}
 	}
 
@@ -68,17 +71,20 @@ impl Turn {
 		while to_be_discarded > 0 {
 			println!("You need to discard {}.", to_be_discarded);
 
+			println!();
 			self.player.hand.print_numbered();
+			println!();
 
-			if let Some(card) = input("> ")
-				.trim()
-				.parse::<usize>()
-				.ok()
-				.and_then(|i| self.player.remove_card_at(i))
-			{
-				self.cards_discarded.add(card);
-				to_be_discarded -= 1;
-			}
+			let card_position = loop {
+				match input("> ").parse::<usize>() {
+					Ok(n) if n < self.player.hand.len() => break n,
+					_ => continue,
+				}
+			};
+
+			self.cards_discarded
+				.add(self.player.remove_card_at(card_position));
+			to_be_discarded -= 1;
 		}
 
 		(self.player, self.assets, self.cards_discarded)
