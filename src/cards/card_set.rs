@@ -42,14 +42,6 @@ impl<T: fmt::Display> CardSet<T> {
 		Some(removed)
 	}
 
-	pub fn card_at(&self, index: usize) -> Option<&T> {
-		if index >= self.size {
-			return None;
-		}
-
-		Some(&self.cards[index])
-	}
-
 	pub fn print_numbered(&self) {
 		for (i, card) in self.cards.iter().enumerate() {
 			println!("{}: {}", i, card);

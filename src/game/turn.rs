@@ -1,36 +1,35 @@
 use super::PlayerAction;
-use crate::cards::{CardKind, CardSet};
+use crate::cards::{CardKind, CardSet, Play};
 use crate::common::input;
-use crate::player::Player;
-use std::collections::VecDeque;
+use crate::player::{Assets, Player};
 
-pub(crate) struct Turn {
-	player: Player,
-	cards_played: CardSet<CardKind>,
-	cards_discarded: CardSet<CardKind>,
+pub struct Turn {
+	pub player: Player,
+	pub assets: Assets,
+	pub cards_discarded: CardSet<CardKind>,
+	num_cards_played: u8,
 }
 
 impl Turn {
-	pub fn new(player: Player) -> Self {
+	pub fn new(player: Player, assets: Assets) -> Self {
 		Self {
 			player,
-			cards_played: CardSet::new(),
+			assets,
 			cards_discarded: CardSet::new(),
+			num_cards_played: 0,
 		}
 	}
 
 	pub fn read_action(&mut self) -> PlayerAction {
-		if self.cards_played.len() == 3 {
+		if self.num_cards_played == 3 {
 			return PlayerAction::Pass;
 		}
 
+		println!("{}", self.assets);
 		self.player.hand.print_numbered();
 
-		println!("Total Bank Value: {}", self.player.played.bank_value());
-		println!(
-			"Total Asset Value: {}",
-			self.player.played.total_property_value()
-		);
+		println!("Total Bank Value: {}", self.assets.bank_value());
+		println!("Total Asset Value: {}", self.assets.total_property_value());
 
 		let user_input = input("> ");
 		let trimmed = user_input.trim();
@@ -47,13 +46,18 @@ impl Turn {
 		}
 	}
 
-	pub fn play(&mut self, card_position: usize, table: &mut VecDeque<Player>) {
+	pub fn play(&mut self, card_position: usize) {
 		if let Some(card) = self.player.remove_card_at(card_position) {
-			self.cards_played.add(card);
+			if card.can_play(&self.assets) {
+				card.play(self);
+				self.num_cards_played += 1;
+			} else {
+				self.player.hand.add(card);
+			}
 		}
 	}
 
-	pub fn terminate(mut self) -> (Player, CardSet<CardKind>, CardSet<CardKind>) {
+	pub fn terminate(mut self) -> (Player, Assets, CardSet<CardKind>) {
 		// A player is not allowed to have more than 7 cards in their hand at the end of a turn.
 		// This needs to be checked at the end of each turn. The player should be propmted for discarding.
 		let mut to_be_discarded: i8 = self.player.hand.len() as i8 - 7;
@@ -74,6 +78,6 @@ impl Turn {
 			}
 		}
 
-		(self.player, self.cards_played, self.cards_discarded)
+		(self.player, self.assets, self.cards_discarded)
 	}
 }

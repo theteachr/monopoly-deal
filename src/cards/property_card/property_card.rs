@@ -7,7 +7,8 @@ use std::{
 use super::PropertyCardKind;
 use crate::cards::{data::COLLECTIONS, Card, Play};
 use crate::color::{colored_text, CardColor};
-use crate::player::Player;
+use crate::game::Turn;
+use crate::player::Assets;
 
 #[derive(Debug, Eq)]
 pub struct PropertyCard {
@@ -18,10 +19,6 @@ pub struct PropertyCard {
 impl PropertyCard {
 	pub fn new(name: &'static str, color: CardColor) -> Self {
 		Self { name, color }
-	}
-
-	pub fn play(self, player: &mut Player) {
-		player.add_property(self.into());
 	}
 }
 
@@ -44,8 +41,12 @@ impl PartialEq for PropertyCard {
 }
 
 impl Play for PropertyCard {
-	fn can_play(&self, _: &Player) -> bool {
+	fn can_play(&self, _: &Assets) -> bool {
 		true
+	}
+
+	fn play(self, turn: &mut Turn) {
+		turn.assets.add_property(self.into());
 	}
 }
 

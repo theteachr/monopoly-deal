@@ -3,7 +3,8 @@ use std::{cmp::PartialEq, fmt, hash::Hash};
 use super::PropertyCardKind;
 use crate::cards::{Card, Colored, Play};
 use crate::color::{colored_text, CardColor, MultiColor};
-use crate::player::Player;
+use crate::game::Turn;
+use crate::player::Assets;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct PropertyWildCard {
@@ -29,8 +30,12 @@ impl Card for PropertyWildCard {
 }
 
 impl Play for PropertyWildCard {
-	fn can_play(&self, _: &Player) -> bool {
+	fn can_play(&self, _: &Assets) -> bool {
 		true
+	}
+
+	fn play(self, turn: &mut Turn) {
+		turn.assets.add_property(self.into());
 	}
 }
 
@@ -41,11 +46,6 @@ impl Colored for PropertyWildCard {
 
 	fn colors(&self) -> Vec<CardColor> {
 		Vec::from(self.available_colors)
-	}
-
-	fn play(mut self, color: CardColor, player: &mut Player) {
-		self.set_color(color);
-		player.add_property(self.into());
 	}
 }
 

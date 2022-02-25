@@ -1,7 +1,7 @@
 use super::Action;
-use crate::cards::Card;
-use crate::player::Player;
-use std::collections::VecDeque;
+use crate::cards::{Card, Play};
+use crate::game::Turn;
+use crate::player::Assets;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -14,16 +14,22 @@ impl ActionCard {
 	pub fn new(value: u8, action: Action) -> Self {
 		Self { value, action }
 	}
-
-	pub fn play(self, _table: &mut VecDeque<Player>, _player: &mut Player) {
-		// TODO Ask whether to bank it or play it
-		println!("Implementing `Playable` for ActionCard...");
-	}
 }
 
 impl Card for ActionCard {
 	fn value(&self) -> u8 {
 		self.value
+	}
+}
+
+impl Play for ActionCard {
+	fn can_play(&self, _turn: &Assets) -> bool {
+		false
+	}
+
+	fn play(self, _turn: &mut Turn) {
+		// TODO Ask whether to bank it or play it
+		println!("Implementing `Playable` for ActionCard...");
 	}
 }
 

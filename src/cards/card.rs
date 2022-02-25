@@ -1,15 +1,13 @@
-use std::collections::VecDeque;
 use std::fmt;
 
 use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
 use crate::color::CardColor;
-use crate::game::read_color;
-use crate::player::Player;
+use crate::game::{read_color, Turn};
+use crate::player::Assets;
 
 pub trait Colored {
 	fn set_color(&mut self, color: CardColor);
 	fn colors(&self) -> Vec<CardColor>;
-	fn play(self, color: CardColor, player: &mut Player);
 }
 
 pub trait Card {
@@ -17,7 +15,8 @@ pub trait Card {
 }
 
 pub trait Play {
-	fn can_play(&self, player: &Player) -> bool;
+	fn can_play(&self, assets: &Assets) -> bool;
+	fn play(self, turn: &mut Turn);
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -47,32 +46,42 @@ impl Card for BankableCardKind {
 }
 
 impl Play for CardKind {
-	fn can_play(&self, player: &Player) -> bool {
+	fn can_play(&self, assets: &Assets) -> bool {
 		match self {
-			Self::ActionCard(c) => c.can_play(player),
-			Self::MoneyCard(c) => c.can_play(player),
-			Self::RentCard(c) => c.can_play(player),
-			Self::PropertyCard(c) => c.can_play(player),
-			Self::PropertyWildCard(c) => c.can_play(player),
+			Self::ActionCard(c) => c.can_play(assets),
+			Self::MoneyCard(c) => c.can_play(assets),
+			Self::RentCard(c) => c.can_play(assets),
+			Self::PropertyCard(c) => c.can_play(assets),
+			Self::PropertyWildCard(c) => c.can_play(assets),
+		}
+	}
+
+	fn play(self, turn: &mut Turn) {
+		match self {
+			Self::ActionCard(c) => c.play(turn),
+			Self::MoneyCard(c) => c.play(turn),
+			Self::PropertyCard(c) => c.play(turn),
+			Self::PropertyWildCard(c) => play_colored_card(c, turn),
+			Self::RentCard(c) => play_colored_card(c, turn),
 		}
 	}
 }
 
 impl CardKind {
-	pub fn play(self, table: &mut VecDeque<Player>, player: &mut Player) {
+	pub fn play(self, turn: &mut Turn) {
 		match self {
-			Self::ActionCard(c) => c.play(table, player),
-			Self::MoneyCard(c) => c.play(player),
-			Self::PropertyCard(c) => c.play(player),
-			Self::PropertyWildCard(c) => play_colored_card(c, player),
-			Self::RentCard(c) => play_colored_card(c, player),
+			Self::ActionCard(c) => c.play(turn),
+			Self::MoneyCard(c) => c.play(turn),
+			Self::PropertyCard(c) => c.play(turn),
+			Self::PropertyWildCard(c) => play_colored_card(c, turn),
+			Self::RentCard(c) => play_colored_card(c, turn),
 		}
 	}
 }
 
-fn play_colored_card<T: Colored>(card: T, player: &mut Player) {
-	let color = read_color(&card);
-	card.play(color, player);
+fn play_colored_card<T: Play + Colored>(mut card: T, turn: &mut Turn) {
+	card.set_color(read_color(&card));
+	card.play(turn);
 }
 
 impl From<PropertyCard> for CardKind {
