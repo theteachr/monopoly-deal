@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
+use crate::cards::{ActionCardKind, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
 use crate::color::CardColor;
 use crate::game::{read_color, Turn};
 use crate::player::Assets;
@@ -22,7 +22,7 @@ pub trait Play {
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum CardKind {
 	PropertyCard(PropertyCard),
-	ActionCard(ActionCard),
+	ActionCard(ActionCardKind),
 	MoneyCard(MoneyCard),
 	RentCard(RentCard),
 	PropertyWildCard(PropertyWildCard),
@@ -31,7 +31,7 @@ pub enum CardKind {
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub enum BankableCardKind {
 	MoneyCard(MoneyCard),
-	ActionCard(ActionCard),
+	ActionCard(ActionCardKind),
 	RentCard(RentCard),
 }
 
@@ -90,8 +90,8 @@ impl From<PropertyCard> for CardKind {
 	}
 }
 
-impl From<ActionCard> for CardKind {
-	fn from(action_card: ActionCard) -> Self {
+impl From<ActionCardKind> for CardKind {
+	fn from(action_card: ActionCardKind) -> Self {
 		Self::ActionCard(action_card)
 	}
 }
@@ -120,8 +120,8 @@ impl From<MoneyCard> for BankableCardKind {
 	}
 }
 
-impl From<ActionCard> for BankableCardKind {
-	fn from(action_card: ActionCard) -> Self {
+impl From<ActionCardKind> for BankableCardKind {
+	fn from(action_card: ActionCardKind) -> Self {
 		Self::ActionCard(action_card)
 	}
 }
