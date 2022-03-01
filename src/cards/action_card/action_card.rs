@@ -43,7 +43,7 @@ impl Card for ActionCardKind {
 }
 
 impl Play for ActionCardKind {
-	fn can_play(&self, _turn: &Assets) -> bool {
+	fn is_playable(&self, _turn: &Assets) -> bool {
 		false
 	}
 

@@ -15,7 +15,7 @@ pub trait Card {
 }
 
 pub trait Play {
-	fn can_play(&self, assets: &Assets) -> bool;
+	fn is_playable(&self, assets: &Assets) -> bool;
 	fn play(self, turn: &mut Turn);
 }
 
@@ -46,13 +46,13 @@ impl Card for BankableCardKind {
 }
 
 impl Play for CardKind {
-	fn can_play(&self, assets: &Assets) -> bool {
+	fn is_playable(&self, assets: &Assets) -> bool {
 		match self {
-			Self::ActionCard(c) => c.can_play(assets),
-			Self::MoneyCard(c) => c.can_play(assets),
-			Self::RentCard(c) => c.can_play(assets),
-			Self::PropertyCard(c) => c.can_play(assets),
-			Self::PropertyWildCard(c) => c.can_play(assets),
+			Self::ActionCard(c) => c.is_playable(assets),
+			Self::MoneyCard(c) => c.is_playable(assets),
+			Self::RentCard(c) => c.is_playable(assets),
+			Self::PropertyCard(c) => c.is_playable(assets),
+			Self::PropertyWildCard(c) => c.is_playable(assets),
 		}
 	}
 

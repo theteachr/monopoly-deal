@@ -31,7 +31,7 @@ impl Card for RentCard {
 }
 
 impl Play for RentCard {
-	fn can_play(&self, assets: &Assets) -> bool {
+	fn is_playable(&self, assets: &Assets) -> bool {
 		self.colors()
 			.iter()
 			.any(|color| assets.property_sets.exists(color))

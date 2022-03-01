@@ -20,7 +20,7 @@ impl Card for MoneyCard {
 }
 
 impl Play for MoneyCard {
-	fn can_play(&self, _: &Assets) -> bool {
+	fn is_playable(&self, _: &Assets) -> bool {
 		true
 	}
 

@@ -55,7 +55,7 @@ impl Turn {
 		// FIXME
 		let card = self.player.remove_card_at(card_position);
 
-		if card.can_play(&self.assets) {
+		if card.is_playable(&self.assets) {
 			card.play(self);
 			self.num_cards_played += 1;
 		} else {
