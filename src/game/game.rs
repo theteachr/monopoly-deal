@@ -27,34 +27,25 @@ pub struct Game {
 impl Game {
 	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
-		let mut table = VecDeque::new();
+		let mut discard_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
 
 		let mut players = get_mock_players(player_count);
-
-		println!(
-			"Added {} players: {}.",
-			players.len(),
-			players
-				.iter()
-				.map(|p| p.name.as_str())
-				.collect::<Vec<&str>>()
-				.join(", ")
-		);
 
 		// distribute cards
 		for player in &mut players {
 			player.draw(&mut draw_pile);
 		}
 
-		players
+		let table: VecDeque<(Player, Assets)> = players
 			.into_iter()
-			.for_each(|player| table.push_back((player, Assets::new())));
+			.map(|player| (player, Assets::new()))
+            .collect();
 
 		Self {
 			draw_pile,
-			discard_pile: Deck::new(),
+			discard_pile,
 			table,
 			player_count,
 		}
