@@ -1,5 +1,6 @@
 use std::fmt;
 
+/// Represents the color of a property card.
 #[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 #[repr(u8)]
 pub enum CardColor {
@@ -15,8 +16,10 @@ pub enum CardColor {
 	Yellow,
 }
 
+/// Represents a color as a three tuple holding R G B values.
 type Color = (u8, u8, u8);
 
+/// Store RGB values of all colors.
 const RGB_TRIPLES: [Color; 10] = [
 	(000, 000, 000), // Black
 	(010, 147, 150), // Blue
@@ -30,6 +33,7 @@ const RGB_TRIPLES: [Color; 10] = [
 	(244, 157, 055), // Yellow
 ];
 
+/// Store all the color variants in an array.
 pub const COLORS: [CardColor; 10] = [
 	CardColor::Black,
 	CardColor::Blue,
@@ -45,13 +49,23 @@ pub const COLORS: [CardColor; 10] = [
 
 pub const BLOCK: &'static str = "⬤";
 
+/// Represents the color type of a colored card.
+/// 
+/// ## Examples
+///
+/// A `RentCard` with `Magenta` and `Yellow` on it.
+/// A `PropertyWildCard`.
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub enum MultiColor {
+	/// Represents the colors of a dual colored card.
 	Two(CardColor, CardColor),
+
+	/// Represents a wild colored card, that can be played as any color.
 	All,
 }
 
 impl CardColor {
+	/// Returns the R G B value corresponding to the `CardColor`.
 	pub fn to_rgb(self) -> Color {
 		RGB_TRIPLES[self as usize]
 	}
@@ -83,6 +97,7 @@ impl fmt::Display for CardColor {
 	}
 }
 
+/// Returns `text` colored in `color` with terminal escape sequences.
 pub fn colored_text(text: &'static str, color: CardColor) -> String {
 	let (r, g, b) = color.to_rgb();
 

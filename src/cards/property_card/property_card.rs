@@ -10,6 +10,7 @@ use crate::color::{colored_text, CardColor};
 use crate::game::Turn;
 use crate::player::Assets;
 
+/// Represents a mono colored property card.
 #[derive(Debug, Eq)]
 pub struct PropertyCard {
 	pub name: &'static str,
@@ -41,7 +42,7 @@ impl PartialEq for PropertyCard {
 }
 
 impl Play for PropertyCard {
-	fn can_play(&self, _: &Assets) -> bool {
+	fn is_playable(&self, _: &Assets) -> bool {
 		true
 	}
 

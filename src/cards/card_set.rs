@@ -1,5 +1,6 @@
 use std::{fmt, ops::Index};
 
+/// Represents a collection of cards.
 #[derive(Debug)]
 pub struct CardSet<T> {
 	cards: Vec<T>,
@@ -7,6 +8,7 @@ pub struct CardSet<T> {
 }
 
 impl<T: fmt::Display> CardSet<T> {
+	/// Returns an empty collection of cards.
 	pub fn new() -> Self {
 		Self {
 			cards: Vec::new(),
@@ -14,23 +16,29 @@ impl<T: fmt::Display> CardSet<T> {
 		}
 	}
 
+	/// Return the number of cards in the collection.
 	pub fn len(&self) -> usize {
 		self.size
 	}
 
+	/// Adds `card` into the collection.
 	pub fn add(&mut self, card: T) {
 		self.cards.push(card);
 		self.size += 1;
 	}
 
+	/// Returns an iterator of the references of all cards in the collection.
 	pub fn iter(&self) -> impl Iterator<Item = &T> {
 		self.cards.iter()
 	}
 
+	/// Returns true if the collection has no cards.
 	pub fn is_empty(&self) -> bool {
 		self.size == 0
 	}
 
+	/// Returns the card present at index = `position`.
+	/// Panics if the index in not valid.
 	pub fn remove(&mut self, position: usize) -> T {
 		let removed = self.cards.swap_remove(position);
 		self.size -= 1;

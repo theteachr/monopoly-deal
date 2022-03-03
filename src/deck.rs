@@ -1,14 +1,16 @@
 use crate::cards::{
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	ActionCard, CardKind, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
+	ActionCardKind, CardKind, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
 };
 
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
+/// Represents the deck of cards.
 #[derive(Debug)]
 pub struct Deck(Vec<CardKind>);
 
+/// Represents the count of cards that can be drawn from the deck.
 #[repr(u8)]
 pub enum DrawCount {
 	Two = 2,
@@ -16,6 +18,7 @@ pub enum DrawCount {
 }
 
 impl Deck {
+	/// Returns a shuffled deck of all cards in the game.
 	pub fn new() -> Self {
 		let mut cards: Vec<CardKind> = Vec::new();
 
@@ -31,9 +34,9 @@ impl Deck {
 			}
 		}
 
-		for (value, action, count) in ACTION_CARDS.iter() {
+		for (action, count) in ACTION_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(ActionCard::new(*value, *action).into());
+				cards.push(ActionCardKind::from(*action).into());
 			}
 		}
 
@@ -54,6 +57,7 @@ impl Deck {
 		Self(cards)
 	}
 
+	/// Returns the top `count` cards of the deck.
 	pub fn draw(&mut self, count: DrawCount) -> Vec<CardKind> {
 		let mut cards = Vec::new();
 
@@ -64,10 +68,12 @@ impl Deck {
 		return cards;
 	}
 
+	/// Adds `card` into the deck.
 	pub fn push_back(&mut self, card: CardKind) {
 		self.0.push(card);
 	}
 
+	/// Returns the number of cards in the deck.
 	pub fn len(&self) -> u8 {
 		self.0.len() as u8
 	}
