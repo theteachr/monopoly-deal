@@ -1,6 +1,6 @@
-use super::Turn;
+use super::{Table, Turn};
 use crate::{
-	cards::Colored,
+	cards::{CardKind, CardSet, Colored},
 	color::CardColor,
 	common::input,
 	deck::Deck,
@@ -13,21 +13,20 @@ use std::fmt::Debug;
 pub enum PlayerAction {
 	Play(usize),
 	Pass,
-	// TODO Rearrange
 }
 
 #[derive(Debug)]
 pub struct Game {
 	draw_pile: Deck,
 	discard_pile: Deck,
-	table: VecDeque<(Player, Assets)>,
-	player_count: u8,
+	players: VecDeque<Player>,
+	table: Table,
 }
 
 impl Game {
 	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
-		let mut discard_pile = Deck::new();
+		let discard_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
 
@@ -38,16 +37,11 @@ impl Game {
 			player.draw(&mut draw_pile);
 		}
 
-		let table: VecDeque<(Player, Assets)> = players
-			.into_iter()
-			.map(|player| (player, Assets::new()))
-            .collect();
-
 		Self {
 			draw_pile,
 			discard_pile,
-			table,
-			player_count,
+			players: VecDeque::from(players),
+			table: Table::new(player_count),
 		}
 	}
 
@@ -55,44 +49,34 @@ impl Game {
 		println!("The Deal has been initiated.");
 
 		loop {
-			let (mut player, assets) = self.table.pop_front().unwrap();
+			let mut player = self.players.pop_front().unwrap();
+			let (assets, table) = self.table.turn();
 
 			player.draw(&mut self.draw_pile);
 
-			println!("\n+++ Table +++\n");
-			self.print_table();
+			let (player, assets, discarded) = handle_turn(Turn::new(player, assets), table);
 
-			println!("\n*** {}'s Turn ***\n", player.name);
+			discarded
+				.into_iter()
+				.for_each(|card| self.discard_pile.push_back(card));
 
-			self.handle_turn(Turn::new(player, assets));
+			self.players.push_back(player);
+			self.table.update(assets);
+		}
+	}
+}
+
+fn handle_turn(mut turn: Turn, table: &mut Table) -> (Player, Assets, CardSet<CardKind>) {
+	loop {
+		table.print();
+
+		match turn.read_action() {
+			PlayerAction::Play(n) => turn.play(n),
+			PlayerAction::Pass => break,
 		}
 	}
 
-	fn handle_turn(&mut self, mut turn: Turn) {
-		loop {
-			match turn.read_action() {
-				PlayerAction::Play(n) => turn.play(n),
-				PlayerAction::Pass => break,
-			}
-		}
-
-		let (player, assets, cards_discarded) = turn.terminate();
-
-		cards_discarded
-			.into_iter()
-			.for_each(|card| self.discard_pile.push_back(card));
-
-		self.table.push_back((player, assets));
-	}
-
-	fn print_table(&mut self) {
-		for _ in 1..self.player_count {
-			let (player, assets) = self.table.pop_front().unwrap();
-
-			println!("### Assets of {} ###\n\n{}\n", player.name, assets);
-			self.table.push_back((player, assets));
-		}
-	}
+	turn.terminate()
 }
 
 fn get_mock_players(count: u8) -> Vec<Player> {
