@@ -3,9 +3,13 @@ use std::{cmp::PartialEq, hash::Hash};
 use super::{PropertyCard, PropertyWildCard};
 use crate::cards::Card;
 
+/// Represents the type of a property card.
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub enum PropertyCardKind {
+	/// Holds a mono colored card.
 	Single(PropertyCard),
+
+	/// Holds a multi colored card.
 	Wild(PropertyWildCard),
 }
 

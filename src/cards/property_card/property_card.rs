@@ -10,6 +10,7 @@ use crate::color::{colored_text, CardColor};
 use crate::game::Turn;
 use crate::player::Assets;
 
+/// Represents a mono colored property card.
 #[derive(Debug, Eq)]
 pub struct PropertyCard {
 	pub name: &'static str,

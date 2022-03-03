@@ -1,3 +1,4 @@
+/// Represents the value of a `MoneyCard`.
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 #[repr(u8)]
 pub enum Denomination {

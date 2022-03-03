@@ -6,10 +6,16 @@ use crate::color::{colored_text, CardColor, MultiColor};
 use crate::game::Turn;
 use crate::player::Assets;
 
+/// Represents a property wild card.
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct PropertyWildCard {
+	/// Represents the money the card will amount to when paid as rent.
 	pub value: u8,
+
+	/// Holds all the colors on the card.
 	pub available_colors: MultiColor,
+
+	/// Represents the current color of the card.
 	pub selected_color: Option<CardColor>,
 }
 

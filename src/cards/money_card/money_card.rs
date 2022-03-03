@@ -4,16 +4,19 @@ use crate::game::Turn;
 use crate::player::Assets;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
+/// Represents a money card.
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct MoneyCard(Denomination);
 
 impl MoneyCard {
+	/// Returns a money card valued `value`.
 	pub fn new(value: u8) -> Self {
 		Self(value.into())
 	}
 }
 
 impl Card for MoneyCard {
+	/// Returns the value of the card.
 	fn value(&self) -> u8 {
 		self.0 as u8
 	}
@@ -21,10 +24,12 @@ impl Card for MoneyCard {
 
 impl Play for MoneyCard {
 	fn is_playable(&self, _: &Assets) -> bool {
+		// `MoneyCard`s are always playable, so return `true`.
 		true
 	}
 
 	fn play(self, turn: &mut Turn) {
+		// Simple add the card into player's assets.
 		turn.assets.add_money(self.into());
 	}
 }

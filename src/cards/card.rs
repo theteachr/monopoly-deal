@@ -5,6 +5,7 @@ use crate::color::CardColor;
 use crate::game::{read_color, Turn};
 use crate::player::Assets;
 
+/// For cards that the player can set a color.
 pub trait Colored {
 	fn set_color(&mut self, color: CardColor);
 	fn colors(&self) -> Vec<CardColor>;
@@ -14,20 +15,35 @@ pub trait Card {
 	fn value(&self) -> u8;
 }
 
+// XXX Merge `Card` and `Play`
 pub trait Play {
 	fn is_playable(&self, assets: &Assets) -> bool;
 	fn play(self, turn: &mut Turn);
 }
 
+/// Represents all possible types a card can be.
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum CardKind {
+	/// Represents a property card.
 	PropertyCard(PropertyCard),
+
+	/// Represents an action card.
 	ActionCard(ActionCardKind),
+
+	/// Represents a money card.
 	MoneyCard(MoneyCard),
+
+	/// Represents a rent card.
 	RentCard(RentCard),
+
+	/// Represents a property wild card.
 	PropertyWildCard(PropertyWildCard),
 }
 
+/// Represents cards that can be banked (played as money).
+/// 
+/// Once banked, a card cannot be used to activate its original action,
+/// except for `MoneyCard` as their sole purpose is to be banked :P
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub enum BankableCardKind {
 	MoneyCard(MoneyCard),
@@ -79,6 +95,7 @@ impl CardKind {
 	}
 }
 
+/// Sets the color of a `Colored` card and `play`s it.
 fn play_colored_card<T: Play + Colored>(mut card: T, turn: &mut Turn) {
 	card.set_color(read_color(&card));
 	card.play(turn);
