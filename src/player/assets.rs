@@ -36,10 +36,11 @@ impl Assets {
 	}
 
 	pub fn rent(&self, color: CardColor) -> u8 {
-		match self.property_sets.cards(color).map(CardSet::len) {
-			Some(count) => COLLECTIONS[color as usize].1[(count - 1) as usize],
-			None => 0,
-		}
+		self.property_sets
+			.cards(color)
+			.map(CardSet::len)
+			.map(|i| COLLECTIONS[color as usize].1[(i - 1) as usize])
+			.unwrap_or(0)
 	}
 
 	pub fn bank_value(&self) -> u8 {
