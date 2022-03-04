@@ -5,7 +5,7 @@ use std::{
 
 use crate::color::CardColor;
 
-use crate::cards::{Card, CardSet, PropertyCardKind};
+use crate::cards::{CardSet, PropertyCardKind};
 
 /// Tracks the set of property cards played by a player.
 ///
@@ -29,14 +29,9 @@ impl PropertySets {
 		self.0.get(&color)
 	}
 
-	// XXX This is generic enough to be an independent function.
-	fn set_value(cards: &CardSet<PropertyCardKind>) -> u8 {
-		cards.iter().map(Card::value).sum()
-	}
-
 	/// Returns the total value all the played properties.
 	pub fn total_value(&self) -> u8 {
-		self.0.values().map(PropertySets::set_value).sum()
+		self.0.values().map(CardSet::value).sum()
 	}
 
 	/// Return `true` if at least one property of the given `color` exists in the set.

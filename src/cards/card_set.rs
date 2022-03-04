@@ -1,5 +1,7 @@
 use std::{fmt, ops::Index};
 
+use super::Card;
+
 /// Represents a collection of cards.
 #[derive(Debug)]
 pub struct CardSet<T> {
@@ -7,7 +9,7 @@ pub struct CardSet<T> {
 	size: usize,
 }
 
-impl<T: fmt::Display> CardSet<T> {
+impl<T: fmt::Display + Card> CardSet<T> {
 	/// Returns an empty collection of cards.
 	pub fn new() -> Self {
 		Self {
@@ -44,6 +46,10 @@ impl<T: fmt::Display> CardSet<T> {
 		self.size -= 1;
 
 		removed
+	}
+
+	pub fn value(&self) -> u8 {
+		self.cards.iter().map(Card::value).sum()
 	}
 
 	pub fn print_numbered(&self) {
