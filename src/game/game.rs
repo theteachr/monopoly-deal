@@ -27,7 +27,7 @@ pub struct Game {
 
 	/// Used to hold action cards and those the players choose to discard when excess.
 	discard_pile: Deck,
-	
+
 	/// A queue of players in the game.
 	players: VecDeque<Player>,
 
@@ -92,7 +92,7 @@ impl Game {
 }
 
 /// Returns updated player, their assets and a set of cards they chose to discard.
-/// 
+///
 /// # Arguments
 /// * `turn` - a `Turn` holding the player playing the turn and their assets
 /// * `table` - a mutable ref to a `Table` holding cards played by rest of the players

@@ -5,7 +5,7 @@ use std::{
 };
 
 use super::PropertyCardKind;
-use crate::cards::{data::COLLECTIONS, Card, Play};
+use crate::cards::{data::COLLECTIONS, Card};
 use crate::color::{colored_text, CardColor};
 use crate::game::Turn;
 use crate::player::Assets;
@@ -21,11 +21,19 @@ impl PropertyCard {
 	pub fn new(name: &'static str, color: CardColor) -> Self {
 		Self { name, color }
 	}
+
+	pub fn play(self, turn: &mut Turn) {
+		turn.assets.add_property(self.into());
+	}
 }
 
 impl Card for PropertyCard {
 	fn value(&self) -> u8 {
 		COLLECTIONS[self.color as usize].0
+	}
+
+	fn is_playable(&self, _: &Assets) -> bool {
+		true
 	}
 }
 
@@ -38,16 +46,6 @@ impl Hash for PropertyCard {
 impl PartialEq for PropertyCard {
 	fn eq(&self, other: &Self) -> bool {
 		self.name == other.name
-	}
-}
-
-impl Play for PropertyCard {
-	fn is_playable(&self, _: &Assets) -> bool {
-		true
-	}
-
-	fn play(self, turn: &mut Turn) {
-		turn.assets.add_property(self.into());
 	}
 }
 

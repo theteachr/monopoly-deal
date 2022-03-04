@@ -1,9 +1,9 @@
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 use super::PropertyCardKind;
-use crate::cards::{Card, Colored, Play};
+use crate::cards::{Card, Colored};
 use crate::color::{colored_text, CardColor, MultiColor};
-use crate::game::Turn;
+use crate::game::{read_color, Turn};
 use crate::player::Assets;
 
 /// Represents a property wild card.
@@ -27,21 +27,27 @@ impl PropertyWildCard {
 			selected_color: None,
 		}
 	}
+
+	// FIXME Rent Card has a similar logic, the code isn't dry.
+	pub fn play(mut self, turn: &mut Turn) {
+		// Read color from the player.
+		let color = read_color(&mut self);
+
+		// Set the read color to the card.
+		self.set_color(color);
+
+		// Add the card into player's properties.
+		turn.assets.add_property(self.into());
+	}
 }
 
 impl Card for PropertyWildCard {
 	fn value(&self) -> u8 {
 		self.value
 	}
-}
 
-impl Play for PropertyWildCard {
 	fn is_playable(&self, _: &Assets) -> bool {
 		true
-	}
-
-	fn play(self, turn: &mut Turn) {
-		turn.assets.add_property(self.into());
 	}
 }
 

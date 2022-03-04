@@ -5,7 +5,8 @@ use crate::color::{
 	MultiColor,
 };
 
-// Color, NamesOfProperties
+// TODO Add aliases for primitive types.
+
 pub const PROPERTY_CARDS: [(CardColor, &[&str]); 10] = [
 	(Brown, &["Baltic Avenue", "Mediterranean Avenue"]),
 	(Blue, &["Broadwalk", "Park Place"]),
@@ -49,24 +50,21 @@ pub const PROPERTY_CARDS: [(CardColor, &[&str]); 10] = [
 	),
 ];
 
-// Action, NumberOfCards
-pub const ACTION_CARDS: [(Action, u8); 10] = [
-	(Action::Birthday(2), 3),
-	(Action::DealBreaker(5), 2),
-	(Action::DebtCollector(3), 3),
-	(Action::DoubleTheRent(1), 2),
-	(Action::ForcedDeal(3), 4),
-	(Action::Hotel(4), 3),
-	(Action::House(3), 3),
-	(Action::JustSayNo(2), 3),
-	(Action::PassGo(1), 10),
-	(Action::SlyDeal(3), 3),
+pub const ACTION_CARDS: [(u8, Action, u8); 10] = [
+	(2, Action::Birthday, 3),
+	(5, Action::DealBreaker, 2),
+	(3, Action::DebtCollector, 3),
+	(1, Action::DoubleTheRent, 2),
+	(3, Action::ForcedDeal, 4),
+	(4, Action::Hotel, 3),
+	(3, Action::House, 3),
+	(2, Action::JustSayNo, 3),
+	(1, Action::PassGo, 10),
+	(3, Action::SlyDeal, 3),
 ];
 
-// NumberOfCards, Value
 pub const MONEY_CARDS: [(u8, u8); 6] = [(10, 1), (1, 6), (2, 5), (3, 3), (4, 3), (5, 2)];
 
-// Value, Type, NumberOfCards
 pub const PROPERTY_WILD_CARDS: [(u8, MultiColor, u8); 8] = [
 	(0, MultiColor::All, 2),
 	(4, MultiColor::Two(Blue, Green), 1),
@@ -78,7 +76,6 @@ pub const PROPERTY_WILD_CARDS: [(u8, MultiColor, u8); 8] = [
 	(3, MultiColor::Two(Yellow, Red), 2),
 ];
 
-// Value, Type, NumberOfCards
 pub const RENT_CARDS: [(u8, MultiColor, u8); 6] = [
 	(3, MultiColor::All, 3),
 	(1, MultiColor::Two(Turquoise, Black), 2),
@@ -88,7 +85,6 @@ pub const RENT_CARDS: [(u8, MultiColor, u8); 6] = [
 	(1, MultiColor::Two(Yellow, Red), 2),
 ];
 
-// Value, Rents
 pub const COLLECTIONS: [(u8, &[u8]); 10] = [
 	(2, &[1, 2, 3, 4]), // Black
 	(4, &[3, 8]),       // Blue

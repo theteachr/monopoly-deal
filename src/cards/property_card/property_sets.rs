@@ -8,7 +8,7 @@ use crate::color::CardColor;
 use crate::cards::{Card, CardSet, PropertyCardKind};
 
 /// Tracks the set of property cards played by a player.
-/// 
+///
 /// Key represents a `CardColor`, and the associated value is a
 /// set of properties of that color played by a player.
 #[derive(Debug)]

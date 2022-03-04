@@ -1,5 +1,5 @@
 use super::PlayerAction;
-use crate::cards::{CardKind, CardSet, Play};
+use crate::cards::{Card, CardKind, CardSet};
 use crate::common::input;
 use crate::player::{Assets, Player};
 
@@ -79,7 +79,7 @@ impl Turn {
 	}
 
 	/// Plays the card at index `card_position` of the player's hand if it's playable.
-	/// 
+	///
 	/// Requires: `card_position` to be a valid index pointing to a card in
 	/// the player's hand.
 	pub fn play(&mut self, card_position: usize) {
@@ -97,7 +97,7 @@ impl Turn {
 	}
 
 	/// Returns the mutated player, assets and a set of cards the player chose to discard.
-	/// 
+	///
 	/// A player is not allowed to have more than **7** cards in their hand at the end of a turn.
 	/// This needs to be checked at the end of each turn. If there are excess cards, prompt
 	/// the player to discard the excess.

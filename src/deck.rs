@@ -1,6 +1,6 @@
 use crate::cards::{
 	data::{ACTION_CARDS, MONEY_CARDS, PROPERTY_CARDS, PROPERTY_WILD_CARDS, RENT_CARDS},
-	ActionCardKind, CardKind, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
+	ActionCard, CardKind, MoneyCard, PropertyCard, PropertyWildCard, RentCard,
 };
 
 use rand::seq::SliceRandom;
@@ -34,9 +34,9 @@ impl Deck {
 			}
 		}
 
-		for (action, count) in ACTION_CARDS.iter() {
+		for (value, action, count) in ACTION_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(ActionCardKind::from(*action).into());
+				cards.push(ActionCard::new(*value, (*action).into()).into());
 			}
 		}
 

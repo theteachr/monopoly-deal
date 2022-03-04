@@ -50,7 +50,7 @@ pub const COLORS: [CardColor; 10] = [
 pub const BLOCK: &'static str = "⬤";
 
 /// Represents the color type of a colored card.
-/// 
+///
 /// ## Examples
 ///
 /// A `RentCard` with `Magenta` and `Yellow` on it.

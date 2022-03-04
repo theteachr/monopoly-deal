@@ -1,9 +1,9 @@
 use std::fmt;
 
 use crate::{
-	cards::{Card, Colored, Play},
+	cards::{Card, Colored},
 	color::{CardColor, MultiColor},
-	game::Turn,
+	game::{read_color, Turn},
 	player::Assets,
 };
 
@@ -22,26 +22,30 @@ impl RentCard {
 			selected_color: None,
 		}
 	}
+
+	pub fn play(&mut self, turn: &mut Turn) {
+		// Read the color from the player.
+		let color = read_color(self);
+
+		// Assign the read color to the card.
+		self.set_color(color);
+
+		println!(
+			"Playing a rent card: {}",
+			turn.assets.rent(self.selected_color.unwrap())
+		);
+	}
 }
 
 impl Card for RentCard {
 	fn value(&self) -> u8 {
 		self.value
 	}
-}
 
-impl Play for RentCard {
 	fn is_playable(&self, assets: &Assets) -> bool {
 		self.colors()
 			.iter()
 			.any(|color| assets.property_sets.exists(color))
-	}
-
-	fn play(self, turn: &mut Turn) {
-		println!(
-			"Playing a rent card: {}",
-			turn.assets.rent(self.selected_color.unwrap())
-		);
 	}
 }
 

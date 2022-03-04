@@ -1,5 +1,5 @@
 use super::denomination::Denomination;
-use crate::cards::{Card, Play};
+use crate::cards::Card;
 use crate::game::Turn;
 use crate::player::Assets;
 use std::{cmp::PartialEq, fmt, hash::Hash};
@@ -13,6 +13,11 @@ impl MoneyCard {
 	pub fn new(value: u8) -> Self {
 		Self(value.into())
 	}
+
+	pub fn play(self, turn: &mut Turn) {
+		// Simple add the card into player's assets.
+		turn.assets.add_money(self.into());
+	}
 }
 
 impl Card for MoneyCard {
@@ -20,17 +25,10 @@ impl Card for MoneyCard {
 	fn value(&self) -> u8 {
 		self.0 as u8
 	}
-}
 
-impl Play for MoneyCard {
 	fn is_playable(&self, _: &Assets) -> bool {
 		// `MoneyCard`s are always playable, so return `true`.
 		true
-	}
-
-	fn play(self, turn: &mut Turn) {
-		// Simple add the card into player's assets.
-		turn.assets.add_money(self.into());
 	}
 }
 

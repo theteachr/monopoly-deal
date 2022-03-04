@@ -11,7 +11,7 @@ mod pass_go_card;
 mod rent_card;
 mod sly_deal_card;
 
-pub use action_card::{Action, ActionCardKind};
+pub use action_card::{Action, ActionCard, ActionCardKind};
 pub use rent_card::RentCard;
 
 pub use birthday_card::BirthdayCard;

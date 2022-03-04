@@ -1,8 +1,8 @@
 use std::fmt;
 
-use crate::cards::{ActionCardKind, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
+use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
 use crate::color::CardColor;
-use crate::game::{read_color, Turn};
+use crate::game::Turn;
 use crate::player::Assets;
 
 /// For cards that the player can set a color.
@@ -13,12 +13,7 @@ pub trait Colored {
 
 pub trait Card {
 	fn value(&self) -> u8;
-}
-
-// XXX Merge `Card` and `Play`
-pub trait Play {
 	fn is_playable(&self, assets: &Assets) -> bool;
-	fn play(self, turn: &mut Turn);
 }
 
 /// Represents all possible types a card can be.
@@ -28,7 +23,7 @@ pub enum CardKind {
 	PropertyCard(PropertyCard),
 
 	/// Represents an action card.
-	ActionCard(ActionCardKind),
+	ActionCard(ActionCard),
 
 	/// Represents a money card.
 	MoneyCard(MoneyCard),
@@ -41,13 +36,13 @@ pub enum CardKind {
 }
 
 /// Represents cards that can be banked (played as money).
-/// 
+///
 /// Once banked, a card cannot be used to activate its original action,
 /// except for `MoneyCard` as their sole purpose is to be banked :P
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub enum BankableCardKind {
 	MoneyCard(MoneyCard),
-	ActionCard(ActionCardKind),
+	ActionCard(ActionCard),
 	RentCard(RentCard),
 }
 
@@ -59,9 +54,27 @@ impl Card for BankableCardKind {
 			Self::RentCard(c) => c.value(),
 		}
 	}
+
+	fn is_playable(&self, assets: &Assets) -> bool {
+		match self {
+			Self::ActionCard(c) => c.is_playable(assets),
+			Self::MoneyCard(c) => c.is_playable(assets),
+			Self::RentCard(c) => c.is_playable(assets),
+		}
+	}
 }
 
-impl Play for CardKind {
+impl Card for CardKind {
+	fn value(&self) -> u8 {
+		match self {
+			Self::ActionCard(c) => c.value(),
+			Self::MoneyCard(c) => c.value(),
+			Self::RentCard(c) => c.value(),
+			Self::PropertyCard(c) => c.value(),
+			Self::PropertyWildCard(c) => c.value(),
+		}
+	}
+
 	fn is_playable(&self, assets: &Assets) -> bool {
 		match self {
 			Self::ActionCard(c) => c.is_playable(assets),
@@ -71,34 +84,18 @@ impl Play for CardKind {
 			Self::PropertyWildCard(c) => c.is_playable(assets),
 		}
 	}
-
-	fn play(self, turn: &mut Turn) {
-		match self {
-			Self::ActionCard(c) => c.play(turn),
-			Self::MoneyCard(c) => c.play(turn),
-			Self::PropertyCard(c) => c.play(turn),
-			Self::PropertyWildCard(c) => play_colored_card(c, turn),
-			Self::RentCard(c) => play_colored_card(c, turn),
-		}
-	}
 }
 
 impl CardKind {
 	pub fn play(self, turn: &mut Turn) {
 		match self {
-			Self::ActionCard(c) => c.play(turn),
+			Self::ActionCard(_) => todo!(),
 			Self::MoneyCard(c) => c.play(turn),
 			Self::PropertyCard(c) => c.play(turn),
-			Self::PropertyWildCard(c) => play_colored_card(c, turn),
-			Self::RentCard(c) => play_colored_card(c, turn),
+			Self::PropertyWildCard(c) => c.play(turn),
+			Self::RentCard(mut c) => c.play(turn),
 		}
 	}
-}
-
-/// Sets the color of a `Colored` card and `play`s it.
-fn play_colored_card<T: Play + Colored>(mut card: T, turn: &mut Turn) {
-	card.set_color(read_color(&card));
-	card.play(turn);
 }
 
 impl From<PropertyCard> for CardKind {
@@ -107,8 +104,8 @@ impl From<PropertyCard> for CardKind {
 	}
 }
 
-impl From<ActionCardKind> for CardKind {
-	fn from(action_card: ActionCardKind) -> Self {
+impl From<ActionCard> for CardKind {
+	fn from(action_card: ActionCard) -> Self {
 		Self::ActionCard(action_card)
 	}
 }
@@ -137,8 +134,8 @@ impl From<MoneyCard> for BankableCardKind {
 	}
 }
 
-impl From<ActionCardKind> for BankableCardKind {
-	fn from(action_card: ActionCardKind) -> Self {
+impl From<ActionCard> for BankableCardKind {
+	fn from(action_card: ActionCard) -> Self {
 		Self::ActionCard(action_card)
 	}
 }
