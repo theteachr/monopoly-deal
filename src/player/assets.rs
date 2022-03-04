@@ -49,8 +49,7 @@ impl Assets {
 		self.property_sets
 			.cards(color)
 			.map(CardSet::len)
-			.map(|i| COLLECTIONS[color as usize].1[(i - 1) as usize])
-			.unwrap_or(0)
+			.map_or(0, |i| COLLECTIONS[color as usize].1[(i - 1) as usize])
 	}
 
 	/// Returns the max amount of money a player can pay using the cards in their bank.
