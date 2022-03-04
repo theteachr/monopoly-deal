@@ -2,7 +2,7 @@ use super::{Table, Turn};
 use crate::{
 	cards::{CardKind, CardSet, Colored},
 	color::CardColor,
-	common::input,
+	common::read_index,
 	deck::Deck,
 	player::{Assets, Player},
 };
@@ -121,31 +121,9 @@ fn get_mock_players(count: u8) -> Vec<Player> {
 
 /// Returns the color of the card that the player chose to play.
 pub fn read_color<T: Colored>(card: &T) -> CardColor {
-	// Get all colors available on the card.
+	// get all colors available on the card
 	let colors = card.colors();
 
-	// Get the max number the user can enter.
-	let max_choose_num = colors.len();
-
-	// Print the index and associated color
-	for (i, color) in colors.iter().enumerate() {
-		println!("{}: {}", i, color);
-	}
-
-	// FIXME: Smell -> repeating pattern of looping until right input
-	// Continuously ask the user for a number until they enter a valid index.
-	loop {
-		// Check if the entered number can be parsed into a `u8`.
-		if let Ok(n) = input("Choose color: ").parse::<u8>() {
-			// Break if the entered number is < the number of available colors.
-			if (n as usize) < max_choose_num {
-				break colors[n as usize];
-			}
-		}
-
-		println!(
-			"Invalid color number, entered value should be between 0..={}.",
-			max_choose_num
-		);
-	}
+	// read the index from the user and return the color at the index
+	colors[read_index("Choose color: ", colors.iter(), colors.len())]
 }
