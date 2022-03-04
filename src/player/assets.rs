@@ -46,10 +46,9 @@ impl Assets {
 	/// Returns the amount of rent that the player will be paid,
 	/// if they choose to ask rent for all their `color` properties.
 	pub fn rent(&self, color: CardColor) -> u8 {
-		self.property_sets
-			.cards(color)
-			.map(CardSet::len)
-			.map_or(0, |i| COLLECTIONS[color as usize].1[(i - 1) as usize])
+		self.property_sets.cards(color).map_or(0, |cards| {
+			COLLECTIONS[color as usize].1[(cards.len() - 1) as usize]
+		})
 	}
 
 	/// Returns the max amount of money a player can pay using the cards in their bank.
