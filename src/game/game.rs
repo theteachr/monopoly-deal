@@ -36,13 +36,14 @@ pub struct Game {
 }
 
 impl Game {
-	/// XXX Returns a `Game` with 4 hard coded players and a shuffled deck of 108 cards.
+	/// Returns a `Game` with 4 hard coded players and a shuffled deck of 108 cards.
 	pub fn new(player_count: u8) -> Self {
 		let mut draw_pile = Deck::new();
 		let discard_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
 
+		// FIXME
 		let mut players = get_mock_players(player_count);
 
 		// distribute cards
@@ -63,29 +64,29 @@ impl Game {
 		println!("The Deal has been initiated.");
 
 		loop {
-			// Get the next player.
+			// get the next player
 			let mut player = self.players.pop_front().unwrap();
 
-			// Get the next player's assets and a mutable reference
-			// to the rest of the table holding other players' played cards.
+			// get the next player's assets and a mutable reference
+			// to the rest of the table holding other players' played cards
 			let (assets, table) = self.table.turn();
 
-			// Make the player draw cards from the deck.
+			// make the player draw cards from the deck
 			player.draw(&mut self.draw_pile);
 
-			// Get the updated player and their assets, along with the set of cards
-			// that they chose to discard.
+			// get the updated player and their assets, along with the set of cards
+			// that they chose to discard
 			let (player, assets, discarded) = handle_turn(Turn::new(player, assets), table);
 
-			// Put the discarded into the discard deck.
+			// put the discarded into the discard deck
 			discarded
 				.into_iter()
 				.for_each(|card| self.discard_pile.push_back(card));
 
-			// Put the player back into the queue.
+			// put the player back into the queue
 			self.players.push_back(player);
 
-			// Add the updated player assets back onto the table.
+			// add the updated player assets back onto the table
 			self.table.update(assets);
 		}
 	}

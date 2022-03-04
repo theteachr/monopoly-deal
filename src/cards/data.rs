@@ -5,8 +5,6 @@ use crate::color::{
 	MultiColor,
 };
 
-// TODO Add aliases for primitive types.
-
 pub const PROPERTY_CARDS: [(CardColor, &[&str]); 10] = [
 	(Brown, &["Baltic Avenue", "Mediterranean Avenue"]),
 	(Blue, &["Broadwalk", "Park Place"]),
