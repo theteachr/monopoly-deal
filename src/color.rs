@@ -23,7 +23,7 @@ type Color = (u8, u8, u8);
 const RGB_TRIPLES: [Color; 10] = [
 	(000, 000, 000), // Black
 	(010, 147, 150), // Blue
-	(155, 034, 038), // Brown
+	(150, 075, 000), // Brown
 	(083, 221, 108), // Green
 	(214, 122, 177), // Magenta
 	(255, 120, 079), // Orange
