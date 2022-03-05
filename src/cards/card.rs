@@ -79,6 +79,7 @@ impl Card for CardKind {
 
 impl CardKind {
 	pub fn play(self, current_player: &mut CurrentPlayer, _game: &mut Game) {
+		current_player.num_cards_played += 1;
 		card_kind_apply_inner!(self c => c.play(current_player))
 	}
 }
