@@ -3,6 +3,7 @@ use super::{
 	HouseCard, JustSayNoCard, PassGoCard, SlyDealCard,
 };
 use crate::cards::Card;
+use crate::game::CurrentPlayer;
 use crate::player::Assets;
 use std::fmt::Debug;
 use std::{cmp::PartialEq, fmt, hash::Hash};
@@ -47,6 +48,10 @@ impl ActionCard {
 			value,
 			action: action.into(),
 		}
+	}
+
+	pub fn play(self, _player: &mut CurrentPlayer) {
+		todo!()
 	}
 }
 
