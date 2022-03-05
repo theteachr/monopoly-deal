@@ -59,17 +59,15 @@ impl CurrentPlayer {
 		loop {
 			let user_input = input("> ");
 
-			// Let the player signal a `Pass` by just pressing the enter or return key,
-			// which will result in `user_input` being empty.
+			// Let the player signal a `Pass` by just pressing the enter or return key.
 			if user_input.is_empty() {
 				return PlayerAction::Pass;
 			}
 
 			// Try to parse the input into a usize (index).
-			if let Ok(n) = user_input.parse::<usize>() {
-				return PlayerAction::Play(n);
-			} else {
-				continue;
+			match user_input.parse::<usize>() {
+				Ok(n) if n < self.player.hand.len() => return PlayerAction::Play(n),
+				_ => continue,
 			}
 		}
 	}
@@ -120,6 +118,8 @@ impl CurrentPlayer {
 			// and add it to the set of cards that will be dumped in the disccard pile.
 			self.cards_discarded
 				.add(self.player.remove_card_at(card_position));
+
+			// One less card to be discarded, decrement the variable.
 			to_be_discarded -= 1;
 		}
 
