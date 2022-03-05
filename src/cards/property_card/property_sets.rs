@@ -1,5 +1,5 @@
 use std::{
-	collections::{hash_map::Entry, HashMap},
+	collections::{hash_map::Entry, HashMap, HashSet},
 	fmt,
 };
 
@@ -27,6 +27,11 @@ impl PropertySets {
 	/// Returns the set of cards colored in `color` if any.
 	pub fn cards(&self, color: CardColor) -> Option<&CardSet<PropertyCardKind>> {
 		self.0.get(&color)
+	}
+
+	/// Returns all colors in the properties.
+	pub fn colors(&self) -> HashSet<CardColor> {
+		self.0.keys().cloned().collect()
 	}
 
 	/// Returns the total value all the played properties.
