@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
-use crate::game::CurrentPlayer;
+use crate::game::{CurrentPlayer, Game};
 use crate::player::Assets;
 
 pub trait Card {
@@ -78,7 +78,7 @@ impl Card for CardKind {
 }
 
 impl CardKind {
-	pub fn play(self, current_player: &mut CurrentPlayer) {
+	pub fn play(self, current_player: &mut CurrentPlayer, _game: &mut Game) {
 		card_kind_apply_inner!(self c => c.play(current_player))
 	}
 }
