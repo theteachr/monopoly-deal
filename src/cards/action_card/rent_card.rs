@@ -28,7 +28,7 @@ impl RentCard {
 		self.selected_color = Some(color);
 	}
 
-	pub fn play(&mut self, current_player: &mut CurrentPlayer) {
+	pub fn play(mut self, current_player: &mut CurrentPlayer) {
 		// Get the colors the player can play given their assets.
 		let playable_colors = self
 			.available_colors
