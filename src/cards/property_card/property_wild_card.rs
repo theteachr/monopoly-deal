@@ -3,7 +3,7 @@ use std::{cmp::PartialEq, fmt, hash::Hash};
 use super::PropertyCardKind;
 use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
-use crate::common::read_index;
+use crate::common::{print_indexed, read_index};
 use crate::game::CurrentPlayer;
 use crate::player::Assets;
 
@@ -35,15 +35,18 @@ impl PropertyWildCard {
 
 	// FIXME Rent Card has a similar logic, the code isn't dry.
 	pub fn play(mut self, current_player: &mut CurrentPlayer) {
-		// get available colors as a vector as we want to be able to index (user's input) into it and set the color
+		// Get available colors as a vector as we want to be able to index (user's input) into it and set the color.
 		let colors = self
 			.available_colors
 			.colors()
 			.into_iter()
 			.collect::<Vec<CardColor>>();
 
+		// Print the indexed list of colors for the user to pick.
+		print_indexed(colors.iter());
+
 		// read color from the player
-		let color = colors[read_index("> ", colors.iter(), colors.len())];
+		let color = colors[read_index("> ", colors.len())];
 
 		// set the read color to the card
 		self.set_color(color);

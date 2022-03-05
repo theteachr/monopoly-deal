@@ -3,7 +3,7 @@ use std::fmt;
 use crate::{
 	cards::Card,
 	color::{CardColor, MultiColor},
-	common::read_index,
+	common::{print_indexed, read_index},
 	game::CurrentPlayer,
 	player::Assets,
 };
@@ -28,10 +28,8 @@ impl RentCard {
 		self.selected_color = Some(color);
 	}
 
-	// should be called only if playable
-	// if that's guaranteed, we know that there will be at least one color
 	pub fn play(&mut self, current_player: &mut CurrentPlayer) {
-		// get the colors the player can play given their assets
+		// Get the colors the player can play given their assets.
 		let playable_colors = self
 			.available_colors
 			.colors()
@@ -39,17 +37,21 @@ impl RentCard {
 			.cloned()
 			.collect::<Vec<CardColor>>();
 
-		// if there are more than one colors, let the player choose, else we choose the one at index 0, as it's the only one
+		// Print the colors with their index so the user can choose.
+		print_indexed(playable_colors.iter());
+
+		// This method should be called only if playable. If that's guaranteed,
+		// we know that there will be at least one color. If there are more than one colors,
+		// let the player choose, else we choose the one at index 0, as it's the only one.
 		let index = if playable_colors.len() > 1 {
-			read_index("> ", playable_colors.iter(), playable_colors.len())
+			read_index("> ", playable_colors.len())
 		} else {
 			0
 		};
 
-		// read the index of the color from the player, and get the color at it
 		let color = playable_colors[index];
 
-		// assign the read color to the card
+		// Assign the read color to the card.
 		self.set_color(color);
 
 		println!(

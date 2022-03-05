@@ -95,7 +95,10 @@ impl Game {
 /// # Arguments
 /// * `current_player` - the player playing the turn
 /// * `table` - a mutable ref to a `Table` holding cards played by rest of the players
-fn handle_turn(mut player: CurrentPlayer, table: &mut Table) -> (Player, Assets, CardSet<CardKind>) {
+fn handle_turn(
+	mut player: CurrentPlayer,
+	table: &mut Table,
+) -> (Player, Assets, CardSet<CardKind>) {
 	loop {
 		table.print();
 

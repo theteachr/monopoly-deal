@@ -51,12 +51,6 @@ impl<T: fmt::Display + Card> CardSet<T> {
 	pub fn value(&self) -> u8 {
 		self.cards.iter().map(Card::value).sum()
 	}
-
-	pub fn print_numbered(&self) {
-		for (i, card) in self.cards.iter().enumerate() {
-			println!("{}: {}", i, card);
-		}
-	}
 }
 
 impl<T> Index<usize> for CardSet<T> {

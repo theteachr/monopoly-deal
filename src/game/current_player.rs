@@ -1,6 +1,6 @@
 use super::PlayerAction;
 use crate::cards::{Card, CardKind, CardSet};
-use crate::common::input;
+use crate::common::{input, print_indexed, read_index};
 use crate::player::{Assets, Player};
 
 /// Stores all necessary information about the player playing the current turn.
@@ -44,7 +44,7 @@ impl CurrentPlayer {
 		);
 
 		// Print all the cards in the player's hand along with their index.
-		self.player.hand.print_numbered();
+		print_indexed(self.player.hand.iter());
 
 		println!();
 
@@ -66,12 +66,10 @@ impl CurrentPlayer {
 			}
 
 			// Try to parse the input into a usize (index).
-			match user_input.parse::<usize>() {
-				// If the parsed number is a valid index, return it wrapped in `Play`.
-				Ok(n) if n < self.player.hand.len() => break PlayerAction::Play(n),
-
-				// Input couldn't be parsed, ask again.
-				_ => continue,
+			if let Ok(n) = user_input.parse::<usize>() {
+				return PlayerAction::Play(n);
+			} else {
+				continue;
 			}
 		}
 	}
@@ -111,19 +109,12 @@ impl CurrentPlayer {
 			println!();
 
 			// Print the cards in hand along with their index.
-			self.player.hand.print_numbered();
+			print_indexed(self.player.hand.iter());
 
 			println!();
 
 			// Read the index from the user.
-			let card_position = loop {
-				// If the entered number can be parsed into a usize (representing a valid card index),
-				// break, else ask again.
-				match input("> ").parse::<usize>() {
-					Ok(n) if n < self.player.hand.len() => break n,
-					_ => continue,
-				}
-			};
+			let card_position = read_index("> ", self.player.hand.len());
 
 			// Remove the card at `card_position` from the  player's hand,
 			// and add it to the set of cards that will be dumped in the disccard pile.

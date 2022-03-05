@@ -4,7 +4,7 @@ use std::{
 };
 
 /// Prints `prompt` and returns the trimmed input coming from stdin.
-pub fn input(prompt: &str) -> String {
+pub fn input<T: Display>(prompt: T) -> String {
 	let mut input = String::new();
 
 	print!("{}", prompt);
@@ -17,32 +17,28 @@ pub fn input(prompt: &str) -> String {
 	return input.trim().to_string();
 }
 
-/// Prints the items in the `iterator` along with their index and returns the index
-/// chosen by the user.
+/// Prints the items in the `iterator` along with their index.
+pub fn print_indexed<'a, T: 'a + Display>(iterator: impl Iterator<Item = &'a T>) {
+	for (i, item) in iterator.enumerate() {
+		println!("{}: {}", i, item);
+	}
+}
+
+/// Parses the user input into a valid index.
 ///
 /// # Arguments
 ///
 /// * `prompt` - text shown to the user
-/// * `iterator` - a container of items that the user needs to choose from
 /// * `size` - the number of items in the `iterator`
-pub fn read_index<'a, T: 'a + Display>(
-	prompt: &str,
-	iterator: impl Iterator<Item = &'a T>,
-	size: usize,
-) -> usize {
-	// print the indexed items
-	for (i, item) in iterator.enumerate() {
-		println!("{}: {}", i, item);
-	}
-
-	// keep asking the user for a number until they enter a valid index
+pub fn read_index<T: Display>(prompt: T, size: usize) -> usize {
+	// Keep asking the user for a number until they enter a valid index.
 	loop {
-		// check if the entered number can be parsed into a `u8`
-		match input(prompt).parse::<u8>() {
-			// break if the entered number is a valid index (i. e. a positive value less than the size of the container)
+		// Check if the entered number can be parsed into a `u8`.
+		match input(&prompt).parse::<u8>() {
+			// Break if the entered number is a valid index (i. e. a positive value less than the size of the container).
 			Ok(n) if (n as usize) < size => break n.into(),
 
-			// otherwise, display the message and loop
+			// Otherwise, display the message and loop.
 			_ => println!(
 				"Invalid number, entered value should be between 0..={}.",
 				size
