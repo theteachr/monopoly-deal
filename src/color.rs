@@ -30,7 +30,7 @@ const RGB_TRIPLES: [Color; 10] = [
 	(232, 049, 081), // Red
 	(132, 218, 235), // SkyBlue
 	(148, 210, 189), // Turquoise
-	(244, 157, 055), // Yellow
+	(244, 233, 000), // Yellow
 ];
 
 /// Store all the color variants in an array.
