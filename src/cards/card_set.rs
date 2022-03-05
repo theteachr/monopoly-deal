@@ -39,6 +39,10 @@ impl<T: fmt::Display + Card> CardSet<T> {
 		self.size == 0
 	}
 
+	pub fn get(&self, index: usize) -> Option<&T> {
+		self.cards.get(index)
+	}
+
 	/// Returns the card present at index = `position`.
 	/// Panics if the index in not valid.
 	pub fn remove(&mut self, position: usize) -> T {
