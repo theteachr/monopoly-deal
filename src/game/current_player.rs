@@ -15,7 +15,7 @@ pub struct CurrentPlayer {
 	pub cards_discarded: CardSet<CardKind>,
 
 	/// Represents the number of cards played by the player in the turn.
-	num_cards_played: u8,
+	pub num_cards_played: u8,
 }
 
 impl CurrentPlayer {
@@ -59,21 +59,22 @@ impl CurrentPlayer {
 		loop {
 			let user_input = input("> ");
 
-			// Let the player signal a `Pass` by just pressing the enter or return key.
+			// Let the player signal a `Pass` by just pressing the enter or the return key.
 			if user_input.is_empty() {
 				break PlayerAction::Pass;
 			}
 
-			// Try to parse the input into a usize (index).
-			match user_input.parse::<usize>() {
-				Ok(n) if n < self.player.hand.len() => {
-					let card = &self.player.hand[n];
+			let parsed = user_input.parse::<usize>();
 
-					if card.is_playable(&self.assets) {
-						self.num_cards_played += 1;
-						break PlayerAction::Play(self.player.remove_card_at(n));
-					}
-				}
+			// If `user_input` can be parsed into a valid index, and the card at it `is_playable`,
+			// remove the card from hand, and return it wrapped inside `Play`.
+			match parsed
+				.clone()
+				.ok()
+				.and_then(|n| self.player.hand.get(n))
+				.filter(|&card| card.is_playable(&self.assets))
+			{
+				Some(_) => break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap())),
 				_ => continue,
 			}
 		}
