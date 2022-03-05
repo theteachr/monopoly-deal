@@ -1,8 +1,6 @@
 use super::{Table, Turn};
 use crate::{
-	cards::{CardKind, CardSet, Colored},
-	color::CardColor,
-	common::read_index,
+	cards::{CardKind, CardSet},
 	deck::Deck,
 	player::{Assets, Player},
 };
@@ -43,7 +41,6 @@ impl Game {
 
 		println!("Shuffled {} cards.", draw_pile.len());
 
-		// FIXME
 		let mut players = get_mock_players(player_count);
 
 		// distribute cards
@@ -118,13 +115,4 @@ fn get_mock_players(count: u8) -> Vec<Player> {
 		.enumerate()
 		.map(|(i, &name)| Player::new(i, String::from(name)))
 		.collect()
-}
-
-/// Returns the color of the card that the player chose to play.
-pub fn read_color<T: Colored>(card: &T) -> CardColor {
-	// get all colors available on the card
-	let colors = card.colors();
-
-	// read the index from the user and return the color at the index
-	colors[read_index("Choose color: ", colors.iter(), colors.len())]
 }
