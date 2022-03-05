@@ -7,7 +7,7 @@ use std::{
 use super::PropertyCardKind;
 use crate::cards::{data::COLLECTIONS, Card};
 use crate::color::{colored_text, CardColor};
-use crate::game::Turn;
+use crate::game::CurrentPlayer;
 use crate::player::Assets;
 
 /// Represents a mono colored property card.
@@ -22,8 +22,8 @@ impl PropertyCard {
 		Self { name, color }
 	}
 
-	pub fn play(self, turn: &mut Turn) {
-		turn.assets.add_property(self.into());
+	pub fn play(self, current_player: &mut CurrentPlayer) {
+		current_player.assets.add_property(self.into());
 	}
 }
 

@@ -1,8 +1,8 @@
 mod game;
 mod table;
-mod turn;
+mod current_player;
 
 pub use game::Game;
 use game::PlayerAction;
 pub use table::Table;
-pub use turn::Turn;
+pub use current_player::CurrentPlayer;

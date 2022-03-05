@@ -18,7 +18,7 @@ impl<T: fmt::Display + Card> CardSet<T> {
 		}
 	}
 
-	/// Return the number of cards in the collection.
+	/// Returns the number of cards in the collection.
 	pub fn len(&self) -> usize {
 		self.size
 	}
@@ -34,7 +34,7 @@ impl<T: fmt::Display + Card> CardSet<T> {
 		self.cards.iter()
 	}
 
-	/// Returns true if the collection has no cards.
+	/// Returns `true` if the collection has no cards.
 	pub fn is_empty(&self) -> bool {
 		self.size == 0
 	}

@@ -1,6 +1,6 @@
 use super::denomination::Denomination;
 use crate::cards::Card;
-use crate::game::Turn;
+use crate::game::CurrentPlayer;
 use crate::player::Assets;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
@@ -14,9 +14,9 @@ impl MoneyCard {
 		Self(value.into())
 	}
 
-	pub fn play(self, turn: &mut Turn) {
+	pub fn play(self, current_player: &mut CurrentPlayer) {
 		// Simple add the card into player's assets.
-		turn.assets.add_money(self.into());
+		current_player.assets.add_money(self.into());
 	}
 }
 

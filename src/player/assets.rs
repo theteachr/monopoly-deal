@@ -17,6 +17,8 @@ pub struct Assets {
 	pub property_sets: PropertySets,
 }
 
+// XXX Maintain an accumulated value of all the assets to avoid calculation every time
+
 impl Assets {
 	pub fn new() -> Self {
 		Self {

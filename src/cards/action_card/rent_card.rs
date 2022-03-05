@@ -4,7 +4,7 @@ use crate::{
 	cards::Card,
 	color::{CardColor, MultiColor},
 	common::read_index,
-	game::Turn,
+	game::CurrentPlayer,
 	player::Assets,
 };
 
@@ -30,12 +30,12 @@ impl RentCard {
 
 	// should be called only if playable
 	// if that's guaranteed, we know that there will be at least one color
-	pub fn play(&mut self, turn: &mut Turn) {
+	pub fn play(&mut self, current_player: &mut CurrentPlayer) {
 		// get the colors the player can play given their assets
 		let playable_colors = self
 			.available_colors
 			.colors()
-			.intersection(&turn.assets.property_sets.colors())
+			.intersection(&current_player.assets.property_sets.colors())
 			.cloned()
 			.collect::<Vec<CardColor>>();
 
@@ -54,7 +54,7 @@ impl RentCard {
 
 		println!(
 			"Playing a rent card: {}",
-			turn.assets.rent(self.selected_color.unwrap())
+			current_player.assets.rent(self.selected_color.unwrap())
 		);
 	}
 }

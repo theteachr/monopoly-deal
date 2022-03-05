@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
-use crate::game::Turn;
+use crate::game::CurrentPlayer;
 use crate::player::Assets;
 
 pub trait Card {
@@ -80,13 +80,13 @@ impl Card for CardKind {
 }
 
 impl CardKind {
-	pub fn play(self, turn: &mut Turn) {
+	pub fn play(self, current_player: &mut CurrentPlayer) {
 		match self {
 			Self::ActionCard(_) => todo!(),
-			Self::MoneyCard(c) => c.play(turn),
-			Self::PropertyCard(c) => c.play(turn),
-			Self::PropertyWildCard(c) => c.play(turn),
-			Self::RentCard(mut c) => c.play(turn),
+			Self::MoneyCard(c) => c.play(current_player),
+			Self::PropertyCard(c) => c.play(current_player),
+			Self::PropertyWildCard(c) => c.play(current_player),
+			Self::RentCard(mut c) => c.play(current_player),
 		}
 	}
 }

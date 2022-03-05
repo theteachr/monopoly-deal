@@ -55,7 +55,7 @@ impl Card for ActionCard {
 		self.value
 	}
 
-	fn is_playable(&self, _turn: &Assets) -> bool {
+	fn is_playable(&self, _assets: &Assets) -> bool {
 		false
 	}
 }

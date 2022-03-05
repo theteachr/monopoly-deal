@@ -3,8 +3,8 @@ use crate::cards::{Card, CardKind, CardSet};
 use crate::common::input;
 use crate::player::{Assets, Player};
 
-/// Used to track a player's turn.
-pub struct Turn {
+/// Stores all necessary information about the player playing the current turn.
+pub struct CurrentPlayer {
 	/// Represents the player playing the turn.
 	pub player: Player,
 
@@ -18,9 +18,7 @@ pub struct Turn {
 	num_cards_played: u8,
 }
 
-// XXX `Turn` -> `CurrentPlayer`
-
-impl Turn {
+impl CurrentPlayer {
 	pub fn new(player: Player, assets: Assets) -> Self {
 		Self {
 			player,
@@ -101,7 +99,7 @@ impl Turn {
 	/// A player is not allowed to have more than **7** cards in their hand at the end of a turn.
 	/// This needs to be checked at the end of each turn. If there are excess cards, prompt
 	/// the player to discard the excess.
-	pub fn terminate(mut self) -> (Player, Assets, CardSet<CardKind>) {
+	pub fn end_turn(mut self) -> (Player, Assets, CardSet<CardKind>) {
 		// Get the number of cards that need to be discarded.
 		let mut to_be_discarded: i8 = self.player.hand.len() as i8 - 7;
 

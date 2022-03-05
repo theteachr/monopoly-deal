@@ -1,4 +1,4 @@
-use super::{Table, Turn};
+use super::{CurrentPlayer, Table};
 use crate::{
 	cards::{CardKind, CardSet},
 	deck::Deck,
@@ -73,7 +73,8 @@ impl Game {
 
 			// get the updated player and their assets, along with the set of cards
 			// that they chose to discard
-			let (player, assets, discarded) = handle_turn(Turn::new(player, assets), table);
+			let (player, assets, discarded) =
+				handle_turn(CurrentPlayer::new(player, assets), table);
 
 			// put the discarded into the discard deck
 			discarded
@@ -92,19 +93,19 @@ impl Game {
 /// Returns updated player, their assets and a set of cards they chose to discard.
 ///
 /// # Arguments
-/// * `turn` - a `Turn` holding the player playing the turn and their assets
+/// * `current_player` - the player playing the turn
 /// * `table` - a mutable ref to a `Table` holding cards played by rest of the players
-fn handle_turn(mut turn: Turn, table: &mut Table) -> (Player, Assets, CardSet<CardKind>) {
+fn handle_turn(mut player: CurrentPlayer, table: &mut Table) -> (Player, Assets, CardSet<CardKind>) {
 	loop {
 		table.print();
 
-		match turn.read_action() {
-			PlayerAction::Play(n) => turn.play(n),
+		match player.read_action() {
+			PlayerAction::Play(n) => player.play(n),
 			PlayerAction::Pass => break,
 		}
 	}
 
-	turn.terminate()
+	player.end_turn()
 }
 
 /// Returns a vector of `count` players.

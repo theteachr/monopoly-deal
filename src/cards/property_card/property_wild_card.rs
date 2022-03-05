@@ -4,7 +4,7 @@ use super::PropertyCardKind;
 use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::read_index;
-use crate::game::Turn;
+use crate::game::CurrentPlayer;
 use crate::player::Assets;
 
 /// Represents a property wild card.
@@ -34,7 +34,7 @@ impl PropertyWildCard {
 	}
 
 	// FIXME Rent Card has a similar logic, the code isn't dry.
-	pub fn play(mut self, turn: &mut Turn) {
+	pub fn play(mut self, current_player: &mut CurrentPlayer) {
 		// get available colors as a vector as we want to be able to index (user's input) into it and set the color
 		let colors = self
 			.available_colors
@@ -49,7 +49,7 @@ impl PropertyWildCard {
 		self.set_color(color);
 
 		// add the card into player's properties
-		turn.assets.add_property(self.into());
+		current_player.assets.add_property(self.into());
 	}
 }
 
