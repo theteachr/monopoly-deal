@@ -61,32 +61,21 @@ impl CurrentPlayer {
 
 			// Let the player signal a `Pass` by just pressing the enter or return key.
 			if user_input.is_empty() {
-				return PlayerAction::Pass;
+				break PlayerAction::Pass;
 			}
 
 			// Try to parse the input into a usize (index).
 			match user_input.parse::<usize>() {
-				Ok(n) if n < self.player.hand.len() => return PlayerAction::Play(n),
+				Ok(n) if n < self.player.hand.len() => {
+					let card = &self.player.hand[n];
+
+					if card.is_playable(&self.assets) {
+						self.num_cards_played += 1;
+						break PlayerAction::Play(self.player.remove_card_at(n));
+					}
+				}
 				_ => continue,
 			}
-		}
-	}
-
-	/// Plays the card at index `card_position` of the player's hand if it's playable.
-	///
-	/// Requires: `card_position` to be a valid index pointing to a card in
-	/// the player's hand.
-	pub fn play(&mut self, card_position: usize) {
-		// Remove the card at `card_position` from the player's hand.
-		let card = self.player.remove_card_at(card_position);
-
-		// If the card is playable, delagate the play mehcanism and increment the number of cards played,
-		// else just add the card back in the player's hand.
-		if card.is_playable(&self.assets) {
-			card.play(self);
-			self.num_cards_played += 1;
-		} else {
-			self.player.hand.add(card);
 		}
 	}
 

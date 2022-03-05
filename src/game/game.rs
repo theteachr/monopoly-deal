@@ -10,8 +10,8 @@ use std::fmt::Debug;
 
 /// Represents the actions a player can perform in their turn.
 pub enum PlayerAction {
-	/// Holds the index of the card that the player chose to play.
-	Play(usize),
+	/// Holds the the card that the player chose to play.
+	Play(CardKind),
 
 	/// Marks the end of the turn.
 	Pass,
@@ -61,54 +61,45 @@ impl Game {
 		println!("The Deal has been initiated.");
 
 		loop {
-			// get the next player
+			// Get the next player.
 			let mut player = self.players.pop_front().unwrap();
 
-			// get the next player's assets and a mutable reference
-			// to the rest of the table holding other players' played cards
-			let (assets, table) = self.table.turn();
+			// Get the next player's assets.
+			let assets = self.table.turn();
 
-			// make the player draw cards from the deck
+			// Make the player draw cards from the deck.
 			player.draw(&mut self.draw_pile);
 
-			// get the updated player and their assets, along with the set of cards
-			// that they chose to discard
-			let (player, assets, discarded) =
-				handle_turn(CurrentPlayer::new(player, assets), table);
+			// Get the updated player and their assets, along with the set of cards
+			// that they chose to discard.
+			let (player, assets, discarded) = self.handle_turn(CurrentPlayer::new(player, assets));
 
-			// put the discarded into the discard deck
+			// Put the discarded ones into the discard deck.
 			discarded
 				.into_iter()
 				.for_each(|card| self.discard_pile.push_back(card));
 
-			// put the player back into the queue
+			// Put the player back into the queue.
 			self.players.push_back(player);
 
-			// add the updated player assets back onto the table
+			// Add the updated player assets back onto the table.
 			self.table.update(assets);
 		}
 	}
-}
 
-/// Returns updated player, their assets and a set of cards they chose to discard.
-///
-/// # Arguments
-/// * `current_player` - the player playing the turn
-/// * `table` - a mutable ref to a `Table` holding cards played by rest of the players
-fn handle_turn(
-	mut player: CurrentPlayer,
-	table: &mut Table,
-) -> (Player, Assets, CardSet<CardKind>) {
-	loop {
-		table.print();
+	/// Returns the updated player, their assets and the set of cards they chose to discard.
+	fn handle_turn(&mut self, mut player: CurrentPlayer) -> (Player, Assets, CardSet<CardKind>) {
+		loop {
+			self.table.print();
 
-		match player.read_action() {
-			PlayerAction::Play(n) => player.play(n),
-			PlayerAction::Pass => break,
+			match player.read_action() {
+				PlayerAction::Play(card) => card.play(&mut player, self),
+				PlayerAction::Pass => break,
+			}
 		}
-	}
 
-	player.end_turn()
+		player.end_turn()
+	}
 }
 
 /// Returns a vector of `count` players.

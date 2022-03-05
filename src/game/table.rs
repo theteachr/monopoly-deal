@@ -14,10 +14,8 @@ impl Table {
 
 	/// Gives the assets of the next player and a reference to the rest of the table
 	/// holding the assets of the other players.
-	pub fn turn(&mut self) -> (Assets, &mut Self) {
-		let assets = self.0.pop_front().unwrap();
-
-		(assets, self)
+	pub fn turn(&mut self) -> Assets {
+		self.0.pop_front().unwrap()
 	}
 
 	/// Puts back the `assets` into the table.
