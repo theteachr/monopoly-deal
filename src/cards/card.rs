@@ -1,15 +1,8 @@
 use std::fmt;
 
 use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
-use crate::color::CardColor;
 use crate::game::Turn;
 use crate::player::Assets;
-
-/// For cards that the player can set a color.
-pub trait Colored {
-	fn set_color(&mut self, color: CardColor);
-	fn colors(&self) -> Vec<CardColor>;
-}
 
 pub trait Card {
 	fn value(&self) -> u8;

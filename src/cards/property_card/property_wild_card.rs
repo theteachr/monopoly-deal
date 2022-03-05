@@ -1,9 +1,10 @@
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 use super::PropertyCardKind;
-use crate::cards::{Card, Colored};
+use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
-use crate::game::{read_color, Turn};
+use crate::common::read_index;
+use crate::game::Turn;
 use crate::player::Assets;
 
 /// Represents a property wild card.
@@ -28,15 +29,26 @@ impl PropertyWildCard {
 		}
 	}
 
+	fn set_color(&mut self, color: CardColor) {
+		self.selected_color = Some(color);
+	}
+
 	// FIXME Rent Card has a similar logic, the code isn't dry.
 	pub fn play(mut self, turn: &mut Turn) {
-		// Read color from the player.
-		let color = read_color(&mut self);
+		// get available colors as a vector as we want to be able to index (user's input) into it and set the color
+		let colors = self
+			.available_colors
+			.colors()
+			.into_iter()
+			.collect::<Vec<CardColor>>();
 
-		// Set the read color to the card.
+		// read color from the player
+		let color = colors[read_index("> ", colors.iter(), colors.len())];
+
+		// set the read color to the card
 		self.set_color(color);
 
-		// Add the card into player's properties.
+		// add the card into player's properties
 		turn.assets.add_property(self.into());
 	}
 }
@@ -48,16 +60,6 @@ impl Card for PropertyWildCard {
 
 	fn is_playable(&self, _: &Assets) -> bool {
 		true
-	}
-}
-
-impl Colored for PropertyWildCard {
-	fn set_color(&mut self, color: CardColor) {
-		self.selected_color = Some(color);
-	}
-
-	fn colors(&self) -> Vec<CardColor> {
-		Vec::from(self.available_colors)
 	}
 }
 

@@ -1,9 +1,10 @@
 use std::fmt;
 
 use crate::{
-	cards::{Card, Colored},
+	cards::Card,
 	color::{CardColor, MultiColor},
-	game::{read_color, Turn},
+	common::read_index,
+	game::Turn,
 	player::Assets,
 };
 
@@ -23,11 +24,32 @@ impl RentCard {
 		}
 	}
 
-	pub fn play(&mut self, turn: &mut Turn) {
-		// Read the color from the player.
-		let color = read_color(self);
+	fn set_color(&mut self, color: CardColor) {
+		self.selected_color = Some(color);
+	}
 
-		// Assign the read color to the card.
+	// should be called only if playable
+	// if that's guaranteed, we know that there will be at least one color
+	pub fn play(&mut self, turn: &mut Turn) {
+		// get the colors the player can play given their assets
+		let playable_colors = self
+			.available_colors
+			.colors()
+			.intersection(&turn.assets.property_sets.colors())
+			.cloned()
+			.collect::<Vec<CardColor>>();
+
+		// if there are more than one colors, let the player choose, else we choose the one at index 0, as it's the only one
+		let index = if playable_colors.len() > 1 {
+			read_index("> ", playable_colors.iter(), playable_colors.len())
+		} else {
+			0
+		};
+
+		// read the index of the color from the player, and get the color at it
+		let color = playable_colors[index];
+
+		// assign the read color to the card
 		self.set_color(color);
 
 		println!(
@@ -43,23 +65,10 @@ impl Card for RentCard {
 	}
 
 	fn is_playable(&self, assets: &Assets) -> bool {
-		self.colors()
+		self.available_colors
+			.colors()
 			.iter()
 			.any(|color| assets.property_sets.exists(color))
-	}
-}
-
-// TODO Allow play only if the player owns at least one property whose color is on the `RentCard`
-
-// FIXME Only All color wild cards need to ask for player selection
-// Dual color cards should request money from the rest of the players
-impl Colored for RentCard {
-	fn set_color(&mut self, color: CardColor) {
-		self.selected_color = Some(color);
-	}
-
-	fn colors(&self) -> Vec<CardColor> {
-		Vec::from(self.available_colors)
 	}
 }
 
