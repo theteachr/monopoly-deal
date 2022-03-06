@@ -1,7 +1,27 @@
+use std::num::ParseIntError;
+
 use super::PlayerAction;
 use crate::cards::{Card, CardKind, CardSet};
 use crate::common::{input, print_indexed, read_index};
 use crate::player::{Assets, Player};
+
+#[derive(Debug)]
+enum ErrorKind {
+	InvalidIndex,
+	NotPlayable,
+}
+
+impl std::convert::From<ParseIntError> for ErrorKind {
+	fn from(_: ParseIntError) -> Self {
+		Self::InvalidIndex
+	}
+}
+
+impl std::convert::From<bool> for ErrorKind {
+	fn from(_: bool) -> Self {
+		Self::NotPlayable
+	}
+}
 
 /// Stores all necessary information about the player playing the current turn.
 pub struct CurrentPlayer {
@@ -70,12 +90,18 @@ impl CurrentPlayer {
 			// remove the card from hand, and return it wrapped inside `Play`.
 			match parsed
 				.clone()
-				.ok()
-				.and_then(|n| self.player.hand.get(n))
-				.filter(|&card| card.is_playable(&self.assets))
-			{
-				Some(_) => break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap())),
-				_ => continue,
+				.map_err(ErrorKind::from)
+				.and_then(|n| self.player.hand.get(n).ok_or(ErrorKind::InvalidIndex))
+				.and_then(|card| {
+					card.is_playable(&self.assets)
+						.then(|| 0)
+						.ok_or(ErrorKind::NotPlayable)
+				}) {
+				Ok(_) => break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap())),
+				Err(e) => {
+					println!("{:?}", e);
+					continue;
+				}
 			}
 		}
 	}
