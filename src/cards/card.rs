@@ -79,9 +79,16 @@ impl Card for CardKind {
 }
 
 impl CardKind {
-	pub fn play(self, current_player: &mut CurrentPlayer, _game: &mut Game) {
+	pub fn play(self, current_player: &mut CurrentPlayer, game: &mut Game) {
 		current_player.num_cards_played += 1;
-		card_kind_apply_inner!(self c => c.play(current_player))
+
+		match self {
+			Self::ActionCard(card) => card.play(current_player, game),
+			Self::MoneyCard(card) => card.play(current_player),
+			Self::PropertyCard(card) => card.play(current_player),
+			Self::PropertyWildCard(card) => card.play(current_player),
+			Self::RentCard(card) => card.play(current_player),
+		}
 	}
 }
 

@@ -4,7 +4,7 @@ use super::{
 };
 use crate::cards::Card;
 use crate::errors::NotPlayable;
-use crate::game::CurrentPlayer;
+use crate::game::{CurrentPlayer, Game};
 use crate::player::Assets;
 use std::fmt::Debug;
 use std::{cmp::PartialEq, fmt, hash::Hash};
@@ -51,8 +51,11 @@ impl ActionCard {
 		}
 	}
 
-	pub fn play(self, _player: &mut CurrentPlayer) {
-		todo!()
+	pub fn play(self, player: &mut CurrentPlayer, game: &mut Game) {
+		match self.action {
+			ActionCardKind::PassGo(card) => card.play(&mut player.player, &mut game.draw_pile),
+			_ => todo!(),
+		}
 	}
 }
 
@@ -62,9 +65,13 @@ impl Card for ActionCard {
 	}
 
 	fn is_playable(&self, _assets: &Assets) -> Result<(), NotPlayable> {
-		Err(NotPlayable(
-			"Action cards are not implemented yet.".to_string(),
-		))
+		match self.action {
+			ActionCardKind::PassGo(_) => Ok(()),
+			_ => Err(NotPlayable(format!(
+				"Action for {} is not implemented for self yet...",
+				self
+			))),
+		}
 	}
 }
 

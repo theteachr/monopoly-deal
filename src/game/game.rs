@@ -21,7 +21,7 @@ pub enum PlayerAction {
 #[derive(Debug)]
 pub struct Game {
 	/// Represents the deck of cards.
-	draw_pile: Deck,
+	pub draw_pile: Deck,
 
 	/// Used to hold action cards and those the players choose to discard when excess.
 	discard_pile: Deck,

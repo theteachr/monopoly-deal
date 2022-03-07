@@ -31,20 +31,30 @@ impl Player {
 	/// * `deck` - a mutable reference to the game's deck
 	pub fn draw(&mut self, deck: &mut Deck) {
 		// If the hand is empty, draw 5, else 2.
-		let draw_count = match self.hand.is_empty() {
-			true => DrawCount::Five,
-			false => DrawCount::Two,
-		};
+		self.draw_cards(
+			deck,
+			match self.hand.is_empty() {
+				true => DrawCount::Five,
+				false => DrawCount::Two,
+			},
+		)
+	}
 
-		// Draw the cards from the deck and add them to the player's hand.
-		for card in deck.draw(draw_count) {
-			self.hand.add(card);
-		}
+	/// Draws two cards from the deck and adds them into the player's hand.
+	pub fn draw_two(&mut self, deck: &mut Deck) {
+		self.draw_cards(deck, DrawCount::Two)
+	}
+
+	/// Draws `n` (2 or 5) cards from the deck then adds them into the player's hand.
+	fn draw_cards(&mut self, deck: &mut Deck, n: DrawCount) {
+		deck.draw(n)
+			.into_iter()
+			.for_each(|card| self.hand.add(card))
 	}
 
 	/// Returns the card present at `index`.
 	///
-	/// **Precondition**: `index` should not be out of bounds, panics otherwise.
+	/// **Panics** if `index` is out of bounds.
 	pub fn remove_card_at(&mut self, index: usize) -> CardKind {
 		return self.hand.remove(index);
 	}
