@@ -1,6 +1,7 @@
 use super::PlayerAction;
 use crate::cards::{Card, CardKind, CardSet};
 use crate::common::{input, print_indexed, read_index};
+use crate::errors::Failed;
 use crate::player::{Assets, Player};
 
 /// Stores all necessary information about the player playing the current turn.
@@ -70,12 +71,12 @@ impl CurrentPlayer {
 			// remove the card from hand, and return it wrapped inside `Play`.
 			match parsed
 				.clone()
-				.ok()
-				.and_then(|n| self.player.hand.get(n))
-				.filter(|&card| card.is_playable(&self.assets))
+				.map_err(Failed::from)
+				.and_then(|n| self.player.hand.get(n).ok_or(Failed::InvalidIndex))
+				.and_then(|card| card.is_playable(&self.assets).map_err(Failed::from))
 			{
-				Some(_) => break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap())),
-				_ => continue,
+				Ok(_) => break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap())),
+				Err(e) => println!("{}", e),
 			}
 		}
 	}

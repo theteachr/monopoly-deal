@@ -5,10 +5,13 @@ use std::{
 };
 
 use super::PropertyCardKind;
-use crate::cards::{data::COLLECTIONS, Card};
 use crate::color::{colored_text, CardColor};
 use crate::game::CurrentPlayer;
 use crate::player::Assets;
+use crate::{
+	cards::{data::COLLECTIONS, Card},
+	errors::NotPlayable,
+};
 
 /// Represents a mono colored property card.
 #[derive(Debug, Eq)]
@@ -32,8 +35,8 @@ impl Card for PropertyCard {
 		COLLECTIONS[self.color as usize].0
 	}
 
-	fn is_playable(&self, _: &Assets) -> bool {
-		true
+	fn is_playable(&self, _: &Assets) -> Result<(), NotPlayable> {
+		Ok(())
 	}
 }
 

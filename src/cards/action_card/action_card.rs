@@ -3,6 +3,7 @@ use super::{
 	HouseCard, JustSayNoCard, PassGoCard, SlyDealCard,
 };
 use crate::cards::Card;
+use crate::errors::NotPlayable;
 use crate::game::CurrentPlayer;
 use crate::player::Assets;
 use std::fmt::Debug;
@@ -60,8 +61,10 @@ impl Card for ActionCard {
 		self.value
 	}
 
-	fn is_playable(&self, _assets: &Assets) -> bool {
-		false
+	fn is_playable(&self, _assets: &Assets) -> Result<(), NotPlayable> {
+		Err(NotPlayable(
+			"Action cards are not implemented yet.".to_string(),
+		))
 	}
 }
 

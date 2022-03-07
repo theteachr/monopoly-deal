@@ -2,6 +2,7 @@ use std::{cmp::PartialEq, hash::Hash};
 
 use super::{PropertyCard, PropertyWildCard};
 use crate::cards::Card;
+use crate::errors::NotPlayable;
 use crate::player::Assets;
 
 /// Represents the type of a property card.
@@ -22,7 +23,7 @@ impl Card for PropertyCardKind {
 		}
 	}
 
-	fn is_playable(&self, _: &Assets) -> bool {
-		true
+	fn is_playable(&self, _: &Assets) -> Result<(), NotPlayable> {
+		Ok(())
 	}
 }
