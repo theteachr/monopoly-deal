@@ -34,7 +34,6 @@ impl PropertyWildCard {
 		self.selected_color = Some(color);
 	}
 
-	// FIXME Rent Card has a similar logic, the code isn't dry.
 	pub fn play(mut self, current_player: &mut CurrentPlayer) {
 		// Get available colors as a vector as we want to be able to index (user's input) into it and set the color.
 		let colors = self
@@ -46,13 +45,13 @@ impl PropertyWildCard {
 		// Print the indexed list of colors for the user to pick.
 		print_indexed(colors.iter());
 
-		// read color from the player
+		// Read color from the player.
 		let color = colors[read_index("> ", colors.len())];
 
-		// set the read color to the card
+		// Set the read color to the card.
 		self.set_color(color);
 
-		// add the card into player's properties
+		// Add the card into player's properties.
 		current_player.assets.add_property(self.into());
 	}
 }
@@ -62,6 +61,7 @@ impl Card for PropertyWildCard {
 		self.value
 	}
 
+	// FIXME A property card can't be played if the set is complete.
 	fn is_playable(&self, _: &Assets) -> Result<(), NotPlayable> {
 		Ok(())
 	}

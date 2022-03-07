@@ -91,7 +91,8 @@ impl CurrentPlayer {
 		let mut to_be_discarded: i8 = self.player.hand.len() as i8 - 7;
 
 		// Until the number of cards need to be discarded is > 0,
-		// ask the player to enter the index of the card they want to discard.
+		// ask the player to enter the index of the card they want to discard,
+		// and add the card into the discard pile.
 		while to_be_discarded > 0 {
 			println!("You need to discard {}.", to_be_discarded);
 
@@ -106,7 +107,7 @@ impl CurrentPlayer {
 			let card_position = read_index("> ", self.player.hand.len());
 
 			// Remove the card at `card_position` from the  player's hand,
-			// and add it to the set of cards that will be dumped in the disccard pile.
+			// and add it to the set of cards that will be dumped in the discard pile.
 			self.cards_discarded
 				.add(self.player.remove_card_at(card_position));
 
