@@ -25,9 +25,9 @@ impl Player {
 	}
 
 	/// Draws cards from the `deck` and puts them in the player's `hand`.
-	/// 
+	///
 	/// #### Arguments
-	/// 
+	///
 	/// * `deck` - a mutable reference to the game's deck
 	pub fn draw(&mut self, deck: &mut Deck) {
 		// If the hand is empty, draw 5, else 2.
@@ -43,7 +43,7 @@ impl Player {
 	}
 
 	/// Returns the card present at `index`.
-	/// 
+	///
 	/// **Precondition**: `index` should not be out of bounds, panics otherwise.
 	pub fn remove_card_at(&mut self, index: usize) -> CardKind {
 		return self.hand.remove(index);
