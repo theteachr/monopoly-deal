@@ -4,7 +4,7 @@ use crate::{deck::Deck, player::Player};
 pub struct PassGoCard;
 
 impl PassGoCard {
-	pub fn play(self, player: &mut Player, deck: &mut Deck) {
+	pub fn play(player: &mut Player, deck: &mut Deck) {
 		player.draw_two(deck);
 	}
 }

@@ -4,7 +4,7 @@ mod card_set;
 mod money_card;
 pub mod property_card;
 
-pub use action_card::{Action, ActionCard, ActionCardKind, RentCard};
+pub use action_card::{Action, ActionCard, RentCard};
 pub use card::{BankableCardKind, Card, CardKind};
 pub use card_set::CardSet;
 pub use money_card::MoneyCard;

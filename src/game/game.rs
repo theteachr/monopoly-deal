@@ -24,7 +24,7 @@ pub struct Game {
 	pub deck: Deck,
 
 	/// Used to hold action cards and those the players choose to discard when excess.
-	discard_deck: Deck,
+	pub discard_deck: Deck,
 
 	/// A queue of players in the game.
 	players: VecDeque<Player>,
