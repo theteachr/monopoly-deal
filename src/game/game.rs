@@ -21,10 +21,10 @@ pub enum PlayerAction {
 #[derive(Debug)]
 pub struct Game {
 	/// Represents the deck of cards.
-	pub draw_pile: Deck,
+	pub deck: Deck,
 
 	/// Used to hold action cards and those the players choose to discard when excess.
-	discard_pile: Deck,
+	discard_deck: Deck,
 
 	/// A queue of players in the game.
 	players: VecDeque<Player>,
@@ -49,8 +49,8 @@ impl Game {
 		}
 
 		Self {
-			draw_pile,
-			discard_pile,
+			deck: draw_pile,
+			discard_deck: discard_pile,
 			players: VecDeque::from(players),
 			table: Table::new(player_count),
 		}
@@ -68,7 +68,7 @@ impl Game {
 			let assets = self.table.turn();
 
 			// Make the player draw cards from the deck.
-			player.draw(&mut self.draw_pile);
+			player.draw(&mut self.deck);
 
 			// Get the updated player and their assets, along with the set of cards
 			// that they chose to discard.
@@ -77,7 +77,7 @@ impl Game {
 			// Put the discarded ones into the discard deck.
 			discarded
 				.into_iter()
-				.for_each(|card| self.discard_pile.push_back(card));
+				.for_each(|card| self.discard_deck.push_back(card));
 
 			// Put the player back into the queue.
 			self.players.push_back(player);

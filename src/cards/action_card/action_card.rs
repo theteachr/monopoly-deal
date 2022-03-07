@@ -53,7 +53,7 @@ impl ActionCard {
 
 	pub fn play(self, player: &mut CurrentPlayer, game: &mut Game) {
 		match self.action {
-			ActionCardKind::PassGo(card) => card.play(&mut player.player, &mut game.draw_pile),
+			ActionCardKind::PassGo(card) => card.play(&mut player.player, &mut game.deck),
 			_ => todo!(),
 		}
 	}
