@@ -4,6 +4,7 @@ use super::PropertyCardKind;
 use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::{print_indexed, read_index};
+use crate::errors::NotPlayable;
 use crate::game::CurrentPlayer;
 use crate::player::Assets;
 
@@ -61,8 +62,8 @@ impl Card for PropertyWildCard {
 		self.value
 	}
 
-	fn is_playable(&self, _: &Assets) -> bool {
-		true
+	fn is_playable(&self, _: &Assets) -> Result<(), NotPlayable> {
+		Ok(())
 	}
 }
 

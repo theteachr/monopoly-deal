@@ -4,6 +4,7 @@ use crate::{
 	cards::Card,
 	color::{CardColor, MultiColor},
 	common::{print_indexed, read_index},
+	errors::NotPlayable,
 	game::CurrentPlayer,
 	player::Assets,
 };
@@ -67,11 +68,19 @@ impl Card for RentCard {
 		self.value
 	}
 
-	fn is_playable(&self, assets: &Assets) -> bool {
-		self.available_colors
+	fn is_playable(&self, assets: &Assets) -> Result<(), NotPlayable> {
+		if self
+			.available_colors
 			.colors()
 			.iter()
 			.any(|color| assets.property_sets.exists(color))
+		{
+			return Ok(());
+		}
+
+		Err(NotPlayable(
+			"You don't own a single asset of any of the available colors.".to_string(),
+		))
 	}
 }
 

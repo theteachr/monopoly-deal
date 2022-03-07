@@ -2,6 +2,7 @@ mod cards;
 mod color;
 mod common;
 mod deck;
+mod errors;
 mod game;
 mod player;
 
