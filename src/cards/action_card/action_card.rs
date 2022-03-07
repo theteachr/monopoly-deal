@@ -44,6 +44,7 @@ impl ActionCard {
 	}
 }
 
+/// Draws two cards from the deck and adds them into the player's hand.
 fn play_pass_go(player: &mut Player, deck: &mut Deck) {
 	player.draw_two(deck);
 }
@@ -57,7 +58,7 @@ impl Card for ActionCard {
 		match self.action {
 			Action::PassGo => Ok(()),
 			_ => Err(NotPlayable(format!(
-				"Action for {} is not implemented for self yet...",
+				"Action for {} is not implemented yet...",
 				self
 			))),
 		}
