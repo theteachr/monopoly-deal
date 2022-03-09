@@ -3,11 +3,12 @@ use std::fmt;
 use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
 use crate::errors::NotPlayable;
 use crate::game::{CurrentPlayer, Game};
-use crate::player::Assets;
+
+use super::PropertySets;
 
 pub trait Card {
 	fn value(&self) -> u8;
-	fn is_playable(&self, assets: &Assets) -> Result<(), NotPlayable>;
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable>;
 }
 
 macro_rules! apply_inner {
@@ -63,8 +64,8 @@ impl Card for BankableCardKind {
 		bankable_card_kind_apply_inner!(self c => c.value())
 	}
 
-	fn is_playable(&self, assets: &Assets) -> Result<(), NotPlayable> {
-		bankable_card_kind_apply_inner!(self c => c.is_playable(assets))
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		bankable_card_kind_apply_inner!(self c => c.is_playable(properties))
 	}
 }
 
@@ -73,8 +74,8 @@ impl Card for CardKind {
 		card_kind_apply_inner!(self c => c.value())
 	}
 
-	fn is_playable(&self, assets: &Assets) -> Result<(), NotPlayable> {
-		card_kind_apply_inner!(self c => c.is_playable(assets))
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		card_kind_apply_inner!(self c => c.is_playable(properties))
 	}
 }
 
@@ -87,7 +88,7 @@ impl CardKind {
 			Self::MoneyCard(card) => card.play(current_player),
 			Self::PropertyCard(card) => card.play(current_player),
 			Self::PropertyWildCard(card) => card.play(current_player),
-			Self::RentCard(card) => card.play(current_player),
+			Self::RentCard(card) => card.play(&current_player.assets.property_sets),
 		}
 	}
 }

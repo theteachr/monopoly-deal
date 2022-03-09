@@ -5,6 +5,7 @@ use std::{
 
 use crate::color::CardColor;
 
+use crate::cards::data::COLLECTIONS;
 use crate::cards::{CardSet, PropertyCardKind};
 
 /// Tracks the set of property cards played by a player.
@@ -24,14 +25,17 @@ impl PropertySets {
 		self.0.entry(color)
 	}
 
-	/// Returns the set of cards colored in `color` if any.
-	pub fn cards(&self, color: CardColor) -> Option<&CardSet<PropertyCardKind>> {
-		self.0.get(&color)
-	}
-
 	/// Returns all colors in the properties.
 	pub fn colors(&self) -> HashSet<CardColor> {
 		self.0.keys().cloned().collect()
+	}
+
+	/// Returns the amount of rent that the player will be paid,
+	/// if they choose to ask rent for all their `color` properties.
+	pub fn rent(&self, color: CardColor) -> u8 {
+		self.0.get(&color).map_or(0, |cards| {
+			COLLECTIONS[color as usize].1[(cards.len() - 1) as usize]
+		})
 	}
 
 	/// Returns the total value all the played properties.

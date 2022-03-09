@@ -1,8 +1,8 @@
-use crate::cards::Card;
+use crate::cards::{Card, PropertySets};
 use crate::deck::Deck;
 use crate::errors::NotPlayable;
 use crate::game::{CurrentPlayer, Game};
-use crate::player::{Assets, Player};
+use crate::player::Player;
 use std::fmt::Debug;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
@@ -54,7 +54,7 @@ impl Card for ActionCard {
 		self.value
 	}
 
-	fn is_playable(&self, _assets: &Assets) -> Result<(), NotPlayable> {
+	fn is_playable(&self, _properties: &PropertySets) -> Result<(), NotPlayable> {
 		match self.action {
 			Action::PassGo => Ok(()),
 			_ => Err(NotPlayable(format!(

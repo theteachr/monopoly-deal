@@ -1,12 +1,10 @@
 use std::fmt;
 
 use crate::{
-	cards::Card,
+	cards::{Card, PropertySets},
 	color::{CardColor, MultiColor},
 	common::{print_indexed, read_index},
 	errors::NotPlayable,
-	game::CurrentPlayer,
-	player::Assets,
 };
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -29,12 +27,12 @@ impl RentCard {
 		self.selected_color = Some(color);
 	}
 
-	pub fn play(mut self, current_player: &mut CurrentPlayer) {
+	pub fn play(mut self, properties: &PropertySets) {
 		// Get the colors the player can play given their assets.
 		let playable_colors = self
 			.available_colors
 			.colors()
-			.intersection(&current_player.assets.property_sets.colors())
+			.intersection(&properties.colors())
 			.cloned()
 			.collect::<Vec<CardColor>>();
 
@@ -58,7 +56,7 @@ impl RentCard {
 
 		println!(
 			"Playing a rent card: {}",
-			current_player.assets.rent(self.selected_color.unwrap())
+			properties.rent(self.selected_color.unwrap())
 		);
 	}
 }
@@ -68,12 +66,12 @@ impl Card for RentCard {
 		self.value
 	}
 
-	fn is_playable(&self, assets: &Assets) -> Result<(), NotPlayable> {
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
 		if self
 			.available_colors
 			.colors()
 			.iter()
-			.any(|color| assets.property_sets.exists(color))
+			.any(|color| properties.exists(color))
 		{
 			return Ok(());
 		}

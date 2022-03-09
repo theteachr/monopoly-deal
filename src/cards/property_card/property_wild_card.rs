@@ -1,12 +1,11 @@
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
-use super::PropertyCardKind;
+use super::{PropertyCardKind, PropertySets};
 use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::{print_indexed, read_index};
 use crate::errors::NotPlayable;
 use crate::game::CurrentPlayer;
-use crate::player::Assets;
 
 /// Represents a property wild card.
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -62,7 +61,7 @@ impl Card for PropertyWildCard {
 	}
 
 	// FIXME A property card can't be played if the set is complete.
-	fn is_playable(&self, _: &Assets) -> Result<(), NotPlayable> {
+	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
 		Ok(())
 	}
 }

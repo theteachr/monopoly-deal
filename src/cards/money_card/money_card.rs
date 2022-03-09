@@ -1,6 +1,6 @@
 use super::denomination::Denomination;
+use crate::cards::PropertySets;
 use crate::game::CurrentPlayer;
-use crate::player::Assets;
 use crate::{cards::Card, errors::NotPlayable};
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
@@ -26,7 +26,7 @@ impl Card for MoneyCard {
 		self.0 as u8
 	}
 
-	fn is_playable(&self, _: &Assets) -> Result<(), NotPlayable> {
+	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
 		// `MoneyCard`s are always playable, so return `true`.
 		Ok(())
 	}

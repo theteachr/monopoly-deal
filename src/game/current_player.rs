@@ -73,8 +73,10 @@ impl CurrentPlayer {
 				.clone()
 				.map_err(Failed::from)
 				.and_then(|n| self.player.hand.get(n).ok_or(Failed::InvalidIndex))
-				.and_then(|card| card.is_playable(&self.assets).map_err(Failed::from))
-			{
+				.and_then(|card| {
+					card.is_playable(&self.assets.property_sets)
+						.map_err(Failed::from)
+				}) {
 				Ok(_) => break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap())),
 				Err(e) => println!("{}", e),
 			}

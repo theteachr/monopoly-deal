@@ -4,10 +4,9 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use super::PropertyCardKind;
+use super::{PropertyCardKind, PropertySets};
 use crate::color::{colored_text, CardColor};
 use crate::game::CurrentPlayer;
-use crate::player::Assets;
 use crate::{
 	cards::{data::COLLECTIONS, Card},
 	errors::NotPlayable,
@@ -35,7 +34,7 @@ impl Card for PropertyCard {
 		COLLECTIONS[self.color as usize].0
 	}
 
-	fn is_playable(&self, _: &Assets) -> Result<(), NotPlayable> {
+	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
 		Ok(())
 	}
 }
