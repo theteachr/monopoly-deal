@@ -3,14 +3,16 @@ use std::fmt::Display;
 use std::num::ParseIntError;
 
 pub enum Failed {
-	InvalidIndex,
+	NotANumber,
+	InvalidIndex(usize),
 	NotPlayable(String),
 }
 
 impl Display for Failed {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			Self::InvalidIndex => write!(f, "Invalid index :o"),
+			Self::NotANumber => write!(f, "Not a valid number o_0"),
+			Self::InvalidIndex(i) => write!(f, "{} is out of bounds :<", i),
 			Self::NotPlayable(reason) => reason.fmt(f),
 		}
 	}
@@ -20,7 +22,7 @@ pub struct NotPlayable(pub String);
 
 impl From<ParseIntError> for Failed {
 	fn from(_: ParseIntError) -> Self {
-		Self::InvalidIndex
+		Self::NotANumber
 	}
 }
 

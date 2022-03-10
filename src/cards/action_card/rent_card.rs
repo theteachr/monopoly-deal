@@ -80,9 +80,10 @@ impl Card for RentCard {
 
 		// The player didn't own any property of any color on the card,
 		// report with an appropriate error message.
-		Err(NotPlayable(
-			"You don't own a single asset of any of the available colors.".to_string(),
-		))
+		Err(NotPlayable(format!(
+			"You need to own at least one property colored in any of {}.",
+			self.available_colors
+		)))
 	}
 }
 

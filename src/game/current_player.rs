@@ -77,7 +77,7 @@ impl CurrentPlayer {
 			match parsed
 				.clone()
 				.map_err(Failed::from)
-				.and_then(|n| self.player.hand.get(n).ok_or(Failed::InvalidIndex))
+				.and_then(|n| self.player.hand.get(n).ok_or(Failed::InvalidIndex(n)))
 				.and_then(|card| {
 					card.is_playable(&self.assets.property_sets)
 						.map_err(Failed::from)
