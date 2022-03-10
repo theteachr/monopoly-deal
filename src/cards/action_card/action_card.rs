@@ -36,7 +36,7 @@ impl ActionCard {
 
 	pub fn play(self, player: &mut CurrentPlayer, game: &mut Game) {
 		match self.action {
-			Action::PassGo => play_pass_go(&mut player.player, &mut game.deck),
+			Action::PassGo => play_pass_go(player.get(), &mut game.deck),
 			_ => todo!(),
 		}
 

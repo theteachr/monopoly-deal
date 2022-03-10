@@ -37,7 +37,7 @@ impl PropertyWildCard {
 		// Get available colors as a vector as we want to be able to index (user's input) into it and set the color.
 		let colors = self
 			.available_colors
-			.colors()
+			.get()
 			.into_iter()
 			.collect::<Vec<CardColor>>();
 

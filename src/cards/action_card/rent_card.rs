@@ -31,7 +31,7 @@ impl RentCard {
 		// Get the colors the player can play given their assets.
 		let playable_colors = self
 			.available_colors
-			.colors()
+			.get()
 			.intersection(&properties.colors())
 			.cloned()
 			.collect::<Vec<CardColor>>();
@@ -69,7 +69,7 @@ impl Card for RentCard {
 	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
 		if self
 			.available_colors
-			.colors()
+			.get()
 			.iter()
 			.any(|color| properties.exists(color))
 		{

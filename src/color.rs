@@ -65,7 +65,7 @@ pub enum MultiColor {
 }
 
 impl MultiColor {
-	pub fn colors(&self) -> HashSet<CardColor> {
+	pub fn get(&self) -> HashSet<CardColor> {
 		match self {
 			Self::Two(c, d) => vec![*c, *d].into_iter().collect(),
 			Self::All => COLORS.to_vec().into_iter().collect(),
@@ -82,7 +82,7 @@ impl CardColor {
 
 impl fmt::Display for MultiColor {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		self.colors()
+		self.get()
 			.iter()
 			.map(|&color| colored_text(BLOCK, color))
 			.collect::<Vec<String>>()

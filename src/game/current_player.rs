@@ -29,6 +29,11 @@ impl CurrentPlayer {
 		}
 	}
 
+	/// Returns a mutable reference to the player playing the turn.
+	pub fn get(&mut self) -> &mut Player {
+		&mut self.player
+	}
+
 	/// Returns the action the player chooses to play.
 	pub fn read_action(&mut self) -> PlayerAction {
 		// A player can play a max of 3 cards per turn.
