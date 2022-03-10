@@ -67,6 +67,8 @@ impl Card for RentCard {
 	}
 
 	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		// Check if any of the colors on the card is present in the properties played by the player.
+		// If yes, then report as playable.
 		if self
 			.available_colors
 			.get()
@@ -76,6 +78,8 @@ impl Card for RentCard {
 			return Ok(());
 		}
 
+		// The player didn't own any property of any color on the card,
+		// report with an appropriate error message.
 		Err(NotPlayable(
 			"You don't own a single asset of any of the available colors.".to_string(),
 		))
