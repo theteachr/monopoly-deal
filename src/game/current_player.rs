@@ -82,7 +82,15 @@ impl CurrentPlayer {
 					card.is_playable(&self.assets.property_sets)
 						.map_err(Failed::from)
 				}) {
-				Ok(_) => break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap())),
+				Ok(_) => {
+					// At this point, we know that this card will be played,
+					// so incement the number of cards played by the player. 
+					self.num_cards_played += 1;
+
+					// Since `parsed` was checked to see if it were a valid index,
+					// we're safe to `unwrap` it.
+					break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap()));
+				}
 				Err(e) => println!("{}", e),
 			}
 		}
