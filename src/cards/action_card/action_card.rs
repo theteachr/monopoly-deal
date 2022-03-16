@@ -22,15 +22,15 @@ pub enum Action {
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct ActionCard {
-	value: u8,
-	action: Action,
+	pub value: u8,
+	pub action: Action,
 }
 
 impl ActionCard {
 	pub fn new(value: u8, action: Action) -> Self {
 		Self {
 			value,
-			action: action.into(),
+			action: action,
 		}
 	}
 
@@ -56,17 +56,26 @@ impl Card for ActionCard {
 
 	fn is_playable(&self, _properties: &PropertySets) -> Result<(), NotPlayable> {
 		match self.action {
-			Action::PassGo => Ok(()),
-			_ => Err(NotPlayable(format!(
-				"Action for {} is not implemented yet...",
-				self
-			))),
+			Action::PassGo | Action::Birthday | Action::DealBreaker | Action::DebtCollector => {
+				Ok(())
+			}
+			Action::DoubleTheRent => Err(NotPlayable(
+				"You need to play a rent card before playing this one.".to_string(),
+			)),
+			Action::ForcedDeal => Ok(()),
+			Action::Hotel => Ok(()),
+			Action::House => Ok(()),
+			Action::JustSayNo => Err(NotPlayable(
+				"Can only be played when you're asked to pay or to counter another JustSayNo."
+					.to_string(),
+			)),
+			Action::SlyDeal => Ok(()),
 		}
 	}
 }
 
 impl fmt::Display for ActionCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{:?}", self.action)
+		self.action.fmt(f)
 	}
 }
