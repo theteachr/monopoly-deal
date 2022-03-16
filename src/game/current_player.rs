@@ -1,5 +1,5 @@
 use super::PlayerAction;
-use crate::cards::{Card, CardKind, CardSet};
+use crate::cards::{Action, Card, CardKind, CardSet};
 use crate::common::{input, print_indexed, read_index};
 use crate::errors::Failed;
 use crate::player::{Assets, Player};
@@ -78,13 +78,11 @@ impl CurrentPlayer {
 				.clone()
 				.map_err(Failed::from)
 				.and_then(|n| self.player.hand.get(n).ok_or(Failed::InvalidIndex(n)))
-				.and_then(|card| {
-					card.is_playable(&self.assets.property_sets)
-						.map_err(Failed::from)
-				}) {
+				.and_then(|card| self.can_play(card))
+			{
 				Ok(_) => {
 					// At this point, we know that this card will be played,
-					// so incement the number of cards played by the player. 
+					// so incement the number of cards played by the player.
 					self.num_cards_played += 1;
 
 					// Since `parsed` was checked to see if it were a valid index,
@@ -94,6 +92,25 @@ impl CurrentPlayer {
 				Err(e) => println!("{}", e),
 			}
 		}
+	}
+
+	// Returns an `Ok(())` if the player can play the `card` in this turn.
+	fn can_play(&self, card: &CardKind) -> Result<(), Failed> {
+		// `DoubleTheRent` needs to be handled separately as it's the only card
+		// that needs to know the cards the player has played in the turn to
+		// determine if it's playable.
+		if let CardKind::ActionCard(card) = card {
+			if matches!(card.action, Action::DoubleTheRent) {
+				// If the player has played a rent card, `DoubleTheRent` card
+				// is playable.
+				return Err(Failed::NotPlayable(
+					"DoubleTheRent is tricky...".to_string(),
+				));
+			}
+		}
+
+		card.is_playable(&self.assets.property_sets)
+			.map_err(Failed::from)
 	}
 
 	/// Returns the mutated player, assets and a set of cards the player chose to discard.
