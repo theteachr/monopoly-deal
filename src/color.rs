@@ -101,5 +101,5 @@ impl fmt::Display for CardColor {
 pub fn colored_text(text: &'static str, color: CardColor) -> String {
 	let (r, g, b) = color.to_rgb();
 
-	return format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text);
+	format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text)
 }
