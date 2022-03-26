@@ -46,3 +46,15 @@ pub fn read_index<T: Display>(prompt: T, size: usize) -> usize {
 		}
 	}
 }
+
+/// - Prints the enumerated iterator
+/// - `prompt`s the user for input, until input is a valid index
+/// - Returns the index
+pub fn print_read_index<'a, T: Display, U: 'a + Display>(
+	prompt: T,
+	iterator: impl Iterator<Item = &'a U>,
+	size: usize,
+) -> usize {
+	print_indexed(iterator);
+	read_index(prompt, size)
+}

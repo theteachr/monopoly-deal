@@ -24,6 +24,10 @@ impl Table {
 		self.0.push_back(assets);
 	}
 
+	pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Assets> {
+		self.0.iter_mut()
+	}
+
 	pub fn print(&self) {
 		self.0
 			.iter()

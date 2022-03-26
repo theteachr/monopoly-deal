@@ -136,12 +136,11 @@ impl CurrentPlayer {
 			println!();
 
 			// Read the index from the user.
-			let card_position = read_index("> ", self.player.hand.len());
+			let idx = read_index("> ", self.player.hand.len());
 
 			// Remove the card at `card_position` from the  player's hand,
 			// and add it to the set of cards that will be dumped in the discard pile.
-			self.cards_discarded
-				.add(self.player.remove_card_at(card_position));
+			self.cards_discarded.add(self.player.remove_card_at(idx));
 
 			// One less card to be discarded, decrement the variable.
 			to_be_discarded -= 1;

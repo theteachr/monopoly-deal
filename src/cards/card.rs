@@ -4,6 +4,7 @@ use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCa
 use crate::errors::NotPlayable;
 use crate::game::{CurrentPlayer, Game};
 
+use super::PropertyCardKind;
 use super::PropertySets;
 
 pub trait Card {
@@ -87,6 +88,25 @@ impl CardKind {
 			Self::PropertyCard(card) => card.play(current_player),
 			Self::PropertyWildCard(card) => card.play(current_player),
 			Self::RentCard(card) => card.play(&current_player.assets.property_sets),
+		}
+	}
+}
+
+impl From<BankableCardKind> for CardKind {
+	fn from(bankable_card_kind: BankableCardKind) -> Self {
+		match bankable_card_kind {
+			BankableCardKind::ActionCard(c) => Self::ActionCard(c),
+			BankableCardKind::MoneyCard(c) => Self::MoneyCard(c),
+			BankableCardKind::RentCard(c) => Self::RentCard(c),
+		}
+	}
+}
+
+impl From<PropertyCardKind> for CardKind {
+	fn from(property_card_kind: PropertyCardKind) -> Self {
+		match property_card_kind {
+			PropertyCardKind::Single(c) => Self::PropertyCard(c),
+			PropertyCardKind::Wild(c) => Self::PropertyWildCard(c),
 		}
 	}
 }
