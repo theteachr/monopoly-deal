@@ -48,14 +48,14 @@ fn play_pass_go(player: &mut Player, deck: &mut Deck) {
 	player.draw_two(deck);
 }
 
-/// Ask every opponents for 2M, add the collected cards to the player's assets.
+/// Asks every opponent for 2M, adds the collected cards to the player's assets.
 fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
 	for assets in rest_of_the_table.iter_mut() {
 		let mut paid = 0u8;
 		// Print the assets.
 		println!("{}", assets);
 
-		// Ask the user to whether they want to play a banked or a property card.
+		// Until the paid amount is < 2, ask the user whether they want to play a banked or a property card.
 		while paid < 2 {
 			match input("> ").as_str() {
 				"b" => {
