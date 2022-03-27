@@ -34,14 +34,14 @@ pub fn read_index<T: Display>(prompt: T, size: usize) -> usize {
 	// Keep asking the user for a number until they enter a valid index.
 	loop {
 		// Check if the entered number can be parsed into a `u8`.
-		match input(&prompt).parse::<u8>() {
+		match input(&prompt).parse::<usize>() {
 			// Break if the entered number is a valid index (i. e. a positive value less than the size of the container).
-			Ok(n) if (n as usize) < size => break n.into(),
+			Ok(n) if (n) < size => break n,
 
 			// Otherwise, display the message and loop.
 			_ => println!(
 				"Invalid number, entered value should be between 0..={}.",
-				size
+				size - 1
 			),
 		}
 	}
