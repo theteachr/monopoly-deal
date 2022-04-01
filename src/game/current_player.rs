@@ -63,6 +63,7 @@ impl CurrentPlayer {
 		println!();
 
 		loop {
+			// Read the input from the user.
 			let user_input = input("> ");
 
 			// Let the player signal a `Pass` by just pressing the enter or the return key.
