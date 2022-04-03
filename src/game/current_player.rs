@@ -88,6 +88,7 @@ impl CurrentPlayer {
 
 					// Since `parsed` was checked to see if it were a valid index,
 					// we're safe to `unwrap` it.
+					// Remove the card out of the player's hand and return it wrapped in `Play`.
 					break PlayerAction::Play(self.player.remove_card_at(parsed.unwrap()));
 				}
 				Err(e) => println!("{}", e),
