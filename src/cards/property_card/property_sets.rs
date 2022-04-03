@@ -48,11 +48,12 @@ impl PropertySets {
 		self.0.values().map(CardSet::value).sum()
 	}
 
-	/// Return `true` if at least one property of the given `color` exists in the set.
+	/// Returns `true` if at least one property of the given `color` exists in the set.
 	pub fn exists(&self, color: &CardColor) -> bool {
 		self.0.contains_key(&color)
 	}
 
+	/// Returns an iterator over the colors played by the players.
 	pub fn iter(&self) -> impl Iterator<Item = CardColor> + '_ {
 		self.0.keys().cloned()
 	}
