@@ -1,10 +1,10 @@
-use crate::cards::card::PaidCardKind;
-use crate::cards::{Card, PropertySets};
+use crate::cards::{Card, PropertySets, PaidCardKind};
 use crate::common::{input, print_read_index};
 use crate::deck::Deck;
 use crate::errors::NotPlayable;
 use crate::game::{CurrentPlayer, Game, Table};
 use crate::player::{Assets, Player};
+
 use std::fmt::Debug;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
@@ -55,9 +55,6 @@ fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
 		// Initialize the amount of value received.
 		let mut paid = 0u8;
 
-		// Print the assets.
-		println!("{}", assets);
-
 		if assets.total_property_value() + assets.bank_value() < 2 {
 			println!("This player is incapable of paying the rent.");
 			return;
@@ -67,16 +64,20 @@ fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
 
 		// Until the paid amount is < 2, ask the user whether they want to play a banked or a property card.
 		while paid < 2 {
+			// Show the assets.
+			println!("{}", assets);
+
+			// Ask how they want to make the payment
+			// `b` -> pay by a card in the bank
+			// `p` -> pay by property
 			let card: PaidCardKind = match input("> ").as_str() {
 				"b" => {
-					let idx = print_read_index("> ", assets.bank.iter(), assets.bank.len());
-
+					let idx = print_read_index("$ ", assets.bank.iter(), assets.bank.len());
 					assets.remove_banked_card(idx).into()
 				}
 				"p" => {
 					let colors = assets.property_sets.iter().collect::<Vec<_>>();
-					let idx = print_read_index("> ", colors.iter(), colors.len());
-
+					let idx = print_read_index("# ", colors.iter(), colors.len());
 					assets.remove_property_card_of_color(&colors[idx]).into()
 				}
 				_ => {
