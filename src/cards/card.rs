@@ -30,6 +30,12 @@ macro_rules! bankable_card_kind_apply_inner {
 	};
 }
 
+macro_rules! paid_card_kind_apply_inner {
+	( $VAL:ident $CARD:ident => $EXPR:expr ) => {
+		apply_inner! { $VAL PaidCardKind $CARD {$EXPR} Banked Property }
+	};
+}
+
 /// Represents all possible types a card can be.
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum CardKind {
@@ -60,6 +66,11 @@ pub enum BankableCardKind {
 	RentCard(RentCard),
 }
 
+pub enum PaidCardKind {
+	Banked(BankableCardKind),
+	Property(PropertyCardKind),
+}
+
 impl Card for BankableCardKind {
 	fn value(&self) -> u8 {
 		bankable_card_kind_apply_inner!(self c => c.value())
@@ -67,6 +78,16 @@ impl Card for BankableCardKind {
 
 	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
 		bankable_card_kind_apply_inner!(self c => c.is_playable(properties))
+	}
+}
+
+impl Card for PaidCardKind {
+	fn value(&self) -> u8 {
+		paid_card_kind_apply_inner!(self c => c.value())
+	}
+
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		paid_card_kind_apply_inner!(self c => c.is_playable(properties))
 	}
 }
 
@@ -92,12 +113,17 @@ impl CardKind {
 	}
 }
 
-impl From<BankableCardKind> for CardKind {
+impl From<BankableCardKind> for PaidCardKind {
 	fn from(bankable_card_kind: BankableCardKind) -> Self {
-		match bankable_card_kind {
-			BankableCardKind::ActionCard(c) => Self::ActionCard(c),
-			BankableCardKind::MoneyCard(c) => Self::MoneyCard(c),
-			BankableCardKind::RentCard(c) => Self::RentCard(c),
+		bankable_card_kind_apply_inner!(bankable_card_kind c => Self::Banked(c.into()))
+	}
+}
+
+impl From<PropertyCardKind> for PaidCardKind {
+	fn from(property_card_kind: PropertyCardKind) -> Self {
+		match property_card_kind {
+			PropertyCardKind::Single(c) => Self::Property(c.into()),
+			PropertyCardKind::Wild(c) => Self::Property(c.into()),
 		}
 	}
 }

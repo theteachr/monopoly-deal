@@ -1,3 +1,4 @@
+use crate::cards::card::PaidCardKind;
 use crate::cards::{Card, PropertySets};
 use crate::common::{input, print_read_index};
 use crate::deck::Deck;
@@ -51,30 +52,41 @@ fn play_pass_go(player: &mut Player, deck: &mut Deck) {
 /// Asks every opponent for 2M, adds the collected cards to the player's assets.
 fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
 	for assets in rest_of_the_table.iter_mut() {
+		// Initialize the amount of value received.
 		let mut paid = 0u8;
+
 		// Print the assets.
 		println!("{}", assets);
 
+		if assets.total_property_value() + assets.bank_value() < 2 {
+			println!("This player is incapable of paying the rent.");
+			return;
+		}
+
+		// TODO Display name of the player who's being asked for rent.
+
 		// Until the paid amount is < 2, ask the user whether they want to play a banked or a property card.
 		while paid < 2 {
-			match input("> ").as_str() {
+			let card: PaidCardKind = match input("> ").as_str() {
 				"b" => {
 					let idx = print_read_index("> ", assets.bank.iter(), assets.bank.len());
-					let card = assets.remove_banked_card(idx);
-					paid += card.value();
 
-					player_assets.add_money(card);
+					assets.remove_banked_card(idx).into()
 				}
 				"p" => {
 					let colors = assets.property_sets.iter().collect::<Vec<_>>();
 					let idx = print_read_index("> ", colors.iter(), colors.len());
-					let card = assets.remove_property_card_of_color(&colors[idx]);
-					paid += card.value();
 
-					player_assets.add_property(card);
+					assets.remove_property_card_of_color(&colors[idx]).into()
 				}
-				_ => continue,
-			}
+				_ => {
+					println!("Press `b` to pay using a banked card and `p` to pay using a property card.");
+					continue;
+				}
+			};
+
+			paid += card.value();
+			player_assets.add_paid_card(card);
 		}
 	}
 }

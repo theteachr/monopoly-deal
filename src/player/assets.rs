@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind, PropertySets};
+use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind, PropertySets, PaidCardKind};
 use crate::color::CardColor;
 
 /// Holds all asset cards played by the player.
@@ -28,6 +28,13 @@ impl Assets {
 	/// Adds the card to the `bank`.
 	pub fn add_money(&mut self, card: BankableCardKind) {
 		self.bank.add(card);
+	}
+
+	pub fn add_paid_card(&mut self, card: PaidCardKind) {
+		match card {
+			PaidCardKind::Banked(c) => self.add_money(c),
+			PaidCardKind::Property(c) => self.add_property(c),
+		}
 	}
 
 	/// Inserts the card into `property_sets`.
