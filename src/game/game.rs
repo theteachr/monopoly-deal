@@ -43,7 +43,8 @@ impl Game {
 
 		let mut players = get_mock_players(player_count);
 
-		// distribute cards
+		// Distribute cards. Since every player's hand be empty at start, each player
+		// will be drawing *5* cards.
 		for player in &mut players {
 			player.draw(&mut draw_pile);
 		}
