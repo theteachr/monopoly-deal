@@ -1,6 +1,7 @@
 use std::fmt;
 
-use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind, PropertySets};
+use crate::cards::{BankableCardKind, Card, CardSet, PropertyCardKind, PropertySets, PaidCardKind};
+use crate::color::CardColor;
 
 /// Holds all asset cards played by the player.
 ///
@@ -29,6 +30,13 @@ impl Assets {
 		self.bank.add(card);
 	}
 
+	pub fn add_paid_card(&mut self, card: PaidCardKind) {
+		match card {
+			PaidCardKind::Banked(c) => self.add_money(c),
+			PaidCardKind::Property(c) => self.add_property(c),
+		}
+	}
+
 	/// Inserts the card into `property_sets`.
 	pub fn add_property(&mut self, card: PropertyCardKind) {
 		let color = match card {
@@ -50,6 +58,14 @@ impl Assets {
 	/// Returns the max amount of money a player can pay using their properties.
 	pub fn total_property_value(&self) -> u8 {
 		self.property_sets.total_value()
+	}
+
+	pub fn remove_banked_card(&mut self, idx: usize) -> BankableCardKind {
+		self.bank.remove(idx)
+	}
+
+	pub fn remove_property_card_of_color(&mut self, color: &CardColor) -> PropertyCardKind {
+		self.property_sets.pop(color)
 	}
 }
 

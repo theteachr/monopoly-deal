@@ -30,7 +30,7 @@ pub struct Game {
 	players: VecDeque<Player>,
 
 	/// Holds all cards played by every player.
-	table: Table,
+	pub table: Table,
 }
 
 impl Game {

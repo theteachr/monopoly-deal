@@ -4,6 +4,7 @@ use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCa
 use crate::errors::NotPlayable;
 use crate::game::{CurrentPlayer, Game};
 
+use super::PropertyCardKind;
 use super::PropertySets;
 
 pub trait Card {
@@ -26,6 +27,12 @@ macro_rules! card_kind_apply_inner {
 macro_rules! bankable_card_kind_apply_inner {
 	( $VAL:ident $CARD:ident => $EXPR:expr ) => {
 		apply_inner! { $VAL BankableCardKind $CARD {$EXPR} ActionCard MoneyCard RentCard }
+	};
+}
+
+macro_rules! paid_card_kind_apply_inner {
+	( $VAL:ident $CARD:ident => $EXPR:expr ) => {
+		apply_inner! { $VAL PaidCardKind $CARD {$EXPR} Banked Property }
 	};
 }
 
@@ -59,6 +66,11 @@ pub enum BankableCardKind {
 	RentCard(RentCard),
 }
 
+pub enum PaidCardKind {
+	Banked(BankableCardKind),
+	Property(PropertyCardKind),
+}
+
 impl Card for BankableCardKind {
 	fn value(&self) -> u8 {
 		bankable_card_kind_apply_inner!(self c => c.value())
@@ -66,6 +78,16 @@ impl Card for BankableCardKind {
 
 	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
 		bankable_card_kind_apply_inner!(self c => c.is_playable(properties))
+	}
+}
+
+impl Card for PaidCardKind {
+	fn value(&self) -> u8 {
+		paid_card_kind_apply_inner!(self c => c.value())
+	}
+
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		paid_card_kind_apply_inner!(self c => c.is_playable(properties))
 	}
 }
 
@@ -87,6 +109,30 @@ impl CardKind {
 			Self::PropertyCard(card) => card.play(current_player),
 			Self::PropertyWildCard(card) => card.play(current_player),
 			Self::RentCard(card) => card.play(&current_player.assets.property_sets),
+		}
+	}
+}
+
+impl From<BankableCardKind> for PaidCardKind {
+	fn from(bankable_card_kind: BankableCardKind) -> Self {
+		bankable_card_kind_apply_inner!(bankable_card_kind c => Self::Banked(c.into()))
+	}
+}
+
+impl From<PropertyCardKind> for PaidCardKind {
+	fn from(property_card_kind: PropertyCardKind) -> Self {
+		match property_card_kind {
+			PropertyCardKind::Single(c) => Self::Property(c.into()),
+			PropertyCardKind::Wild(c) => Self::Property(c.into()),
+		}
+	}
+}
+
+impl From<PropertyCardKind> for CardKind {
+	fn from(property_card_kind: PropertyCardKind) -> Self {
+		match property_card_kind {
+			PropertyCardKind::Single(c) => Self::PropertyCard(c),
+			PropertyCardKind::Wild(c) => Self::PropertyWildCard(c),
 		}
 	}
 }
