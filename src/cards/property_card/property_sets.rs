@@ -30,6 +30,11 @@ impl PropertySets {
 		self.0.keys().cloned().collect()
 	}
 
+	/// Pops a card from the `color` set.
+	pub fn pop(&mut self, color: &CardColor) -> PropertyCardKind {
+		self.0.get_mut(color).unwrap().remove(0)
+	}
+
 	/// Returns the amount of rent that the player will be paid,
 	/// if they choose to ask rent for all their `color` properties.
 	pub fn rent(&self, color: CardColor) -> u8 {
@@ -43,9 +48,14 @@ impl PropertySets {
 		self.0.values().map(CardSet::value).sum()
 	}
 
-	/// Return `true` if at least one property of the given `color` exists in the set.
+	/// Returns `true` if at least one property of the given `color` exists in the set.
 	pub fn exists(&self, color: &CardColor) -> bool {
 		self.0.contains_key(&color)
+	}
+
+	/// Returns an iterator over the colors played by the players.
+	pub fn iter(&self) -> impl Iterator<Item = CardColor> + '_ {
+		self.0.keys().cloned()
 	}
 }
 

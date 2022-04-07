@@ -43,21 +43,21 @@ impl CurrentPlayer {
 			return PlayerAction::Pass;
 		}
 
-		// Print the name of the player, along with the assets they own (property and money).
+		// Show the name of the player, along with the assets they own (property and money).
 		println!(
 			"\n<<< Assets of {} >>>\n\n{}\n",
 			self.player.name, self.assets
 		);
 
-		// Print all the cards in the player's hand along with their index.
+		// Show all the cards in the player's hand along with their index.
 		print_indexed(self.player.hand.iter());
 
 		println!();
 
-		// Print total money in the bank.
+		// Show total money in the bank.
 		println!("Total Bank Value: {}", self.assets.bank_value());
 
-		// Print total value of all the properties.
+		// Show total value of all the properties.
 		println!("Total Asset Value: {}", self.assets.total_property_value());
 
 		println!();
@@ -130,20 +130,15 @@ impl CurrentPlayer {
 		while to_be_discarded > 0 {
 			println!("You need to discard {}.", to_be_discarded);
 
-			println!();
-
-			// Print the cards in hand along with their index.
+			// Show the cards in hand along with their index.
 			print_indexed(self.player.hand.iter());
 
-			println!();
-
-			// Read the index from the user.
-			let card_position = read_index("> ", self.player.hand.len());
+			// Show the index from the user.
+			let idx = read_index("> ", self.player.hand.len());
 
 			// Remove the card at `card_position` from the  player's hand,
 			// and add it to the set of cards that will be dumped in the discard pile.
-			self.cards_discarded
-				.add(self.player.remove_card_at(card_position));
+			self.cards_discarded.add(self.player.remove_card_at(idx));
 
 			// One less card to be discarded, decrement the variable.
 			to_be_discarded -= 1;
