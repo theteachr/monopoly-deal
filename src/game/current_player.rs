@@ -50,7 +50,7 @@ impl CurrentPlayer {
 		);
 
 		// Show all the cards in the player's hand along with their index.
-		print_indexed(self.player.hand.iter());
+		print_indexed(self.player.hand_iter());
 
 		// Show total money in the bank.
 		println!("Total Bank Value: {}", self.assets.bank_value());
@@ -74,7 +74,7 @@ impl CurrentPlayer {
 			match parsed
 				.clone()
 				.map_err(Failed::from)
-				.and_then(|n| self.player.hand.get(n).ok_or(Failed::InvalidIndex(n)))
+				.and_then(|n| self.player.card_at(n).ok_or(Failed::InvalidIndex(n)))
 				.and_then(|card| self.can_play(card))
 			{
 				Ok(_) => {
@@ -118,7 +118,7 @@ impl CurrentPlayer {
 	/// the player to discard the excess.
 	pub fn end_turn(mut self) -> (Player, Assets, CardSet<CardKind>) {
 		// Get the number of cards that need to be discarded.
-		let mut to_be_discarded: i8 = self.player.hand.len() as i8 - 7;
+		let mut to_be_discarded: i8 = self.player.hand_len() as i8 - 7;
 
 		// Until the number of cards need to be discarded is > 0,
 		// ask the player to enter the index of the card they want to discard,
@@ -127,10 +127,10 @@ impl CurrentPlayer {
 			println!("You need to discard {}.", to_be_discarded);
 
 			// Show the cards in hand along with their index.
-			print_indexed(self.player.hand.iter());
+			print_indexed(self.player.hand_iter());
 
 			// Show the index from the user.
-			let idx = read_index("> ", self.player.hand.len());
+			let idx = read_index("> ", self.player.hand_len());
 
 			// Remove the card at `card_position` from the  player's hand,
 			// and add it to the set of cards that will be dumped in the discard pile.

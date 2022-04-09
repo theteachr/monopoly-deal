@@ -11,7 +11,7 @@ pub struct Player {
 	pub name: String,
 
 	/// Contains cards the player is holding in their hand.
-	pub hand: CardSet<CardKind>,
+	hand: CardSet<CardKind>,
 }
 
 impl Player {
@@ -52,10 +52,22 @@ impl Player {
 			.for_each(|card| self.hand.add(card))
 	}
 
+	pub fn hand_iter(&self) -> impl Iterator<Item = &CardKind> {
+		self.hand.iter()
+	}
+
+	pub fn hand_len(&self) -> usize {
+		self.hand.len()
+	}
+
+	pub fn card_at(&self, index: usize) -> Option<&CardKind> {
+		self.hand.get(index)
+	}
+
 	/// Returns the card present at `index`.
 	///
 	/// **Panics** if `index` is out of bounds.
 	pub fn remove_card_at(&mut self, index: usize) -> CardKind {
-		return self.hand.remove(index);
+		self.hand.remove(index)
 	}
 }
