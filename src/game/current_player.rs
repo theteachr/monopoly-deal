@@ -52,15 +52,11 @@ impl CurrentPlayer {
 		// Show all the cards in the player's hand along with their index.
 		print_indexed(self.player.hand.iter());
 
-		println!();
-
 		// Show total money in the bank.
 		println!("Total Bank Value: {}", self.assets.bank_value());
 
 		// Show total value of all the properties.
 		println!("Total Asset Value: {}", self.assets.total_property_value());
-
-		println!();
 
 		loop {
 			// Read the input from the user.

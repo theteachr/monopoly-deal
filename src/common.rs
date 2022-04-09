@@ -35,7 +35,7 @@ pub fn read_index<T: Display>(prompt: T, size: usize) -> usize {
 	if size == 1 {
 		return 0;
 	}
-	
+
 	// Keep asking the user for a number until they enter a valid index.
 	loop {
 		// Check if the entered number can be parsed into a `u8`.
