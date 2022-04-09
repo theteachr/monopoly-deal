@@ -31,6 +31,11 @@ pub fn print_indexed<'a, T: 'a + Display>(iterator: impl Iterator<Item = &'a T>)
 /// * `prompt` - text shown to the user
 /// * `size` - the number of items in the `iterator`
 pub fn read_index<T: Display>(prompt: T, size: usize) -> usize {
+	// Only one right input: 0, if there's only one element in the iterator.
+	if size == 1 {
+		return 0;
+	}
+	
 	// Keep asking the user for a number until they enter a valid index.
 	loop {
 		// Check if the entered number can be parsed into a `u8`.
