@@ -50,7 +50,7 @@ fn play_pass_go(player: &mut Player, deck: &mut Deck) {
 
 /// Asks every opponent for 2M, adds the collected cards to the player's assets.
 fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
-	for assets in rest_of_the_table.iter_mut() {
+	for assets in rest_of_the_table.assets_iter_mut() {
 		ask_for_rent(2, assets)
 			.unwrap_or(Vec::new())
 			.into_iter()

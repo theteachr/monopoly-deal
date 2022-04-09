@@ -5,7 +5,6 @@ use crate::{
 	player::{Assets, Player},
 };
 
-use std::collections::VecDeque;
 use std::fmt::Debug;
 
 /// Represents the actions a player can perform in their turn.
@@ -26,11 +25,8 @@ pub struct Game {
 	/// Used to hold action cards and those the players choose to discard when excess.
 	pub discard_deck: Deck,
 
-	/// Holds all cards played by every player.
+	/// Holds all players with the assets they play.
 	pub table: Table,
-
-	/// A queue of players in the game.
-	players: VecDeque<Player>,
 }
 
 impl Game {
@@ -52,18 +48,14 @@ impl Game {
 		Self {
 			deck: draw_pile,
 			discard_deck: discard_pile,
-			table: Table::new(player_count),
-			players: VecDeque::from(players),
+			table: Table::new(players),
 		}
 	}
 
 	/// Starts the game loop.
 	pub fn play(&mut self) {
-		// Get the next player.
-		let mut player = self.players.pop_front().unwrap();
-
-		// Get the next player's assets.
-		let assets = self.table.turn();
+		// Get the next player and their assets.
+		let (mut player, assets) = self.table.turn();
 
 		// Make the player draw cards from the deck.
 		player.draw(&mut self.deck);
@@ -78,10 +70,7 @@ impl Game {
 			.for_each(|card| self.discard_deck.push_back(card));
 
 		// Put the player back into the queue.
-		self.players.push_back(player);
-
-		// Add the updated player assets back onto the table.
-		self.table.update(assets);
+		self.table.update(player, assets);
 	}
 
 	/// Returns the updated player, their assets and the set of cards they chose to discard.
