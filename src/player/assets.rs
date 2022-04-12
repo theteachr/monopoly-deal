@@ -96,7 +96,7 @@ pub enum PayWith {
 
 pub fn choose_card(assets: &Assets) -> PayWith {
 	let section = loop {
-		// Do the automatic choosing, if one of the sections is empty.
+		// Choose automatically if one of the sections is empty.
 		match (assets.bank.len(), assets.property_sets.colors().len()) {
 			// Bank is empty, the user HAS to choose a property card.
 			(0, _) => break AssetCardChoice::Property,
@@ -107,6 +107,9 @@ pub fn choose_card(assets: &Assets) -> PayWith {
 			// Both are non empty, do nothing here, let the user enter what they want to play.
 			_ => {}
 		};
+
+		// Show the assets.
+		println!("{}", assets);
 
 		// TODO If the bank doesn't have enough value, automatically choose property and vice versa.
 
