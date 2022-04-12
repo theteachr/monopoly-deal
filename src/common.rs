@@ -14,27 +14,29 @@ pub fn input<T: Display>(prompt: T) -> String {
 		.read_line(&mut input)
 		.expect("Couldn't read from `stdin` :<");
 
-	return input.trim().to_string();
+	input.trim().to_string()
 }
 
-/// Prints the items in the `iterator` along with their index.
-pub fn print_indexed<'a, T: 'a + Display>(iterator: impl Iterator<Item = &'a T>) {
+/// Prints the items of the iterator with their index.
+pub fn print_enumerated<T: Display>(iterator: impl Iterator<Item = T>) {
 	for (i, item) in iterator.enumerate() {
 		println!("{}: {}", i, item);
 	}
 }
 
-/// Parses the user input into a valid index.
-///
-/// # Arguments
-///
-/// * `prompt` - text shown to the user
-/// * `size` - the number of items in the `iterator`
-pub fn read_index<T: Display>(prompt: T, size: usize) -> usize {
-	// Only one right input: 0, if there's only one element in the iterator.
+/// - Prints the enumerated iterator
+/// - `prompt`s the user for input, until input is a valid index
+/// - Returns the index
+pub fn print_read_index<'a, T: Display, U: 'a + Display>(
+	prompt: T,
+	iterator: impl Iterator<Item = &'a U>,
+	size: usize,
+) -> usize {
 	if size == 1 {
 		return 0;
 	}
+
+	print_enumerated(iterator);
 
 	// Keep asking the user for a number until they enter a valid index.
 	loop {
@@ -50,16 +52,4 @@ pub fn read_index<T: Display>(prompt: T, size: usize) -> usize {
 			),
 		}
 	}
-}
-
-/// - Prints the enumerated iterator
-/// - `prompt`s the user for input, until input is a valid index
-/// - Returns the index
-pub fn print_read_index<'a, T: Display, U: 'a + Display>(
-	prompt: T,
-	iterator: impl Iterator<Item = &'a U>,
-	size: usize,
-) -> usize {
-	print_indexed(iterator);
-	read_index(prompt, size)
 }
