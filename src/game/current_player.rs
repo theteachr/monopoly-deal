@@ -1,8 +1,19 @@
-use super::PlayerAction;
 use crate::cards::{Action, Card, CardKind, CardSet};
-use crate::common::{input, print_indexed, read_index};
+use crate::common::{input, print_enumerated, print_read_index};
 use crate::errors::Failed;
 use crate::player::{Assets, Player};
+
+/// Represents the actions a player can perform in their turn.
+pub enum PlayerAction {
+	/// Holds the the card that the player chose to play.
+	Play(CardKind),
+
+	/// FIXME
+	Rearrange,
+
+	/// Marks the end of the turn.
+	Pass,
+}
 
 /// Stores all necessary information about the player playing the current turn.
 pub struct CurrentPlayer {
@@ -49,9 +60,6 @@ impl CurrentPlayer {
 			self.player.name, self.assets
 		);
 
-		// Show all the cards in the player's hand along with their index.
-		print_indexed(self.player.hand_iter());
-
 		// Show total money in the bank.
 		println!("Total Bank Value: {}", self.assets.bank_value());
 
@@ -59,6 +67,9 @@ impl CurrentPlayer {
 		println!("Total Asset Value: {}", self.assets.total_property_value());
 
 		loop {
+			// Show the player's hand.
+			print_enumerated(self.player.hand_iter());
+
 			// Read the input from the user.
 			let user_input = input("> ");
 

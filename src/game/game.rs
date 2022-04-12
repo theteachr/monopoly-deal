@@ -1,4 +1,4 @@
-use super::{CurrentPlayer, Table};
+use super::{CurrentPlayer, PlayerAction, Table};
 use crate::{
 	cards::{CardKind, CardSet},
 	deck::Deck,
@@ -6,15 +6,6 @@ use crate::{
 };
 
 use std::fmt::Debug;
-
-/// Represents the actions a player can perform in their turn.
-pub enum PlayerAction {
-	/// Holds the the card that the player chose to play.
-	Play(CardKind),
-
-	/// Marks the end of the turn.
-	Pass,
-}
 
 /// Represents the main game object.
 #[derive(Debug)]
@@ -81,6 +72,7 @@ impl Game {
 			match player.read_action() {
 				PlayerAction::Play(card) => card.play(&mut player, self),
 				PlayerAction::Pass => break,
+				PlayerAction::Rearrange => unimplemented!(),
 			}
 		}
 
