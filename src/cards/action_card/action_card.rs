@@ -1,4 +1,4 @@
-use crate::cards::{Card, PaidCardKind, PropertySets};
+use crate::cards::{Card, CardSet, PaidCardKind, PropertySets};
 use crate::deck::Deck;
 use crate::errors::NotPlayable;
 use crate::game::{CurrentPlayer, Game, Table};
@@ -50,11 +50,19 @@ fn play_pass_go(player: &mut Player, deck: &mut Deck) {
 
 /// Asks every opponent for 2M, adds the collected cards to the player's assets.
 fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
-	for assets in rest_of_the_table.assets_iter_mut() {
-		ask_for_rent(2, assets)
-			.unwrap_or(Vec::new())
-			.into_iter()
-			.for_each(|card| player_assets.add_paid_card(card))
+	for (player, assets) in rest_of_the_table.iter_mut() {
+		println!("{} is paying...", player.name);
+
+		// Ask the `player` to pay 2M.
+		let cards = ask_for_rent(2, assets);
+
+		println!(
+			"{} paid 2M with the following cards: {}",
+			player.name, cards
+		);
+
+		// Add the cards paid into the assets of the player who played the birthday card.
+		cards.for_each(|card| player_assets.add_paid_card(card));
 	}
 }
 
@@ -62,27 +70,24 @@ fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
 ///
 /// Returns `None` if it's not payable, else `Some` of the vector of cards the player
 /// chose to pay with.
-fn ask_for_rent(amount: u8, assets: &mut Assets) -> Option<Vec<PaidCardKind>> {
+fn ask_for_rent(amount: u8, assets: &mut Assets) -> CardSet<PaidCardKind> {
 	// Initialize the amount of value received.
 	let mut paid = 0u8;
 
 	// Hold the cards used to pay the rent.
-	let mut cards = Vec::new();
+	let mut cards = CardSet::<PaidCardKind>::new();
 
 	// If the total amount the player can pay is less than the requested,
-	// just exit, for now. FIXME
+	// just exit with an empty card set (for now). FIXME
 	if !assets.can_pay(amount) {
 		println!("This player is incapable of paying the rent.");
-		return None;
+		return cards;
 	}
 
 	// TODO Display name of the player who's being asked for rent.
 
 	// Until the paid amount is < 2, ask the user whether they want to play a banked or a property card.
 	while paid < amount {
-		// Show the assets.
-		println!("{}", assets);
-
 		// Ask how they want to make the payment
 		let card: PaidCardKind = match choose_card(assets) {
 			PayWith::Bank(idx) => assets.remove_banked_card(idx).into(),
@@ -93,10 +98,10 @@ fn ask_for_rent(amount: u8, assets: &mut Assets) -> Option<Vec<PaidCardKind>> {
 		paid += card.value();
 
 		// Add the card to the vec that will transferred to the player of the birthday card.
-		cards.push(card);
+		cards.add(card);
 	}
 
-	Some(cards)
+	cards
 }
 
 impl Card for ActionCard {
