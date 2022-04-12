@@ -3,7 +3,7 @@ use std::{cmp::PartialEq, fmt, hash::Hash};
 use super::{PropertyCardKind, PropertySets};
 use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
-use crate::common::{print_indexed, read_index};
+use crate::common::print_read_index;
 use crate::errors::NotPlayable;
 use crate::game::CurrentPlayer;
 
@@ -41,11 +41,8 @@ impl PropertyWildCard {
 			.into_iter()
 			.collect::<Vec<CardColor>>();
 
-		// Print the indexed list of colors for the user to pick.
-		print_indexed(colors.iter());
-
-		// Read color from the player.
-		let color = colors[read_index("> ", colors.len())];
+		let idx = print_read_index("> ", colors.iter(), colors.len());
+		let color = colors[idx];
 
 		// Set the read color to the card.
 		self.set_color(color);

@@ -126,13 +126,10 @@ impl CurrentPlayer {
 		while to_be_discarded > 0 {
 			println!("You need to discard {}.", to_be_discarded);
 
-			// Show the cards in hand along with their index.
-			print_indexed(self.player.hand_iter());
+			// Show the cards and read the index.
+			let idx = print_read_index("> ", self.player.hand_iter(), self.player.hand_len());
 
-			// Show the index from the user.
-			let idx = read_index("> ", self.player.hand_len());
-
-			// Remove the card at `card_position` from the  player's hand,
+			// Remove the card at `idx` from the  player's hand,
 			// and add it to the set of cards that will be dumped in the discard pile.
 			self.cards_discarded.add(self.player.remove_card_at(idx));
 

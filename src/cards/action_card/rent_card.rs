@@ -3,7 +3,7 @@ use std::fmt;
 use crate::{
 	cards::{Card, PropertySets},
 	color::{CardColor, MultiColor},
-	common::{print_indexed, read_index},
+	common::print_read_index,
 	errors::NotPlayable,
 };
 
@@ -40,11 +40,7 @@ impl RentCard {
 		// we know that there will be at least one color. If there are more than one colors,
 		// let the player choose, else we choose the one at index 0, as it's the only one.
 		let index = if playable_colors.len() > 1 {
-			// Print the colors with their index so the user can choose.
-			print_indexed(playable_colors.iter());
-
-			// Read a valid index from the user.
-			read_index("> ", playable_colors.len())
+			print_read_index("> ", playable_colors.iter(), playable_colors.len())
 		} else {
 			0
 		};
