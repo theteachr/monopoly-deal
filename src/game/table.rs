@@ -21,7 +21,10 @@ impl Table {
 	/// Gives the assets of the next player and a reference to the rest of the table
 	/// holding the assets of the other players.
 	pub fn turn(&mut self) -> (Player, Assets) {
-		(self.players.pop_front().unwrap(), self.assets.pop_front().unwrap())
+		(
+			self.players.pop_front().unwrap(),
+			self.assets.pop_front().unwrap(),
+		)
 	}
 
 	/// Puts back the `assets` into the table.
@@ -31,14 +34,14 @@ impl Table {
 		self.assets.push_back(assets);
 	}
 
-	pub fn assets_iter_mut(&mut self) -> impl Iterator<Item = &mut Assets> {
-		self.assets.iter_mut()
+	pub fn iter_mut(&mut self) -> impl Iterator<Item = (&Player, &mut Assets)> {
+		self.players.iter().zip(self.assets.iter_mut())
 	}
 
 	pub fn print(&self) {
 		self.assets
 			.iter()
-			.enumerate()
-			.for_each(|(i, assets)| println!("\n-- {} --\n\n{}", i, assets));
+			.zip(self.players.iter())
+			.for_each(|(assets, player)| println!("\n-- {} --\n\n{}", player.name, assets));
 	}
 }
