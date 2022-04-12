@@ -196,3 +196,9 @@ impl fmt::Display for BankableCardKind {
 		bankable_card_kind_apply_inner!(self c => c.fmt(f))
 	}
 }
+
+impl fmt::Display for PaidCardKind {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		paid_card_kind_apply_inner!(self c => c.fmt(f))
+	}
+}
