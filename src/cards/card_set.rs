@@ -2,6 +2,8 @@ use std::{fmt, ops::Index};
 
 use super::Card;
 
+// XXX Just wrap it on a `Vec`.
+
 /// Represents a collection of cards.
 #[derive(Debug)]
 pub struct CardSet<T> {
@@ -50,6 +52,15 @@ impl<T: fmt::Display + Card> CardSet<T> {
 		self.size -= 1;
 
 		removed
+	}
+
+	/// Empties the card set and returns a `Vec` of removed cards.
+	pub fn remove_all(&mut self) -> Vec<T> {
+		let mut cards = Vec::new();
+
+		std::mem::swap(&mut cards, &mut self.cards);
+
+		cards
 	}
 
 	pub fn value(&self) -> u8 {

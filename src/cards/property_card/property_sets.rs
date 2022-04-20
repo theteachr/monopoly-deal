@@ -3,7 +3,7 @@ use std::{
 	fmt,
 };
 
-use crate::color::CardColor;
+use crate::{cards::PaidCardKind, color::CardColor};
 
 use crate::cards::data::COLLECTIONS;
 use crate::cards::{CardSet, PropertyCardKind};
@@ -32,7 +32,14 @@ impl PropertySets {
 
 	/// Pops a card from the `color` set.
 	pub fn pop(&mut self, color: &CardColor) -> PropertyCardKind {
-		self.0.get_mut(color).unwrap().remove(0)
+		let cards = self.0.get_mut(color).unwrap();
+		let popped = cards.remove(0);
+
+		if cards.is_empty() {
+			self.0.remove(color);
+		}
+	
+		popped
 	}
 
 	/// Returns the amount of rent that the player will be paid,
@@ -56,6 +63,20 @@ impl PropertySets {
 	/// Returns an iterator over the colors played by the players.
 	pub fn iter(&self) -> impl Iterator<Item = CardColor> + '_ {
 		self.0.keys().cloned()
+	}
+
+	pub fn go_popper(&mut self) -> Vec<PaidCardKind> {
+		let cards: Vec<PaidCardKind> = self
+			.0
+			.values_mut()
+			.map(|property_cards| property_cards.remove_all())
+			.flatten()
+			.map(PaidCardKind::from)
+			.collect();
+
+		self.0.clear();
+
+		cards
 	}
 }
 

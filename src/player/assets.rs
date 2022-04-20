@@ -76,6 +76,20 @@ impl Assets {
 	pub fn can_pay(&self, amount: u8) -> bool {
 		self.total_property_value() + self.bank_value() >= amount
 	}
+
+	pub fn bankrupt(&mut self) -> CardSet<PaidCardKind> {
+		// XXX impl FromIterator for CardSet
+		let mut cards = CardSet::new();
+
+		self.bank
+			.remove_all()
+			.into_iter()
+			.map(PaidCardKind::from)
+			.chain(self.property_sets.go_popper().into_iter())
+			.for_each(|card| cards.add(card));
+
+		cards
+	}
 }
 
 impl fmt::Display for Assets {
