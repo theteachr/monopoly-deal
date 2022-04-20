@@ -67,7 +67,7 @@ impl Game {
 	/// Returns the updated player, their assets and the set of cards they chose to discard.
 	fn handle_turn(&mut self, mut player: CurrentPlayer) -> (Player, Assets, CardSet<CardKind>) {
 		loop {
-			self.table.print();
+			println!("{}", self.table);
 
 			match player.read_action() {
 				PlayerAction::Play(card) => card.play(&mut player, self),

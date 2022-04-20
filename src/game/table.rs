@@ -1,5 +1,6 @@
 use crate::player::{Assets, Player};
 use std::collections::VecDeque;
+use std::fmt;
 
 /// Represents the Game Table.
 /// Holds all asset cards (property and money) played by the players.
@@ -41,11 +42,16 @@ impl Table {
 	pub fn iter_mut(&mut self) -> impl Iterator<Item = (&Player, &mut Assets)> {
 		self.players.iter().zip(self.assets.iter_mut())
 	}
+}
 
-	pub fn print(&self) {
+impl fmt::Display for Table {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		self.assets
 			.iter()
 			.zip(self.players.iter())
-			.for_each(|(assets, player)| println!("\n-- {} --\n\n{}", player.name, assets));
+			.enumerate()
+			.map(|(i, (assets, player))| format!("\n{}: -- {} --\n\n{}", i, player.name, assets))
+			.collect::<String>()
+			.fmt(f)
 	}
 }
