@@ -51,7 +51,7 @@ fn play_pass_go(player: &mut Player, deck: &mut Deck) {
 /// Asks every opponent for 2M, adds the collected cards to the player's assets.
 fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
 	for (player, assets) in rest_of_the_table.iter_mut() {
-		println!("{} is paying...", player.name);
+		println!("{} needs to pay 2M.", player.name);
 
 		// Ask the `player` to pay 2M.
 		let cards = ask_for_rent(2, assets);
@@ -78,10 +78,10 @@ fn ask_for_rent(amount: u8, assets: &mut Assets) -> CardSet<PaidCardKind> {
 	let mut cards = CardSet::<PaidCardKind>::new();
 
 	// If the total amount the player can pay is less than the requested,
-	// just exit with an empty card set (for now). FIXME
+	// take all cards from the player.
 	if !assets.can_pay(amount) {
 		println!("This player is incapable of paying the rent.");
-		return cards;
+		return assets.bankrupt();
 	}
 
 	// TODO Display name of the player who's being asked for rent.
