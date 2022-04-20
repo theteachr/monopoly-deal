@@ -1,4 +1,5 @@
 use crate::cards::{Card, CardSet, PaidCardKind, PropertySets};
+use crate::common::input;
 use crate::deck::Deck;
 use crate::errors::NotPlayable;
 use crate::game::{CurrentPlayer, Game, Table};
@@ -36,11 +37,40 @@ impl ActionCard {
 		match self.action {
 			Action::PassGo => play_pass_go(player.get(), &mut game.deck),
 			Action::Birthday => play_birthday(&mut player.assets, &mut game.table),
+			Action::DebtCollector => play_deal_breaker(&mut player.assets, &mut game.table),
 			_ => todo!(),
 		}
 
 		game.discard_deck.push_back(self.into());
 	}
+}
+
+fn play_deal_breaker(assets: &mut Assets, table: &mut Table) {
+	// Print the table.
+	println!("{}", table);
+
+	let targeted_assets = loop {
+		// Let the player choose the opponent.
+		match input("$ ")
+			.parse::<usize>()
+			.ok()
+			.and_then(|n| table.get_mut_assets(n))
+		{
+			Some(assets) => break assets,
+			None => {
+				println!("Invalid index entered.");
+				continue;
+			}
+		}
+	};
+
+	let paid_cards = ask_for_rent(5, targeted_assets);
+
+	// FIXME Dry
+	println!("5M were paid with the following cards: {}", paid_cards);
+
+	// Add the cards paid into the assets of the player who played the birthday card.
+	paid_cards.for_each(|card| assets.add_paid_card(card));
 }
 
 /// Draws two cards from the deck and adds them into the player's hand.
@@ -54,15 +84,15 @@ fn play_birthday(player_assets: &mut Assets, rest_of_the_table: &mut Table) {
 		println!("{} needs to pay 2M.", player.name);
 
 		// Ask the `player` to pay 2M.
-		let cards = ask_for_rent(2, assets);
+		let paid_cards = ask_for_rent(2, assets);
 
 		println!(
 			"{} paid 2M with the following cards: {}",
-			player.name, cards
+			player.name, paid_cards
 		);
 
 		// Add the cards paid into the assets of the player who played the birthday card.
-		cards.for_each(|card| player_assets.add_paid_card(card));
+		paid_cards.for_each(|card| player_assets.add_paid_card(card));
 	}
 }
 

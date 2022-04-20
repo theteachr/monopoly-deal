@@ -34,6 +34,10 @@ impl Table {
 		self.assets.push_back(assets);
 	}
 
+	pub fn get_mut_assets(&mut self, idx: usize) -> Option<&mut Assets> {
+		self.assets.get_mut(idx)
+	}
+
 	pub fn iter_mut(&mut self) -> impl Iterator<Item = (&Player, &mut Assets)> {
 		self.players.iter().zip(self.assets.iter_mut())
 	}
