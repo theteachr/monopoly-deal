@@ -2,8 +2,6 @@ use std::{fmt, ops::Index};
 
 use super::Card;
 
-// XXX Just wrap it on a `Vec`.
-
 /// Represents a collection of cards.
 #[derive(Debug)]
 pub struct CardSet<T> {
@@ -63,6 +61,7 @@ impl<T: fmt::Display + Card> CardSet<T> {
 		cards
 	}
 
+	// XXX Track the value in a field: updated when a new card is added, and subtracted when removed
 	pub fn value(&self) -> u8 {
 		self.cards.iter().map(Card::value).sum()
 	}
