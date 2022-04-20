@@ -10,33 +10,43 @@ use crate::cards::{CardSet, PropertyCardKind};
 
 /// Tracks the set of property cards played by a player.
 ///
-/// Key represents a `CardColor`, and the associated value is a
-/// set of properties of that color played by a player.
 #[derive(Debug)]
-pub struct PropertySets(HashMap<CardColor, CardSet<PropertyCardKind>>);
+pub struct PropertySets {
+	/// A map from color to set of cards, where the value holds all cards of
+	/// that color.
+	properties: HashMap<CardColor, CardSet<PropertyCardKind>>,
+
+	/// A list of colors that are complete sets.
+	sets: Vec<CardColor>,
+}
+
+// TODO Add logic to track color sets.
 
 impl PropertySets {
 	/// Returns an empty set of properties.
 	pub fn new() -> Self {
-		Self(HashMap::new())
+		Self {
+			properties: HashMap::new(),
+			sets: Vec::new(),
+		}
 	}
 
 	pub fn entry(&mut self, color: CardColor) -> Entry<'_, CardColor, CardSet<PropertyCardKind>> {
-		self.0.entry(color)
+		self.properties.entry(color)
 	}
 
 	/// Returns all colors in the properties.
 	pub fn colors(&self) -> HashSet<CardColor> {
-		self.0.keys().cloned().collect()
+		self.properties.keys().cloned().collect()
 	}
 
 	/// Pops a card from the `color` set.
 	pub fn pop(&mut self, color: &CardColor) -> PropertyCardKind {
-		let cards = self.0.get_mut(color).unwrap();
+		let cards = self.properties.get_mut(color).unwrap();
 		let popped = cards.remove(0);
 
 		if cards.is_empty() {
-			self.0.remove(color);
+			self.properties.remove(color);
 		}
 
 		popped
@@ -45,36 +55,37 @@ impl PropertySets {
 	/// Returns the amount of rent that the player will be paid,
 	/// if they choose to ask rent for all their `color` properties.
 	pub fn rent(&self, color: CardColor) -> u8 {
-		self.0.get(&color).map_or(0, |cards| {
+		self.properties.get(&color).map_or(0, |cards| {
 			COLLECTIONS[color as usize].1[(cards.len() - 1) as usize]
 		})
 	}
 
 	/// Returns the total value all the played properties.
 	pub fn total_value(&self) -> u8 {
-		self.0.values().map(CardSet::value).sum()
+		self.properties.values().map(CardSet::value).sum()
 	}
 
 	/// Returns `true` if at least one property of the given `color` exists in the set.
 	pub fn exists(&self, color: &CardColor) -> bool {
-		self.0.contains_key(&color)
+		self.properties.contains_key(&color)
 	}
 
 	/// Returns an iterator over the colors played by the players.
 	pub fn iter(&self) -> impl Iterator<Item = CardColor> + '_ {
-		self.0.keys().cloned()
+		self.properties.keys().cloned()
 	}
 
+	/// Returns all properties and empties the player property assets.
 	pub fn go_popper(&mut self) -> Vec<PaidCardKind> {
 		let cards: Vec<PaidCardKind> = self
-			.0
+			.properties
 			.values_mut()
 			.map(|property_cards| property_cards.remove_all())
 			.flatten()
 			.map(PaidCardKind::from)
 			.collect();
 
-		self.0.clear();
+		self.properties.clear();
 
 		cards
 	}
@@ -82,12 +93,12 @@ impl PropertySets {
 
 impl fmt::Display for PropertySets {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		if self.0.is_empty() {
+		if self.properties.is_empty() {
 			return write!(f, "[]");
 		}
 
 		let text = self
-			.0
+			.properties
 			.iter()
 			.map(|(color, cards)| format!("{}: {}", color, cards))
 			.collect::<Vec<String>>()
