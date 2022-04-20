@@ -38,7 +38,7 @@ impl PropertySets {
 		if cards.is_empty() {
 			self.0.remove(color);
 		}
-	
+
 		popped
 	}
 

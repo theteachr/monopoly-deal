@@ -9,6 +9,7 @@ pub enum PlayerAction {
 	Play(CardKind),
 
 	/// FIXME
+	#[allow(dead_code)]
 	Rearrange,
 
 	/// Marks the end of the turn.
