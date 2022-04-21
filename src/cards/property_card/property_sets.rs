@@ -55,9 +55,9 @@ impl PropertySets {
 	/// Returns the amount of rent that the player will be paid,
 	/// if they choose to ask rent for all their `color` properties.
 	pub fn rent(&self, color: CardColor) -> u8 {
-		self.properties.get(&color).map_or(0, |cards| {
-			COLLECTIONS[color as usize].1[(cards.len() - 1) as usize]
-		})
+		self.properties
+			.get(&color)
+			.map_or(0, |cards| rent_for(color, cards.len()))
 	}
 
 	/// Returns the total value all the played properties.
@@ -106,4 +106,19 @@ impl fmt::Display for PropertySets {
 
 		write!(f, "[\n  {}\n]", text)
 	}
+}
+
+/// Returns the array of rents for the `color`.
+fn rents(color: CardColor) -> &'static [u8] {
+	COLLECTIONS[color as usize].1
+}
+
+/// Returns the amount of rent the player will be paid for `num_cards` of `color`.
+fn rent_for(color: CardColor, num_cards: usize) -> u8 {
+	rents(color)[(num_cards - 1) as usize]
+}
+
+/// Returns the number of cards required for a complete set for the `color`.
+fn num_cards_for_complete_set(color: CardColor) -> usize {
+	rents(color).len() as usize
 }
