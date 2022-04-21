@@ -45,7 +45,7 @@ impl PropertySets {
 
 		// Get the number of cards for a complete set for the `color`. If it equals the current count,
 		// add the color to `completed_colors` to indicate the completion of the set.
-		if self.properties.get(&color).unwrap().len() == num_cards_for_complete_set(color) {
+		if self.properties[&color].len() == num_cards_for_complete_set(color) {
 			self.completed_colors.push(color);
 		}
 	}
@@ -65,6 +65,15 @@ impl PropertySets {
 		}
 
 		popped
+	}
+
+	/// Returns `true` if `color` is a complete set.
+	pub fn is_complete_set(&self, color: CardColor) -> bool {
+		self.properties
+			.get(&color)
+			.map(|cards| cards.len())
+			.unwrap_or(0)
+			== num_cards_for_complete_set(color)
 	}
 
 	/// Returns the amount of rent that the player will be paid,

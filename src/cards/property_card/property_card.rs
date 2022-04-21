@@ -34,7 +34,14 @@ impl Card for PropertyCard {
 		COLLECTIONS[self.color as usize].0
 	}
 
-	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		if properties.is_complete_set(self.color) {
+			return Err(NotPlayable(format!(
+				"{} is already a complete set.",
+				self.color
+			)));
+		}
+
 		Ok(())
 	}
 }
