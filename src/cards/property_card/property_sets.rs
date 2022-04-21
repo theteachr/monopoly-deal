@@ -1,15 +1,13 @@
 use std::{
-	collections::{hash_map::Entry, HashMap, HashSet},
+	collections::{HashMap, HashSet},
 	fmt,
 };
 
-use crate::{cards::PaidCardKind, color::CardColor};
-
 use crate::cards::data::COLLECTIONS;
-use crate::cards::{CardSet, PropertyCardKind};
+use crate::cards::{CardSet, PaidCardKind, PropertyCardKind};
+use crate::color::CardColor;
 
 /// Tracks the set of property cards played by a player.
-///
 #[derive(Debug)]
 pub struct PropertySets {
 	/// A map from color to set of cards, where the value holds all cards of
@@ -17,7 +15,7 @@ pub struct PropertySets {
 	properties: HashMap<CardColor, CardSet<PropertyCardKind>>,
 
 	/// A list of colors that are complete sets.
-	sets: Vec<CardColor>,
+	completed_colors: Vec<CardColor>,
 }
 
 // TODO Add logic to track color sets.
@@ -27,12 +25,29 @@ impl PropertySets {
 	pub fn new() -> Self {
 		Self {
 			properties: HashMap::new(),
-			sets: Vec::new(),
+			completed_colors: Vec::new(),
 		}
 	}
 
-	pub fn entry(&mut self, color: CardColor) -> Entry<'_, CardColor, CardSet<PropertyCardKind>> {
-		self.properties.entry(color)
+	/// Adds the card into the respective color bucket. If it makes a complete set after adding, adds the color
+	/// into the vec tracking the number of sets.
+	pub fn add(&mut self, card: PropertyCardKind) {
+		let color = match card {
+			PropertyCardKind::Single(ref c) => c.color,
+			PropertyCardKind::Wild(ref c) => c.selected_color.unwrap(),
+		};
+
+		// Insert the card into map with key as `color`.
+		self.properties
+			.entry(color)
+			.or_insert_with(|| CardSet::new())
+			.add(card);
+
+		// Get the number of cards for a complete set for the `color`. If it equals the current count,
+		// add the color to `completed_colors` to indicate the completion of the set.
+		if self.properties.get(&color).unwrap().len() == num_cards_for_complete_set(color) {
+			self.completed_colors.push(color);
+		}
 	}
 
 	/// Returns all colors in the properties.

@@ -41,15 +41,7 @@ impl Assets {
 
 	/// Inserts the card into `property_sets`.
 	pub fn add_property(&mut self, card: PropertyCardKind) {
-		let color = match card {
-			PropertyCardKind::Single(ref c) => c.color,
-			PropertyCardKind::Wild(ref c) => c.selected_color.unwrap(),
-		};
-
-		self.property_sets
-			.entry(color)
-			.or_insert(CardSet::new())
-			.add(card);
+		self.property_sets.add(card);
 	}
 
 	/// Returns the max amount of money a player can pay using the cards in their bank.
