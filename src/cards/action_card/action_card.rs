@@ -35,7 +35,7 @@ impl ActionCard {
 		match self.action {
 			Action::PassGo => play_pass_go(player.get(), &mut game.deck),
 			Action::Birthday => play_birthday(&mut player.assets, &mut game.table),
-			Action::DebtCollector => play_deal_breaker(&mut player.assets, &mut game.table),
+			Action::DebtCollector => play_debt_collector(&mut player.assets, &mut game.table),
 			_ => todo!(),
 		}
 
