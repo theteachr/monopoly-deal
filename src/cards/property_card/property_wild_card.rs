@@ -35,7 +35,7 @@ impl PropertyWildCard {
 
 	pub fn play(mut self, current_player: &mut CurrentPlayer) {
 		// Get available colors as a vector as we want to be able to index (user's input) into it and set the color.
-		// FIXME Doing this twice, first time to check if the card is playable. Unite both methods?
+		// FIXME Doing this twice, first time in `is_playable`. Unite both methods?
 		let colors = self
 			.available_colors
 			.get()

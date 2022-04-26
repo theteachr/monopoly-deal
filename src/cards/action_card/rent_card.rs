@@ -54,6 +54,9 @@ impl RentCard {
 			"Playing a rent card: {}",
 			properties.rent(self.selected_color.unwrap())
 		);
+
+		// TODO Ask all players for rent. If it's an all colored rent card, target a single player
+		// for grabbing the rent.
 	}
 }
 
