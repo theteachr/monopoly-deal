@@ -1,8 +1,10 @@
+use crate::{deck::Deck, player::Player};
+
 #[derive(Debug, Hash, Eq, PartialEq)]
-pub struct PassGoCard(u8);
+pub struct PassGoCard;
 
 impl PassGoCard {
-	pub fn new(value: u8) -> Self {
-		Self(value)
+	pub fn play(player: &mut Player, deck: &mut Deck) {
+		player.draw_two(deck);
 	}
 }

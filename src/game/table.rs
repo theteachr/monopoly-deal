@@ -1,35 +1,57 @@
-use crate::player::Assets;
+use crate::player::{Assets, Player};
 use std::collections::VecDeque;
+use std::fmt;
 
 /// Represents the Game Table.
 /// Holds all asset cards (property and money) played by the players.
 #[derive(Debug)]
-pub struct Table(VecDeque<Assets>);
+pub struct Table {
+	players: VecDeque<Player>,
+	assets: VecDeque<Assets>,
+}
 
 impl Table {
 	/// Gives an empty table with `player_count` slots.
-	pub fn new(player_count: u8) -> Self {
-		Self((0..player_count).map(|_| Assets::new()).collect())
+	pub fn new(players: Vec<Player>) -> Self {
+		Self {
+			assets: players.iter().map(|_| Assets::new()).collect(),
+			players: VecDeque::from(players),
+		}
 	}
 
 	/// Gives the assets of the next player and a reference to the rest of the table
 	/// holding the assets of the other players.
-	pub fn turn(&mut self) -> (Assets, &mut Self) {
-		let assets = self.0.pop_front().unwrap();
-
-		(assets, self)
+	pub fn turn(&mut self) -> (Player, Assets) {
+		(
+			self.players.pop_front().unwrap(),
+			self.assets.pop_front().unwrap(),
+		)
 	}
 
 	/// Puts back the `assets` into the table.
 	/// Called at the end of every turn.
-	pub fn update(&mut self, assets: Assets) {
-		self.0.push_back(assets);
+	pub fn update(&mut self, player: Player, assets: Assets) {
+		self.players.push_back(player);
+		self.assets.push_back(assets);
 	}
 
-	pub fn print(&self) {
-		self.0
+	pub fn get_mut_assets(&mut self, idx: usize) -> Option<&mut Assets> {
+		self.assets.get_mut(idx)
+	}
+
+	pub fn iter_mut(&mut self) -> impl Iterator<Item = (&Player, &mut Assets)> {
+		self.players.iter().zip(self.assets.iter_mut())
+	}
+}
+
+impl fmt::Display for Table {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		self.assets
 			.iter()
+			.zip(self.players.iter())
 			.enumerate()
-			.for_each(|(i, assets)| println!("\n-- {} --\n\n{}", i, assets));
+			.map(|(i, (assets, player))| format!("\n{}: -- {} --\n\n{}", i, player.name, assets))
+			.collect::<String>()
+			.fmt(f)
 	}
 }

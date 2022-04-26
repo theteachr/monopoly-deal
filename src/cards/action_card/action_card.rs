@@ -1,88 +1,75 @@
-use super::{
-	BirthdayCard, DealBreakerCard, DebtCollectorCard, DoubleTheRentCard, ForcedDealCard, HotelCard,
-	HouseCard, JustSayNoCard, PassGoCard, SlyDealCard,
-};
-use crate::cards::{Card, Play};
-use crate::game::Turn;
-use crate::player::Assets;
+use super::play_fns::*;
+use crate::cards::{Card, PropertySets};
+use crate::errors::NotPlayable;
+use crate::game::{CurrentPlayer, Game};
+
 use std::fmt::Debug;
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub enum Action {
-	Birthday(u8),
-	DealBreaker(u8),
-	DebtCollector(u8),
-	DoubleTheRent(u8),
-	ForcedDeal(u8),
-	Hotel(u8),
-	House(u8),
-	JustSayNo(u8),
-	PassGo(u8),
-	SlyDeal(u8),
+	Birthday,
+	DealBreaker,
+	DebtCollector,
+	DoubleTheRent,
+	ForcedDeal,
+	Hotel,
+	House,
+	JustSayNo,
+	PassGo,
+	SlyDeal,
 }
 
 #[derive(Debug, Hash, Eq, PartialEq)]
-pub enum ActionCardKind {
-	Birthday(BirthdayCard),
-	DealBreaker(DealBreakerCard),
-	DebtCollector(DebtCollectorCard),
-	DoubleTheRent(DoubleTheRentCard),
-	ForcedDeal(ForcedDealCard),
-	Hotel(HotelCard),
-	House(HouseCard),
-	JustSayNo(JustSayNoCard),
-	PassGo(PassGoCard),
-	SlyDeal(SlyDealCard),
+pub struct ActionCard {
+	pub value: u8,
+	pub action: Action,
 }
 
-impl Card for ActionCardKind {
+impl ActionCard {
+	pub fn new(value: u8, action: Action) -> Self {
+		Self { value, action }
+	}
+
+	pub fn play(self, player: &mut CurrentPlayer, game: &mut Game) {
+		match self.action {
+			Action::PassGo => play_pass_go(player.get(), &mut game.deck),
+			Action::Birthday => play_birthday(&mut player.assets, &mut game.table),
+			Action::DebtCollector => play_debt_collector(&mut player.assets, &mut game.table),
+			_ => todo!(),
+		}
+
+		game.discard_deck.push_back(self.into());
+	}
+}
+
+impl Card for ActionCard {
 	fn value(&self) -> u8 {
-		0
-	}
-}
-
-impl Play for ActionCardKind {
-	fn is_playable(&self, _turn: &Assets) -> bool {
-		false
+		self.value
 	}
 
-	fn play(self, _turn: &mut Turn) {
-		// TODO Ask whether to bank it or play it
-		println!("Not Implemented Yet");
-	}
-}
-
-impl std::convert::From<Action> for ActionCardKind {
-	fn from(action: Action) -> Self {
-		match action {
-			Action::Birthday(v) => Self::Birthday(BirthdayCard::new(v)),
-			Action::DealBreaker(v) => Self::DealBreaker(DealBreakerCard::new(v)),
-			Action::DebtCollector(v) => Self::DebtCollector(DebtCollectorCard::new(v)),
-			Action::DoubleTheRent(v) => Self::DoubleTheRent(DoubleTheRentCard::new(v)),
-			Action::ForcedDeal(v) => Self::ForcedDeal(ForcedDealCard::new(v)),
-			Action::Hotel(v) => Self::Hotel(HotelCard::new(v)),
-			Action::House(v) => Self::House(HouseCard::new(v)),
-			Action::JustSayNo(v) => Self::JustSayNo(JustSayNoCard::new(v)),
-			Action::PassGo(v) => Self::PassGo(PassGoCard::new(v)),
-			Action::SlyDeal(v) => Self::SlyDeal(SlyDealCard::new(v)),
+	fn is_playable(&self, _properties: &PropertySets) -> Result<(), NotPlayable> {
+		match self.action {
+			Action::PassGo | Action::Birthday | Action::DealBreaker | Action::DebtCollector => {
+				Ok(())
+			}
+			Action::DoubleTheRent => Err(NotPlayable(
+				"You need to play a rent card before playing this one.".to_string(),
+			)),
+			Action::ForcedDeal => Ok(()),
+			Action::Hotel => Ok(()),
+			Action::House => Ok(()),
+			Action::JustSayNo => Err(NotPlayable(
+				"Can only be played when you're asked to pay or to counter another JustSayNo."
+					.to_string(),
+			)),
+			Action::SlyDeal => Ok(()),
 		}
 	}
 }
 
-impl fmt::Display for ActionCardKind {
+impl fmt::Display for ActionCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		match self {
-			Self::Birthday(c) => c.fmt(f),
-			Self::DealBreaker(c) => c.fmt(f),
-			Self::DebtCollector(c) => c.fmt(f),
-			Self::DoubleTheRent(c) => c.fmt(f),
-			Self::ForcedDeal(c) => c.fmt(f),
-			Self::Hotel(c) => c.fmt(f),
-			Self::House(c) => c.fmt(f),
-			Self::JustSayNo(c) => c.fmt(f),
-			Self::PassGo(c) => c.fmt(f),
-			Self::SlyDeal(c) => c.fmt(f),
-		}
+		self.action.fmt(f)
 	}
 }

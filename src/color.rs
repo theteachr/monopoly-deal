@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{collections::HashSet, fmt, hash::Hash};
 
 /// Represents the color of a property card.
 #[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
@@ -23,14 +23,14 @@ type Color = (u8, u8, u8);
 const RGB_TRIPLES: [Color; 10] = [
 	(000, 000, 000), // Black
 	(010, 147, 150), // Blue
-	(155, 034, 038), // Brown
+	(150, 075, 000), // Brown
 	(083, 221, 108), // Green
 	(214, 122, 177), // Magenta
 	(255, 120, 079), // Orange
 	(232, 049, 081), // Red
 	(132, 218, 235), // SkyBlue
 	(148, 210, 189), // Turquoise
-	(244, 157, 055), // Yellow
+	(244, 233, 000), // Yellow
 ];
 
 /// Store all the color variants in an array.
@@ -50,7 +50,7 @@ pub const COLORS: [CardColor; 10] = [
 pub const BLOCK: &'static str = "⬤";
 
 /// Represents the color type of a colored card.
-/// 
+///
 /// ## Examples
 ///
 /// A `RentCard` with `Magenta` and `Yellow` on it.
@@ -64,6 +64,15 @@ pub enum MultiColor {
 	All,
 }
 
+impl MultiColor {
+	pub fn get(&self) -> HashSet<CardColor> {
+		match self {
+			Self::Two(c, d) => vec![*c, *d].into_iter().collect(),
+			Self::All => COLORS.to_vec().into_iter().collect(),
+		}
+	}
+}
+
 impl CardColor {
 	/// Returns the R G B value corresponding to the `CardColor`.
 	pub fn to_rgb(self) -> Color {
@@ -71,18 +80,9 @@ impl CardColor {
 	}
 }
 
-impl std::convert::From<MultiColor> for Vec<CardColor> {
-	fn from(colors: MultiColor) -> Self {
-		match colors {
-			MultiColor::Two(c, d) => vec![c, d],
-			MultiColor::All => COLORS.to_vec(),
-		}
-	}
-}
-
 impl fmt::Display for MultiColor {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		Vec::from(*self)
+		self.get()
 			.iter()
 			.map(|&color| colored_text(BLOCK, color))
 			.collect::<Vec<String>>()
@@ -101,5 +101,5 @@ impl fmt::Display for CardColor {
 pub fn colored_text(text: &'static str, color: CardColor) -> String {
 	let (r, g, b) = color.to_rgb();
 
-	return format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text);
+	format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text)
 }

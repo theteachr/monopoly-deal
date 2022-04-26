@@ -1,10 +1,11 @@
 use std::{cmp::PartialEq, fmt, hash::Hash};
 
-use super::PropertyCardKind;
-use crate::cards::{Card, Colored, Play};
+use super::{PropertyCardKind, PropertySets};
+use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
-use crate::game::Turn;
-use crate::player::Assets;
+use crate::common::print_read_index;
+use crate::errors::NotPlayable;
+use crate::game::CurrentPlayer;
 
 /// Represents a property wild card.
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -27,31 +28,53 @@ impl PropertyWildCard {
 			selected_color: None,
 		}
 	}
+
+	fn set_color(&mut self, color: CardColor) {
+		self.selected_color = Some(color);
+	}
+
+	pub fn play(mut self, current_player: &mut CurrentPlayer) {
+		// Get available colors as a vector as we want to be able to index (user's input) into it and set the color.
+		// FIXME Doing this twice, first time in `is_playable`. Unite both methods?
+		let colors = self
+			.available_colors
+			.get()
+			.into_iter()
+			.collect::<Vec<CardColor>>();
+
+		let idx = print_read_index("> ", colors.iter(), colors.len());
+		let color = colors[idx];
+
+		self.set_color(color);
+		current_player.assets.add_property(self.into());
+	}
+
+	fn is_playable_with(&self, color: CardColor, properties: &PropertySets) -> bool {
+		!properties.is_complete_set(color)
+	}
 }
 
 impl Card for PropertyWildCard {
 	fn value(&self) -> u8 {
 		self.value
 	}
-}
 
-impl Play for PropertyWildCard {
-	fn is_playable(&self, _: &Assets) -> bool {
-		true
-	}
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		// Get available colors as a vector as we want to be able to index (user's input) into it and set the color.
+		let colors = self
+			.available_colors
+			.get()
+			.into_iter()
+			.collect::<Vec<CardColor>>();
 
-	fn play(self, turn: &mut Turn) {
-		turn.assets.add_property(self.into());
-	}
-}
+		let idx = print_read_index("> ", colors.iter(), colors.len());
+		let color = colors[idx];
 
-impl Colored for PropertyWildCard {
-	fn set_color(&mut self, color: CardColor) {
-		self.selected_color = Some(color);
-	}
+		if self.is_playable_with(color, properties) {
+			return Ok(());
+		}
 
-	fn colors(&self) -> Vec<CardColor> {
-		Vec::from(self.available_colors)
+		Err(NotPlayable(format!("{} is already a complete set.", color)))
 	}
 }
 

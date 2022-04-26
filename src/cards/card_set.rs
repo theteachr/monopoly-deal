@@ -1,5 +1,7 @@
 use std::{fmt, ops::Index};
 
+use super::Card;
+
 /// Represents a collection of cards.
 #[derive(Debug)]
 pub struct CardSet<T> {
@@ -7,7 +9,7 @@ pub struct CardSet<T> {
 	size: usize,
 }
 
-impl<T: fmt::Display> CardSet<T> {
+impl<T: fmt::Display + Card> CardSet<T> {
 	/// Returns an empty collection of cards.
 	pub fn new() -> Self {
 		Self {
@@ -16,7 +18,7 @@ impl<T: fmt::Display> CardSet<T> {
 		}
 	}
 
-	/// Return the number of cards in the collection.
+	/// Returns the number of cards in the collection.
 	pub fn len(&self) -> usize {
 		self.size
 	}
@@ -32,9 +34,13 @@ impl<T: fmt::Display> CardSet<T> {
 		self.cards.iter()
 	}
 
-	/// Returns true if the collection has no cards.
+	/// Returns `true` if the collection has no cards.
 	pub fn is_empty(&self) -> bool {
 		self.size == 0
+	}
+
+	pub fn get(&self, index: usize) -> Option<&T> {
+		self.cards.get(index)
 	}
 
 	/// Returns the card present at index = `position`.
@@ -46,10 +52,18 @@ impl<T: fmt::Display> CardSet<T> {
 		removed
 	}
 
-	pub fn print_numbered(&self) {
-		for (i, card) in self.cards.iter().enumerate() {
-			println!("{}: {}", i, card);
-		}
+	/// Empties the card set and returns a `Vec` of removed cards.
+	pub fn remove_all(&mut self) -> Vec<T> {
+		let mut cards = Vec::new();
+
+		std::mem::swap(&mut cards, &mut self.cards);
+
+		cards
+	}
+
+	// XXX Track the value in a field: updated when a new card is added, and subtracted when removed
+	pub fn value(&self) -> u8 {
+		self.cards.iter().map(Card::value).sum()
 	}
 }
 

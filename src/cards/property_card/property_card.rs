@@ -4,11 +4,13 @@ use std::{
 	hash::{Hash, Hasher},
 };
 
-use super::PropertyCardKind;
-use crate::cards::{data::COLLECTIONS, Card, Play};
+use super::{PropertyCardKind, PropertySets};
 use crate::color::{colored_text, CardColor};
-use crate::game::Turn;
-use crate::player::Assets;
+use crate::game::CurrentPlayer;
+use crate::{
+	cards::{data::COLLECTIONS, Card},
+	errors::NotPlayable,
+};
 
 /// Represents a mono colored property card.
 #[derive(Debug, Eq)]
@@ -21,11 +23,26 @@ impl PropertyCard {
 	pub fn new(name: &'static str, color: CardColor) -> Self {
 		Self { name, color }
 	}
+
+	pub fn play(self, current_player: &mut CurrentPlayer) {
+		current_player.assets.add_property(self.into());
+	}
 }
 
 impl Card for PropertyCard {
 	fn value(&self) -> u8 {
 		COLLECTIONS[self.color as usize].0
+	}
+
+	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		if properties.is_complete_set(self.color) {
+			return Err(NotPlayable(format!(
+				"{} is already a complete set.",
+				self.color
+			)));
+		}
+
+		Ok(())
 	}
 }
 
@@ -38,16 +55,6 @@ impl Hash for PropertyCard {
 impl PartialEq for PropertyCard {
 	fn eq(&self, other: &Self) -> bool {
 		self.name == other.name
-	}
-}
-
-impl Play for PropertyCard {
-	fn is_playable(&self, _: &Assets) -> bool {
-		true
-	}
-
-	fn play(self, turn: &mut Turn) {
-		turn.assets.add_property(self.into());
 	}
 }
 
