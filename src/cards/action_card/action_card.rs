@@ -32,6 +32,7 @@ impl ActionCard {
 	}
 
 	pub fn play(self, player: &mut CurrentPlayer, game: &mut Game) {
+		// TODO Allow for playing `ActionCard`s as money.
 		match self.action {
 			Action::PassGo => play_pass_go(player.get(), &mut game.deck),
 			Action::Birthday => play_birthday(&mut player.assets, &mut game.table),

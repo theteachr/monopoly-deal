@@ -27,7 +27,7 @@ impl Card for MoneyCard {
 	}
 
 	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
-		// `MoneyCard`s are always playable, so return `true`.
+		// `MoneyCard`s are always playable.
 		Ok(())
 	}
 }
