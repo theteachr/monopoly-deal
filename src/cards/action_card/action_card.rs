@@ -51,15 +51,14 @@ impl Card for ActionCard {
 
 	fn is_playable(&self, _properties: &PropertySets) -> Result<(), NotPlayable> {
 		match self.action {
-			Action::PassGo | Action::Birthday | Action::DealBreaker | Action::DebtCollector => {
-				Ok(())
-			}
+			Action::PassGo | Action::Birthday | Action::DebtCollector => Ok(()),
 			Action::DoubleTheRent => Err(NotPlayable(
 				"You need to play a rent card before playing this one.".to_string(),
 			)),
-			Action::ForcedDeal => Ok(()),
-			Action::Hotel => Ok(()),
-			Action::House => Ok(()),
+			Action::DealBreaker => Err(NotPlayable("Not implemented yet.".to_string())),
+			Action::ForcedDeal => Err(NotPlayable("Not implemented yet.".to_string())),
+			Action::Hotel => Err(NotPlayable("Not implemented yet.".to_string())),
+			Action::House => Err(NotPlayable("Not implemented yet.".to_string())),
 			Action::JustSayNo => Err(NotPlayable(
 				"Can only be played when you're asked to pay or to counter another JustSayNo."
 					.to_string(),
