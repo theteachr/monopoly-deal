@@ -3,15 +3,20 @@ use std::collections::VecDeque;
 use std::fmt;
 
 /// Represents the Game Table.
-/// Holds all asset cards (property and money) played by the players.
+/// 
+/// Holds two parallel queues of players and their respective assets.
 #[derive(Debug)]
 pub struct Table {
+	/// A queue of players.
 	players: VecDeque<Player>,
+
+	/// A queue of assets played by the respective players.
 	assets: VecDeque<Assets>,
 }
 
 impl Table {
-	/// Gives an empty table with `player_count` slots.
+	/// Returns a table with the supplied `players` with a corresponding
+	/// empty slot in the `assets` queue for each.
 	pub fn new(players: Vec<Player>) -> Self {
 		Self {
 			assets: players.iter().map(|_| Assets::new()).collect(),
@@ -19,8 +24,7 @@ impl Table {
 		}
 	}
 
-	/// Gives the assets of the next player and a reference to the rest of the table
-	/// holding the assets of the other players.
+	/// Returns the tuple of the next player and their assets.
 	pub fn turn(&mut self) -> (Player, Assets) {
 		(
 			self.players.pop_front().unwrap(),
@@ -28,17 +32,18 @@ impl Table {
 		)
 	}
 
-	/// Puts back the `assets` into the table.
-	/// Called at the end of every turn.
+	/// Puts back the `player` and their updated `assets` into the table.
 	pub fn update(&mut self, player: Player, assets: Assets) {
 		self.players.push_back(player);
 		self.assets.push_back(assets);
 	}
 
+	/// Returns a mutable ref to the assets at `idx` of the assets queue.
 	pub fn get_mut_assets(&mut self, idx: usize) -> Option<&mut Assets> {
 		self.assets.get_mut(idx)
 	}
 
+	/// Returns an iterator of players zipped with the mutable ref to their assets.
 	pub fn iter_mut(&mut self) -> impl Iterator<Item = (&Player, &mut Assets)> {
 		self.players.iter().zip(self.assets.iter_mut())
 	}
