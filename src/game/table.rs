@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use std::fmt;
 
 /// Represents the Game Table.
-/// 
+///
 /// Holds two parallel queues of players and their respective assets.
 #[derive(Debug)]
 pub struct Table {

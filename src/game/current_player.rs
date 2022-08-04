@@ -130,7 +130,10 @@ impl CurrentPlayer {
 	/// the player to discard the excess.
 	pub fn end_turn(mut self) -> (Player, Assets, CardSet<CardKind>) {
 		// Get the number of cards that need to be discarded.
-		let mut to_be_discarded: i8 = self.player.hand_len() as i8 - 7;
+		let mut to_be_discarded = match self.player.hand_len().checked_sub(7) {
+			Some(x) => x,
+			None => 0,
+		};
 
 		// Until the number of cards need to be discarded is > 0,
 		// ask the player to enter the index of the card they want to discard,
