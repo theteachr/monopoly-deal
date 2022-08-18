@@ -127,13 +127,10 @@ impl CurrentPlayer {
 	///
 	/// A player is not allowed to have more than **7** cards in their hand at the end of a turn.
 	/// This needs to be checked at the end of each turn. If there are excess cards, prompt
-	/// the player to discard the excess.
+	/// the player to discard them.
 	pub fn end_turn(mut self) -> (Player, Assets, CardSet<CardKind>) {
 		// Get the number of cards that need to be discarded.
-		let mut to_be_discarded = match self.player.hand_len().checked_sub(7) {
-			Some(x) => x,
-			None => 0,
-		};
+		let mut to_be_discarded = self.player.hand_len().saturating_sub(7);
 
 		// Until the number of cards need to be discarded is > 0,
 		// ask the player to enter the index of the card they want to discard,
