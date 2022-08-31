@@ -1,7 +1,7 @@
 use crate::cards::{Action, Card, CardKind, CardSet};
 use crate::common::{input, print_enumerated, print_read_index};
 use crate::errors::Failed;
-use crate::player::{Assets, Player};
+use super::{Assets, Player};
 
 /// Represents the actions a player can perform in their turn.
 pub enum PlayerAction {
@@ -109,7 +109,7 @@ impl CurrentPlayer {
 		// `DoubleTheRent` needs to be handled separately as it's the only card
 		// that needs to know the cards the player has played in the turn to
 		// determine if it's playable.
-		if let CardKind::ActionCard(card) = card {
+		if let CardKind::Action(card) = card {
 			if matches!(card.action, Action::DoubleTheRent) {
 				// If the player has played a rent card, `DoubleTheRent` card
 				// is playable.

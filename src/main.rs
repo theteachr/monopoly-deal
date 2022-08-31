@@ -3,10 +3,10 @@ mod color;
 mod common;
 mod deck;
 mod errors;
+mod entities;
 mod game;
-mod player;
 
-use game::Game;
+use crate::game::Game;
 
 fn main() {
 	let mut deal = Game::new(4);

@@ -1,4 +1,4 @@
-use crate::player::{Assets, Player};
+use super::{Assets, Player};
 use std::collections::VecDeque;
 use std::fmt;
 

@@ -5,7 +5,7 @@ use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::print_read_index;
 use crate::errors::NotPlayable;
-use crate::game::CurrentPlayer;
+use crate::entities::CurrentPlayer;
 
 /// Represents a property wild card.
 #[derive(Debug, Hash, Eq, PartialEq)]

@@ -1,8 +1,7 @@
 use crate::cards::{Card, PaidCardKind};
 use crate::common::input;
 use crate::deck::Deck;
-use crate::player::{choose_card, PayWith, Player};
-use crate::{game::Table, player::Assets};
+use crate::entities::{Table, Assets, choose_card, PayWith, Player};
 
 /// Takes rent of `amount` from `from_assets` and adds them into `to_assets`.
 pub(crate) fn ask_for_rent(amount: u8, from_assets: &mut Assets, to_assets: &mut Assets) {

@@ -6,7 +6,7 @@ use std::{
 
 use super::{PropertyCardKind, PropertySets};
 use crate::color::{colored_text, CardColor};
-use crate::game::CurrentPlayer;
+use crate::entities::CurrentPlayer;
 use crate::{
 	cards::{data::COLLECTIONS, Card},
 	errors::NotPlayable,

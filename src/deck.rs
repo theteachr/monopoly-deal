@@ -36,7 +36,7 @@ impl Deck {
 
 		for (value, action, count) in ACTION_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(ActionCard::new(*value, (*action).into()).into());
+				cards.push(ActionCard::new(*value, *action).into());
 			}
 		}
 
@@ -65,7 +65,7 @@ impl Deck {
 			cards.push(self.0.pop().unwrap());
 		}
 
-		return cards;
+		cards
 	}
 
 	/// Adds `card` into the deck.

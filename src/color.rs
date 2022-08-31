@@ -21,16 +21,16 @@ type Color = (u8, u8, u8);
 
 /// Store RGB values of all colors.
 const RGB_TRIPLES: [Color; 10] = [
-	(000, 000, 000), // Black
-	(010, 147, 150), // Blue
-	(150, 075, 000), // Brown
-	(083, 221, 108), // Green
+	(  0,   0,   0), // Black
+	( 10, 147, 150), // Blue
+	(150,  75,   0), // Brown
+	( 83, 221, 108), // Green
 	(214, 122, 177), // Magenta
-	(255, 120, 079), // Orange
-	(232, 049, 081), // Red
+	(255, 120,  79), // Orange
+	(232,  49,  81), // Red
 	(132, 218, 235), // SkyBlue
 	(148, 210, 189), // Turquoise
-	(244, 233, 000), // Yellow
+	(244, 233,   0), // Yellow
 ];
 
 /// Store all the color variants in an array.
@@ -47,7 +47,7 @@ pub const COLORS: [CardColor; 10] = [
 	CardColor::Yellow,
 ];
 
-pub const BLOCK: &'static str = "⬤";
+pub const BLOCK: &str = "⬤";
 
 /// Represents the color type of a colored card.
 ///
@@ -68,7 +68,7 @@ impl MultiColor {
 	pub fn get(&self) -> HashSet<CardColor> {
 		match self {
 			Self::Two(c, d) => vec![*c, *d].into_iter().collect(),
-			Self::All => COLORS.to_vec().into_iter().collect(),
+			Self::All => COLORS.iter().copied().collect(),
 		}
 	}
 }

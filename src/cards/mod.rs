@@ -1,13 +1,13 @@
-mod action_card;
+mod action;
 mod card;
 mod card_set;
-mod money_card;
-pub mod property_card;
+mod money;
+pub mod property;
 
-pub use action_card::{Action, ActionCard, RentCard};
+pub use action::{Action, ActionCard, RentCard};
 pub use card::{BankableCardKind, Card, CardKind, PaidCardKind};
 pub use card_set::CardSet;
-pub use money_card::MoneyCard;
-pub use property_card::{PropertyCard, PropertyCardKind, PropertySets, PropertyWildCard};
+pub use money::MoneyCard;
+pub use property::{PropertyCard, PropertyCardKind, PropertySets, PropertyWildCard};
 
 pub mod data;

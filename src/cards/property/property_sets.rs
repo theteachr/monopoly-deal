@@ -40,7 +40,7 @@ impl PropertySets {
 		// Insert the card into map with key as `color`.
 		self.properties
 			.entry(color)
-			.or_insert_with(|| CardSet::new())
+			.or_insert_with(CardSet::new)
 			.add(card);
 
 		// Get the number of cards for a complete set for the `color`. If it equals the current count,
@@ -91,7 +91,7 @@ impl PropertySets {
 
 	/// Returns `true` if at least one property of the given `color` exists in the set.
 	pub fn exists(&self, color: &CardColor) -> bool {
-		self.properties.contains_key(&color)
+		self.properties.contains_key(color)
 	}
 
 	/// Returns an iterator over the colors played by the players.
@@ -104,8 +104,7 @@ impl PropertySets {
 		let cards: Vec<PaidCardKind> = self
 			.properties
 			.values_mut()
-			.map(|property_cards| property_cards.remove_all())
-			.flatten()
+			.flat_map(|property_cards| property_cards.remove_all())
 			.map(PaidCardKind::from)
 			.collect();
 

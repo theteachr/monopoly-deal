@@ -1,8 +1,7 @@
-use super::{CurrentPlayer, PlayerAction, Table};
 use crate::{
 	cards::{CardKind, CardSet},
 	deck::Deck,
-	player::{Assets, Player},
+	entities::{Assets, Player, CurrentPlayer, PlayerAction, Table},
 };
 
 use std::fmt::Debug;

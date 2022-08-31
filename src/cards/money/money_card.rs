@@ -1,6 +1,6 @@
 use super::denomination::Denomination;
 use crate::cards::PropertySets;
-use crate::game::CurrentPlayer;
+use crate::entities::CurrentPlayer;
 use crate::{cards::Card, errors::NotPlayable};
 use std::{cmp::PartialEq, fmt, hash::Hash};
 

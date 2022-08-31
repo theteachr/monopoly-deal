@@ -1,7 +1,8 @@
 use super::play_fns::*;
 use crate::cards::{Card, PropertySets};
 use crate::errors::NotPlayable;
-use crate::game::{CurrentPlayer, Game};
+use crate::entities::CurrentPlayer;
+use crate::Game;
 
 use std::fmt::Debug;
 use std::{cmp::PartialEq, fmt, hash::Hash};
