@@ -18,15 +18,15 @@ pub struct Game {
 	pub table: Table,
 }
 
-impl Game {
+impl Default for Game {
 	/// Returns a `Game` with 4 hard coded players and a shuffled deck of 108 cards.
-	pub fn new(player_count: u8) -> Self {
+	fn default() -> Self {
 		let mut draw_pile = Deck::default();
 		let discard_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
 
-		let mut players = get_mock_players(player_count);
+		let mut players = get_mock_players(4);
 
 		// Distribute cards. Since every player's hand be empty at start, each player
 		// will be drawing *5* cards.
@@ -40,7 +40,9 @@ impl Game {
 			table: Table::new(players),
 		}
 	}
+}
 
+impl Game {
 	/// Starts the game loop.
 	pub fn play(&mut self) {
 		// Get the next player and their assets.

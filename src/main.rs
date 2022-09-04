@@ -9,7 +9,7 @@ mod game;
 use crate::game::Game;
 
 fn main() {
-	let mut deal = Game::new(4);
+	let mut deal = Game::default();
 
 	loop {
 		deal.play();
