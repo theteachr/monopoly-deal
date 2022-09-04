@@ -1,7 +1,7 @@
 use super::play_fns::*;
 use crate::cards::{Card, PropertySets};
-use crate::errors::NotPlayable;
 use crate::entities::CurrentPlayer;
+use crate::errors::NotPlayable;
 use crate::Game;
 
 use std::fmt::Debug;
@@ -23,21 +23,21 @@ pub enum Action {
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct ActionCard {
+	pub id: usize,
 	pub value: u8,
 	pub action: Action,
 }
 
 impl ActionCard {
-	pub fn new(value: u8, action: Action) -> Self {
-		Self { value, action }
+	pub fn new(id: usize, value: u8, action: Action) -> Self {
+		Self { id, value, action }
 	}
 
 	pub fn play(self, player: &mut CurrentPlayer, game: &mut Game) {
 		// TODO Allow for playing `ActionCard`s as money.
 		match self.action {
 			Action::PassGo => play_pass_go(player.get(), &mut game.deck),
-			Action::Birthday => play_birthday(&mut player.assets, &mut game.table),
-			Action::DebtCollector => play_debt_collector(&mut player.assets, &mut game.table),
+			Action::Birthday => play_birthday(&mut game.table),
 			_ => todo!(),
 		}
 
@@ -48,6 +48,10 @@ impl ActionCard {
 impl Card for ActionCard {
 	fn value(&self) -> u8 {
 		self.value
+	}
+
+	fn id(&self) -> usize {
+		self.id
 	}
 
 	fn is_playable(&self, _properties: &PropertySets) -> Result<(), NotPlayable> {

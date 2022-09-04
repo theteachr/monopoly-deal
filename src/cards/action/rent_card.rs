@@ -9,14 +9,16 @@ use crate::{
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct RentCard {
+	pub id: usize,
 	value: u8,
 	available_colors: MultiColor,
 	selected_color: Option<CardColor>,
 }
 
 impl RentCard {
-	pub fn new(value: u8, colors: MultiColor) -> Self {
+	pub fn new(id: usize, value: u8, colors: MultiColor) -> Self {
 		Self {
+			id,
 			value,
 			available_colors: colors,
 			selected_color: None,
@@ -61,6 +63,10 @@ impl RentCard {
 }
 
 impl Card for RentCard {
+	fn id(&self) -> usize {
+		self.id
+	}
+
 	fn value(&self) -> u8 {
 		self.value
 	}

@@ -1,94 +1,88 @@
-use std::{fmt, ops::Index};
+use std::{collections::HashMap, fmt};
+use crate::common::input;
 
 use super::Card;
 
 /// Represents a collection of cards.
 #[derive(Debug)]
-pub struct CardSet<T> {
-	cards: Vec<T>,
-	size: usize,
-}
+pub struct CardSet<T: Card>(HashMap<usize, T>);
 
-impl<T: fmt::Display + Card> CardSet<T> {
+impl<'a, T: Card> CardSet<T> {
 	/// Returns an empty collection of cards.
 	pub fn new() -> Self {
-		Self {
-			cards: Vec::new(),
-			size: 0,
-		}
+		Self(HashMap::new())
 	}
 
 	/// Returns the number of cards in the collection.
 	pub fn len(&self) -> usize {
-		self.size
+		self.0.len()
 	}
 
 	/// Adds `card` into the collection.
 	pub fn add(&mut self, card: T) {
-		self.cards.push(card);
-		self.size += 1;
+		self.0.insert(card.id(), card);
 	}
 
 	/// Returns an iterator of the references of all cards in the collection.
 	pub fn iter(&self) -> impl Iterator<Item = &T> {
-		self.cards.iter()
+		self.0.values()
 	}
 
 	/// Returns `true` if the collection has no cards.
 	pub fn is_empty(&self) -> bool {
-		self.size == 0
+		self.0.is_empty()
 	}
 
-	pub fn get(&self, index: usize) -> Option<&T> {
-		self.cards.get(index)
+	pub fn get(&self, id: usize) -> Option<&T> {
+		self.0.get(&id)
 	}
 
-	/// Returns the card present at index = `position`.
-	/// Panics if the index in not valid.
-	pub fn remove(&mut self, position: usize) -> T {
-		let removed = self.cards.swap_remove(position);
-		self.size -= 1;
-
-		removed
+	pub fn take(&mut self, id: usize) -> Option<T> {
+		self.0.remove(&id)
 	}
 
 	/// Empties the card set and returns a `Vec` of removed cards.
 	pub fn remove_all(&mut self) -> Vec<T> {
-		let mut cards = Vec::new();
-
-		std::mem::swap(&mut cards, &mut self.cards);
-
-		cards
+		todo!()
 	}
 
 	// XXX Track the value in a field: updated when a new card is added, and subtracted when removed
 	pub fn value(&self) -> u8 {
-		self.cards.iter().map(Card::value).sum()
+		self.0.values().map(Card::value).sum()
+	}
+
+	pub fn choose(&self) -> usize {
+		for (id, item) in self.0.iter() {
+			println!("{id}: {item}");
+		}
+
+		loop {
+			if let Some(id) = input("> ")
+				.parse::<usize>()
+				.ok()
+				.filter(|k| self.0.contains_key(k))
+			{
+				return id;
+			}
+		}
 	}
 }
 
-impl<T> Index<usize> for CardSet<T> {
-	type Output = T;
-
-	fn index(&self, index: usize) -> &Self::Output {
-		&self.cards[index]
-	}
-}
-
-impl<T> Iterator for CardSet<T> {
+impl<T: Card> IntoIterator for CardSet<T> {
 	type Item = T;
+	type IntoIter = std::collections::hash_map::IntoValues<usize, T>;
 
-	fn next(&mut self) -> Option<Self::Item> {
-		self.cards.pop()
+	fn into_iter(self) -> Self::IntoIter {
+		self.0.into_values()
 	}
 }
 
-impl<T: fmt::Display> fmt::Display for CardSet<T> {
+impl<T: fmt::Display + Card> fmt::Display for CardSet<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		let string = self
-			.cards
+			.0
 			.iter()
-			.map(|card| card.to_string())
+			.map(|(_, card)| card.to_string())
 			.collect::<Vec<String>>()
 			.join("; ");
 

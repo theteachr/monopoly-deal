@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::cards::{BankableCardKind, Card, CardSet, PaidCardKind, PropertyCardKind, PropertySets};
 use crate::color::CardColor;
-use crate::common::{input, print_read_index};
+use crate::common::input;
 
 /// Holds all asset cards played by the player.
 ///
@@ -54,33 +54,43 @@ impl Assets {
 		self.property_sets.total_value()
 	}
 
-	/// Removes a card from the bank.
-	pub fn remove_banked_card(&mut self, idx: usize) -> BankableCardKind {
-		self.bank.remove(idx)
-	}
-
-	/// Removes a `color` colored card from the property sets played by the player.
-	pub fn remove_property_card_of_color(&mut self, color: &CardColor) -> PropertyCardKind {
-		self.property_sets.pop(color)
-	}
-
 	/// Returns `true` if the `amount` can be paid off of the played cards (assets).
 	pub fn can_pay(&self, amount: u8) -> bool {
 		self.total_property_value() + self.bank_value() >= amount
 	}
 
-	pub fn bankrupt(&mut self) -> CardSet<PaidCardKind> {
-		// XXX impl FromIterator for CardSet
-		let mut cards = CardSet::new();
+	pub fn choose_banked_card(&self) -> usize {
+		self.bank.choose()
+	}
 
-		self.bank
-			.remove_all()
-			.into_iter()
-			.map(PaidCardKind::from)
-			.chain(self.property_sets.go_popper().into_iter())
-			.for_each(|card| cards.add(card));
+	pub fn choose_property_card(&self) -> usize {
+		let colors: Vec<CardColor> = self.property_sets.colors().into_iter().collect();
 
-		cards
+		loop {
+			match input("> ")
+				.parse::<usize>()
+				.ok()
+				.and_then(|i| colors.get(i))
+			{
+				Some(color) => {
+					if let Ok(i) = input("> ").parse::<usize>() {
+                        if let Some(cards) = self.property_sets.property_cards_of_color(*color) {
+                            if cards.get(i).is_some() {
+                                return i;
+                            }
+                        }
+                    }
+				}
+				None => continue,
+			}
+		}
+	}
+
+	pub fn bankrupt(&mut self) -> (Vec<BankableCardKind>, Vec<PropertyCardKind>) {
+		let banked = self.bank.remove_all();
+		let props = self.property_sets.go_popper();
+
+		(banked, props)
 	}
 }
 
@@ -95,12 +105,12 @@ enum AssetCardChoice {
 	Property,
 }
 
-pub enum PayWith {
+pub enum PaidWith {
 	Bank(usize),
-	Property(CardColor),
+	Property(usize),
 }
 
-pub fn choose_card(assets: &Assets) -> PayWith {
+pub fn choose_card(assets: &Assets) -> PaidWith {
 	let section = loop {
 		// Choose automatically if one of the sections is empty.
 		match (assets.bank.len(), assets.property_sets.colors().len()) {
@@ -130,16 +140,7 @@ pub fn choose_card(assets: &Assets) -> PayWith {
 	};
 
 	match section {
-		AssetCardChoice::Bank => {
-			let idx = print_read_index("$ ", assets.bank.iter(), assets.bank.len());
-
-			PayWith::Bank(idx)
-		}
-		AssetCardChoice::Property => {
-			let colors = assets.property_sets.iter().collect::<Vec<_>>();
-			let idx = print_read_index("# ", colors.iter(), colors.len());
-
-			PayWith::Property(colors[idx])
-		}
+		AssetCardChoice::Bank => PaidWith::Bank(assets.choose_banked_card()),
+		AssetCardChoice::Property => PaidWith::Property(assets.choose_property_card()),
 	}
 }

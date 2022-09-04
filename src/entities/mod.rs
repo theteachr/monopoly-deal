@@ -1,9 +1,9 @@
 mod assets;
-mod player;
 mod current_player;
+mod player;
 mod table;
 
+pub use assets::{choose_card, Assets, PaidWith};
 pub use current_player::{CurrentPlayer, PlayerAction};
-pub use table::Table;
-pub use assets::{choose_card, Assets, PayWith};
 pub use player::Player;
+pub use table::Table;

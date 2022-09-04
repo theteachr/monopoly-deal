@@ -6,12 +6,15 @@ use std::{cmp::PartialEq, fmt, hash::Hash};
 
 /// Represents a money card.
 #[derive(Debug, Hash, Eq, PartialEq)]
-pub struct MoneyCard(Denomination);
+pub struct MoneyCard {
+	pub id: usize,
+	pub value: Denomination,
+}
 
 impl MoneyCard {
 	/// Returns a money card valued `value`.
-	pub fn new(value: u8) -> Self {
-		Self(value.into())
+	pub fn new(id: usize, value: Denomination) -> Self {
+		Self { id, value }
 	}
 
 	pub fn play(self, current_player: &mut CurrentPlayer) {
@@ -21,9 +24,13 @@ impl MoneyCard {
 }
 
 impl Card for MoneyCard {
+	fn id(&self) -> usize {
+		self.id
+	}
+
 	/// Returns the value of the card.
 	fn value(&self) -> u8 {
-		self.0 as u8
+		self.value as u8
 	}
 
 	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
@@ -34,6 +41,6 @@ impl Card for MoneyCard {
 
 impl fmt::Display for MoneyCard {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{}M", self.0 as u8)
+		write!(f, "{} M", self.value())
 	}
 }

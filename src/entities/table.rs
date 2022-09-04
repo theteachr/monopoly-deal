@@ -24,6 +24,10 @@ impl Table {
 		}
 	}
 
+	pub fn get_assets(&self, index: usize) -> Option<&Assets> {
+		self.assets.get(index)
+	}
+
 	/// Returns the tuple of the next player and their assets.
 	pub fn turn(&mut self) -> (Player, Assets) {
 		(

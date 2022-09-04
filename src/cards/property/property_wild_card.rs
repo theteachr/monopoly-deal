@@ -4,12 +4,13 @@ use super::{PropertyCardKind, PropertySets};
 use crate::cards::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::print_read_index;
-use crate::errors::NotPlayable;
 use crate::entities::CurrentPlayer;
+use crate::errors::NotPlayable;
 
 /// Represents a property wild card.
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub struct PropertyWildCard {
+	pub id: usize,
 	/// Represents the money the card will amount to when paid as rent.
 	pub value: u8,
 
@@ -21,8 +22,9 @@ pub struct PropertyWildCard {
 }
 
 impl PropertyWildCard {
-	pub fn new(value: u8, colors: MultiColor) -> Self {
+	pub fn new(id: usize, value: u8, colors: MultiColor) -> Self {
 		Self {
+			id,
 			value,
 			available_colors: colors,
 			selected_color: None,
@@ -55,6 +57,10 @@ impl PropertyWildCard {
 }
 
 impl Card for PropertyWildCard {
+	fn id(&self) -> usize {
+		self.id
+	}
+
 	fn value(&self) -> u8 {
 		self.value
 	}

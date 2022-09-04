@@ -21,16 +21,16 @@ type Color = (u8, u8, u8);
 
 /// Store RGB values of all colors.
 const RGB_TRIPLES: [Color; 10] = [
-	(  0,   0,   0), // Black
-	( 10, 147, 150), // Blue
-	(150,  75,   0), // Brown
-	( 83, 221, 108), // Green
+	(0, 0, 0),       // Black
+	(10, 147, 150),  // Blue
+	(150, 75, 0),    // Brown
+	(83, 221, 108),  // Green
 	(214, 122, 177), // Magenta
-	(255, 120,  79), // Orange
-	(232,  49,  81), // Red
+	(255, 120, 79),  // Orange
+	(232, 49, 81),   // Red
 	(132, 218, 235), // SkyBlue
 	(148, 210, 189), // Turquoise
-	(244, 233,   0), // Yellow
+	(244, 233, 0),   // Yellow
 ];
 
 /// Store all the color variants in an array.

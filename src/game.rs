@@ -1,7 +1,6 @@
 use crate::{
-	cards::{CardKind, CardSet},
 	deck::Deck,
-	entities::{Assets, Player, CurrentPlayer, PlayerAction, Table},
+	entities::{Assets, CurrentPlayer, Player, PlayerAction, Table},
 };
 
 use std::fmt::Debug;
@@ -52,30 +51,33 @@ impl Game {
 
 		// Get the updated player and their assets, along with the set of cards
 		// that they chose to discard.
-		let (player, assets, discarded) = self.handle_turn(CurrentPlayer::new(player, assets));
-
-		// Put the discarded ones into the discard deck.
-		discarded
-			.into_iter()
-			.for_each(|card| self.discard_deck.push_back(card));
+		let (player, assets) = self.handle_turn(CurrentPlayer::new(player, assets));
 
 		// Put the player back into the queue.
 		self.table.update(player, assets);
 	}
 
 	/// Returns the updated player, their assets and the set of cards they chose to discard.
-	fn handle_turn(&mut self, mut player: CurrentPlayer) -> (Player, Assets, CardSet<CardKind>) {
+	fn handle_turn(&mut self, player: CurrentPlayer) -> (Player, Assets) {
 		loop {
 			println!("{}", self.table);
 
-			match player.read_action() {
-				PlayerAction::Play(card) => card.play(&mut player, self),
+			let _card = match player.read_action() {
+				PlayerAction::Play(card) => card,
 				PlayerAction::Pass => break,
 				PlayerAction::Rearrange => unimplemented!(),
-			}
+			};
+
+			// TODO: Apply the effects.
 		}
 
-		player.end_turn()
+		let (player, assets, discarded) = player.end_turn();
+
+		for card in discarded {
+			self.discard_deck.push_back(card);
+		}
+
+		(player, assets)
 	}
 }
 

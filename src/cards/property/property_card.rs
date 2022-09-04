@@ -15,13 +15,14 @@ use crate::{
 /// Represents a mono colored property card.
 #[derive(Debug, Eq)]
 pub struct PropertyCard {
+	pub id: usize,
 	pub name: &'static str,
 	pub color: CardColor,
 }
 
 impl PropertyCard {
-	pub fn new(name: &'static str, color: CardColor) -> Self {
-		Self { name, color }
+	pub fn new(id: usize, name: &'static str, color: CardColor) -> Self {
+		Self { id, name, color }
 	}
 
 	pub fn play(self, current_player: &mut CurrentPlayer) {
@@ -32,6 +33,10 @@ impl PropertyCard {
 impl Card for PropertyCard {
 	fn value(&self) -> u8 {
 		COLLECTIONS[self.color as usize].0
+	}
+
+	fn id(&self) -> usize {
+		self.id
 	}
 
 	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {

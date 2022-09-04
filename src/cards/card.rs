@@ -1,14 +1,16 @@
-use std::fmt;
+use std::fmt::{self, Display};
+use std::hash::Hash;
 
 use crate::cards::{ActionCard, MoneyCard, PropertyCard, PropertyWildCard, RentCard};
-use crate::errors::NotPlayable;
 use crate::entities::CurrentPlayer;
+use crate::errors::NotPlayable;
 use crate::Game;
 
 use super::PropertyCardKind;
 use super::PropertySets;
 
-pub trait Card {
+pub trait Card: Eq + Hash + Display {
+	fn id(&self) -> usize;
 	fn value(&self) -> u8;
 	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable>;
 }
@@ -67,12 +69,17 @@ pub enum BankableCardKind {
 	Rent(RentCard),
 }
 
+#[derive(Hash, Eq, PartialEq)]
 pub enum PaidCardKind {
 	Banked(BankableCardKind),
 	Property(PropertyCardKind),
 }
 
 impl Card for BankableCardKind {
+	fn id(&self) -> usize {
+		bankable_card_kind_apply_inner!(self c => c.id())
+	}
+
 	fn value(&self) -> u8 {
 		bankable_card_kind_apply_inner!(self c => c.value())
 	}
@@ -83,6 +90,10 @@ impl Card for BankableCardKind {
 }
 
 impl Card for PaidCardKind {
+	fn id(&self) -> usize {
+		paid_card_kind_apply_inner!(self c => c.id())
+	}
+
 	fn value(&self) -> u8 {
 		paid_card_kind_apply_inner!(self c => c.value())
 	}
@@ -93,6 +104,10 @@ impl Card for PaidCardKind {
 }
 
 impl Card for CardKind {
+	fn id(&self) -> usize {
+		card_kind_apply_inner!(self c => c.id())
+	}
+
 	fn value(&self) -> u8 {
 		card_kind_apply_inner!(self c => c.value())
 	}

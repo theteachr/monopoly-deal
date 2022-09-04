@@ -4,7 +4,7 @@ use crate::deck::{Deck, DrawCount};
 /// Represents a player.
 #[derive(Debug)]
 pub struct Player {
-	///
+	/// ???
 	pub id: usize,
 
 	/// Holds the name of the the player.
@@ -47,9 +47,9 @@ impl Player {
 
 	/// Draws `n` (2 or 5) cards from the deck then adds them into the player's hand.
 	fn draw_cards(&mut self, deck: &mut Deck, n: DrawCount) {
-		deck.draw(n)
-			.into_iter()
-			.for_each(|card| self.hand.add(card))
+		for card in deck.draw(n) {
+			self.hand.add(card);
+		}
 	}
 
 	pub fn hand_iter(&self) -> impl Iterator<Item = &CardKind> {
@@ -60,14 +60,11 @@ impl Player {
 		self.hand.len()
 	}
 
-	pub fn card_at(&self, index: usize) -> Option<&CardKind> {
-		self.hand.get(index)
+	pub fn take_from_hand(&mut self, id: usize) -> Option<CardKind> {
+		self.hand.take(id)
 	}
 
-	/// Returns the card present at `index`.
-	///
-	/// **Panics** if `index` is out of bounds.
-	pub fn remove_card_at(&mut self, index: usize) -> CardKind {
-		self.hand.remove(index)
-	}
+    pub fn choose_card_from_hand(&self) -> usize {
+        self.hand.choose()
+    }
 }

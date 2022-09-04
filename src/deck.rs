@@ -17,38 +17,56 @@ pub enum DrawCount {
 	Five = 5,
 }
 
+struct IdGen(usize);
+
+impl IdGen {
+	fn new() -> Self {
+		Self(0)
+	}
+}
+
+impl Iterator for IdGen {
+	type Item = usize;
+
+	fn next(&mut self) -> Option<Self::Item> {
+		self.0 += 1;
+		Some(self.0)
+	}
+}
+
 impl Deck {
 	/// Returns a shuffled deck of all cards in the game.
 	pub fn new() -> Self {
 		let mut cards: Vec<CardKind> = Vec::new();
+		let mut ids = IdGen::new();
 
 		for (color, names) in PROPERTY_CARDS.iter() {
 			for name in *names {
-				cards.push(PropertyCard::new(name, *color).into());
+				cards.push(PropertyCard::new(ids.next().unwrap(), name, *color).into());
 			}
 		}
 
 		for (value, count) in MONEY_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(MoneyCard::new(*value).into());
+				cards.push(MoneyCard::new(ids.next().unwrap(), (*value).into()).into());
 			}
 		}
 
 		for (value, action, count) in ACTION_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(ActionCard::new(*value, *action).into());
+				cards.push(ActionCard::new(ids.next().unwrap(), *value, *action).into());
 			}
 		}
 
 		for (value, colors, count) in PROPERTY_WILD_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(PropertyWildCard::new(*value, *colors).into());
+				cards.push(PropertyWildCard::new(ids.next().unwrap(), *value, *colors).into());
 			}
 		}
 
 		for (value, colors, count) in RENT_CARDS.iter() {
 			for _ in 0..*count {
-				cards.push(RentCard::new(*value, *colors).into());
+				cards.push(RentCard::new(ids.next().unwrap(), *value, *colors).into());
 			}
 		}
 

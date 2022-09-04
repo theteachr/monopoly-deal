@@ -2,8 +2,8 @@ mod cards;
 mod color;
 mod common;
 mod deck;
-mod errors;
 mod entities;
+mod errors;
 mod game;
 
 use crate::game::Game;

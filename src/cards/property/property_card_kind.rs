@@ -15,6 +15,13 @@ pub enum PropertyCardKind {
 }
 
 impl Card for PropertyCardKind {
+	fn id(&self) -> usize {
+		match self {
+			Self::Single(c) => c.id(),
+			Self::Wild(c) => c.id(),
+		}
+	}
+
 	fn value(&self) -> u8 {
 		match self {
 			Self::Single(c) => c.value(),

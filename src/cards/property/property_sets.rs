@@ -3,8 +3,8 @@ use std::{
 	fmt,
 };
 
-use crate::cards::data::COLLECTIONS;
-use crate::cards::{CardSet, PaidCardKind, PropertyCardKind};
+use crate::cards::{data::COLLECTIONS, Card};
+use crate::cards::{CardSet, PropertyCardKind};
 use crate::color::CardColor;
 
 /// Tracks the set of property cards played by a player.
@@ -55,16 +55,25 @@ impl PropertySets {
 		self.properties.keys().cloned().collect()
 	}
 
+	pub fn properties(&self) -> impl Iterator<Item = &PropertyCardKind> {
+		self.properties.values().flat_map(|cards| cards.iter())
+	}
+
 	/// Pops a card from the `color` set.
-	pub fn pop(&mut self, color: &CardColor) -> PropertyCardKind {
-		let cards = self.properties.get_mut(color).unwrap();
-		let popped = cards.remove(0);
+	pub fn pop(&mut self, property_card: &PropertyCardKind) -> Option<PropertyCardKind> {
+		let color = match property_card {
+			PropertyCardKind::Single(card) => card.color,
+			PropertyCardKind::Wild(_) => return None,
+		};
+
+		let cards = self.properties.get_mut(&color).unwrap();
+		let popped = cards.take(property_card.id()).unwrap();
 
 		if cards.is_empty() {
-			self.properties.remove(color);
+			self.properties.remove(&color);
 		}
 
-		popped
+		Some(popped)
 	}
 
 	/// Returns `true` if `color` is a complete set.
@@ -74,6 +83,27 @@ impl PropertySets {
 			.map(|cards| cards.len())
 			.unwrap_or(0)
 			== num_cards_for_complete_set(color)
+	}
+
+	pub fn take_by_id(&mut self, id: usize) -> PropertyCardKind {
+		let (_, cards) = self
+			.properties
+			.iter_mut()
+			.find(|(_, cards)| cards.get(id).is_some())
+            .unwrap();
+
+        cards.take(id).unwrap()
+	}
+
+	pub fn take(&mut self, card: &PropertyCardKind) -> Option<PropertyCardKind> {
+		let color = match card {
+			PropertyCardKind::Single(c) => c.color,
+			PropertyCardKind::Wild(c) => c.selected_color.unwrap(),
+		};
+
+		self.properties
+			.get_mut(&color)
+			.and_then(|cards| cards.take(card.id()))
 	}
 
 	/// Returns the amount of rent that the player will be paid,
@@ -86,7 +116,10 @@ impl PropertySets {
 
 	/// Returns the total value all the played properties.
 	pub fn total_value(&self) -> u8 {
-		self.properties.values().map(CardSet::value).sum()
+		self.properties
+			.values()
+			.flat_map(|collection| collection.iter().map(Card::value))
+			.sum()
 	}
 
 	/// Returns `true` if at least one property of the given `color` exists in the set.
@@ -100,17 +133,12 @@ impl PropertySets {
 	}
 
 	/// Returns all properties and empties the player property assets.
-	pub fn go_popper(&mut self) -> Vec<PaidCardKind> {
-		let cards: Vec<PaidCardKind> = self
-			.properties
-			.values_mut()
-			.flat_map(|property_cards| property_cards.remove_all())
-			.map(PaidCardKind::from)
-			.collect();
+	pub fn go_popper(&mut self) -> Vec<PropertyCardKind> {
+		todo!();
+	}
 
-		self.properties.clear();
-
-		cards
+	pub fn property_cards_of_color(&self, color: CardColor) -> Option<&CardSet<PropertyCardKind>> {
+		self.properties.get(&color)
 	}
 }
 
@@ -123,7 +151,7 @@ impl fmt::Display for PropertySets {
 		let text = self
 			.properties
 			.iter()
-			.map(|(color, cards)| format!("{}: {}", color, cards))
+			.map(|(color, cards)| format!("{}: {:?}", color, cards))
 			.collect::<Vec<String>>()
 			.join("\n  ");
 

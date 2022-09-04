@@ -4,7 +4,6 @@ use std::num::ParseIntError;
 
 pub enum Failed {
 	NotANumber,
-	InvalidIndex(usize),
 	NotPlayable(String),
 }
 
@@ -12,7 +11,6 @@ impl Display for Failed {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			Self::NotANumber => write!(f, "Not a valid number o_0"),
-			Self::InvalidIndex(i) => write!(f, "{} is out of bounds :<", i),
 			Self::NotPlayable(reason) => reason.fmt(f),
 		}
 	}
