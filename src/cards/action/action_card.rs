@@ -37,7 +37,6 @@ impl ActionCard {
 		// TODO Allow for playing `ActionCard`s as money.
 		match self.action {
 			Action::PassGo => play_pass_go(player.get(), &mut game.deck),
-			Action::Birthday => play_birthday(&mut game.table),
 			_ => todo!(),
 		}
 

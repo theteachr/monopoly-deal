@@ -86,7 +86,7 @@ impl PropertySets {
 	}
 
 	pub fn take_by_id(&mut self, id: usize) -> PropertyCardKind {
-		let (_, cards) = self
+		let (_, mut cards) = self
 			.properties
 			.iter_mut()
 			.find(|(_, cards)| cards.get(id).is_some())
