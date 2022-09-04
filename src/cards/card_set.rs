@@ -53,7 +53,7 @@ impl<'a, T: Card> CardSet<T> {
 
 	pub fn choose(&self) -> usize {
 		for (id, item) in self.0.iter() {
-			println!("{id}: {item}");
+			println!("{id:03}: {item}");
 		}
 
 		loop {
