@@ -74,12 +74,12 @@ impl Assets {
 			{
 				Some(color) => {
 					if let Ok(i) = input("> ").parse::<usize>() {
-                        if let Some(cards) = self.property_sets.property_cards_of_color(*color) {
-                            if cards.get(i).is_some() {
-                                return i;
-                            }
-                        }
-                    }
+						if let Some(cards) = self.property_sets.property_cards_of_color(*color) {
+							if cards.get(i).is_some() {
+								return i;
+							}
+						}
+					}
 				}
 				None => continue,
 			}

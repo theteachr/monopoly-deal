@@ -64,7 +64,7 @@ impl Player {
 		self.hand.take(id)
 	}
 
-    pub fn choose_card_from_hand(&self) -> usize {
-        self.hand.choose()
-    }
+	pub fn choose_card_from_hand(&self) -> usize {
+		self.hand.choose()
+	}
 }

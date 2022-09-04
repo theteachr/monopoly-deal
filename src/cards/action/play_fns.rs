@@ -1,17 +1,13 @@
-use crate::cards::{PaidCardKind, Card};
+use crate::cards::{Card, PaidCardKind};
 use crate::common::input;
 use crate::deck::Deck;
 use crate::entities::{choose_card, Assets, PaidWith, Player, Table};
 
 /// Takes rent of `amount` from `from_assets` and adds them into `to_assets`.
-pub(crate) fn ask_for_rent(
-	amount: u8,
-	from_assets: &mut Assets,
-) -> Vec<PaidCardKind> {
+pub(crate) fn ask_for_rent(amount: u8, from_assets: &mut Assets) -> Vec<PaidCardKind> {
 	// Initialize the amount of value received.
 	let mut paid = 0u8;
 	let mut paid_cards = Vec::new();
-
 
 	// If `amount` is not payable by `from_assets`, transfer all cards from it to
 	// `to_assets`.
@@ -30,8 +26,8 @@ pub(crate) fn ask_for_rent(
 			PaidWith::Property(id) => from_assets.property_sets.take_by_id(id).into(),
 		};
 
-        paid += card.value();
-        paid_cards.push(card);
+		paid += card.value();
+		paid_cards.push(card);
 	}
 
 	paid_cards
@@ -39,9 +35,7 @@ pub(crate) fn ask_for_rent(
 
 /// Transfers 5M worth of cards from the assets of the chosen opponent to the
 /// player of the debt collector.
-pub(crate) fn play_debt_collector(
-	table: &mut Table,
-) -> Vec<PaidCardKind> {
+pub(crate) fn play_debt_collector(table: &mut Table) -> Vec<PaidCardKind> {
 	// Print the table.
 	println!("{}", table);
 
@@ -68,12 +62,12 @@ pub(crate) fn play_pass_go(player: &mut Player, deck: &mut Deck) {
 
 /// Transfers 2M worth of cards from every opponent to the player of the birthday card.
 pub(crate) fn play_birthday(rest_of_the_table: &mut Table) -> Vec<PaidCardKind> {
-    let mut paid_cards = Vec::new();
+	let mut paid_cards = Vec::new();
 
 	for (player, assets) in rest_of_the_table.iter_mut() {
 		println!("{} needs to pay 2M.", player.name);
 		paid_cards.extend(ask_for_rent(2, assets));
 	}
 
-    paid_cards
+	paid_cards
 }

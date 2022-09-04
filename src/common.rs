@@ -1,5 +1,5 @@
-use std::io::{stdin, stdout, Write};
 use std::fmt::Display;
+use std::io::{stdin, stdout, Write};
 
 /// Prints `prompt` and returns the trimmed input coming from stdin.
 pub fn input<T: Display>(prompt: T) -> String {

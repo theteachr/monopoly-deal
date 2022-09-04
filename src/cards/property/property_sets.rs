@@ -90,9 +90,9 @@ impl PropertySets {
 			.properties
 			.iter_mut()
 			.find(|(_, cards)| cards.get(id).is_some())
-            .unwrap();
+			.unwrap();
 
-        cards.take(id).unwrap()
+		cards.take(id).unwrap()
 	}
 
 	pub fn take(&mut self, card: &PropertyCardKind) -> Option<PropertyCardKind> {

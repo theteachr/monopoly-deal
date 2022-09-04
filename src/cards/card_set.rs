@@ -1,5 +1,5 @@
-use std::{collections::HashMap, fmt};
 use crate::common::input;
+use std::{collections::HashMap, fmt};
 
 use super::Card;
 
