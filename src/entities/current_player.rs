@@ -113,20 +113,10 @@ impl CurrentPlayer {
 		// and add the card into the discard pile.
 		while to_be_discarded > 0 {
 			// Read and remove card from hand.
-			print_enumerated(self.player.hand_iter());
-
 			println!("You need to discard {}.", to_be_discarded);
 
-			let card = loop {
-				match input("> ")
-					.parse::<usize>()
-					.ok()
-					.and_then(|k| self.player.take_from_hand(k))
-				{
-					Some(card) => break card,
-					_ => continue,
-				};
-			};
+			let card_id = self.player.choose_card_from_hand();
+			let card = self.player.take_from_hand(card_id).unwrap();
 
 			discarded.push(card);
 			// One less card to be discarded, decrement the variable.
