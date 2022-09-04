@@ -34,9 +34,9 @@ impl Iterator for IdGen {
 	}
 }
 
-impl Deck {
+impl Default for Deck {
 	/// Returns a shuffled deck of all cards in the game.
-	pub fn new() -> Self {
+    fn default() -> Self {
 		let mut cards: Vec<CardKind> = Vec::new();
 		let mut ids = IdGen::new();
 
@@ -73,6 +73,12 @@ impl Deck {
 		cards.shuffle(&mut thread_rng());
 
 		Self(cards)
+    }
+}
+
+impl Deck {
+	pub fn new() -> Self {
+        Self(Vec::new())
 	}
 
 	/// Returns the top `count` cards of the deck.

@@ -21,7 +21,7 @@ pub struct Game {
 impl Game {
 	/// Returns a `Game` with 4 hard coded players and a shuffled deck of 108 cards.
 	pub fn new(player_count: u8) -> Self {
-		let mut draw_pile = Deck::new();
+		let mut draw_pile = Deck::default();
 		let discard_pile = Deck::new();
 
 		println!("Shuffled {} cards.", draw_pile.len());
