@@ -105,7 +105,7 @@ impl CurrentPlayer {
 	/// the player to discard them.
 	pub fn end_turn(mut self) -> (Player, Assets, Vec<CardKind>) {
 		// Get the number of cards that need to be discarded.
-		let mut to_be_discarded = self.player.hand_len().saturating_sub(7);
+		let mut to_be_discarded = self.player.num_cards_in_hand().saturating_sub(7);
 		let mut discarded = Vec::new();
 
 		// Until the number of cards need to be discarded is > 0,

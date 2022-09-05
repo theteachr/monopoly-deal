@@ -52,11 +52,7 @@ impl Player {
 		}
 	}
 
-	pub fn hand_iter(&self) -> impl Iterator<Item = &CardKind> {
-		self.hand.iter()
-	}
-
-	pub fn hand_len(&self) -> usize {
+	pub fn num_cards_in_hand(&self) -> usize {
 		self.hand.len()
 	}
 
