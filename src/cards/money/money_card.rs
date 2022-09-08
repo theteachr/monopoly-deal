@@ -21,6 +21,11 @@ impl MoneyCard {
 		// Simple add the card into player's assets.
 		current_player.assets.add_money(self.into());
 	}
+
+	pub fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
+		// `MoneyCard`s are always playable.
+		Ok(())
+	}
 }
 
 impl Card for MoneyCard {
@@ -31,11 +36,6 @@ impl Card for MoneyCard {
 	/// Returns the value of the card.
 	fn value(&self) -> u8 {
 		self.value as u8
-	}
-
-	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
-		// `MoneyCard`s are always playable.
-		Ok(())
 	}
 }
 

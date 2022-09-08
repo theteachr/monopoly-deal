@@ -12,7 +12,6 @@ use super::PropertySets;
 pub trait Card: Eq + Hash + Display {
 	fn id(&self) -> usize;
 	fn value(&self) -> u8;
-	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable>;
 }
 
 macro_rules! apply_inner {
@@ -69,10 +68,22 @@ pub enum BankableCardKind {
 	Rent(RentCard),
 }
 
+impl BankableCardKind {
+	pub fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		bankable_card_kind_apply_inner!(self c => c.is_playable(properties))
+	}
+}
+
 #[derive(Hash, Eq, PartialEq)]
 pub enum PaidCardKind {
 	Banked(BankableCardKind),
 	Property(PropertyCardKind),
+}
+
+impl PaidCardKind {
+	pub fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		paid_card_kind_apply_inner!(self c => c.is_playable(properties))
+	}
 }
 
 impl Card for BankableCardKind {
@@ -82,10 +93,6 @@ impl Card for BankableCardKind {
 
 	fn value(&self) -> u8 {
 		bankable_card_kind_apply_inner!(self c => c.value())
-	}
-
-	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
-		bankable_card_kind_apply_inner!(self c => c.is_playable(properties))
 	}
 }
 
@@ -97,23 +104,21 @@ impl Card for PaidCardKind {
 	fn value(&self) -> u8 {
 		paid_card_kind_apply_inner!(self c => c.value())
 	}
-
-	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
-		paid_card_kind_apply_inner!(self c => c.is_playable(properties))
-	}
 }
 
 impl Card for CardKind {
 	fn id(&self) -> usize {
-		card_kind_apply_inner!(self c => c.id())
+		card_kind_apply_inner!(self c => c.id)
 	}
 
 	fn value(&self) -> u8 {
-		card_kind_apply_inner!(self c => c.value())
-	}
-
-	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
-		card_kind_apply_inner!(self c => c.is_playable(properties))
+		match self {
+			CardKind::Property(_) => todo!(),
+			CardKind::Action(_) => todo!(),
+			CardKind::Money(_) => todo!(),
+			CardKind::Rent(_) => todo!(),
+			CardKind::PropertyWild(_) => todo!(),
+		}
 	}
 }
 
@@ -126,6 +131,10 @@ impl CardKind {
 			Self::PropertyWild(card) => card.play(current_player),
 			Self::Rent(card) => card.play(&current_player.assets.property_sets),
 		}
+	}
+
+	pub fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		card_kind_apply_inner!(self c => c.is_playable(properties))
 	}
 }
 

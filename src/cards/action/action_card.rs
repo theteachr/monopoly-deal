@@ -33,6 +33,24 @@ impl ActionCard {
 		Self { id, value, action }
 	}
 
+	pub fn is_playable(&self, _properties: &PropertySets) -> Result<(), NotPlayable> {
+		match self.action {
+			Action::PassGo | Action::Birthday | Action::DebtCollector => Ok(()),
+			Action::DoubleTheRent => Err(NotPlayable(
+				"You need to play a rent card before playing this one.".to_string(),
+			)),
+			Action::DealBreaker => Err(NotPlayable("Not implemented yet.".to_string())),
+			Action::ForcedDeal => Err(NotPlayable("Not implemented yet.".to_string())),
+			Action::Hotel => Err(NotPlayable("Not implemented yet.".to_string())),
+			Action::House => Err(NotPlayable("Not implemented yet.".to_string())),
+			Action::JustSayNo => Err(NotPlayable(
+				"Can only be played when you're asked to pay or to counter another JustSayNo."
+					.to_string(),
+			)),
+			Action::SlyDeal => Ok(()),
+		}
+	}
+
 	pub fn play(self, player: &mut CurrentPlayer, game: &mut Game) {
 		// TODO Allow for playing `ActionCard`s as money.
 		match self.action {
@@ -51,24 +69,6 @@ impl Card for ActionCard {
 
 	fn id(&self) -> usize {
 		self.id
-	}
-
-	fn is_playable(&self, _properties: &PropertySets) -> Result<(), NotPlayable> {
-		match self.action {
-			Action::PassGo | Action::Birthday | Action::DebtCollector => Ok(()),
-			Action::DoubleTheRent => Err(NotPlayable(
-				"You need to play a rent card before playing this one.".to_string(),
-			)),
-			Action::DealBreaker => Err(NotPlayable("Not implemented yet.".to_string())),
-			Action::ForcedDeal => Err(NotPlayable("Not implemented yet.".to_string())),
-			Action::Hotel => Err(NotPlayable("Not implemented yet.".to_string())),
-			Action::House => Err(NotPlayable("Not implemented yet.".to_string())),
-			Action::JustSayNo => Err(NotPlayable(
-				"Can only be played when you're asked to pay or to counter another JustSayNo."
-					.to_string(),
-			)),
-			Action::SlyDeal => Ok(()),
-		}
 	}
 }
 

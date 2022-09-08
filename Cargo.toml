@@ -3,5 +3,9 @@ name = "monopoly-deal"
 version = "0.2.5"
 edition = "2018"
 
+[workspace]
+members = ["derive-card"]
+
 [dependencies]
 rand = "0.8.3"
+derive-card = { path = "derive-card" }

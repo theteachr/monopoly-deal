@@ -1,18 +1,20 @@
 use std::fmt;
 
 use crate::{
-	cards::{Card, PropertySets},
+	cards::{PropertySets, Card},
 	color::{CardColor, MultiColor},
 	common::print_read_index,
 	errors::NotPlayable,
 };
 
-#[derive(Debug, Hash, Eq, PartialEq)]
+use derive_card::Card;
+
+#[derive(Debug, Card, Hash, Eq, PartialEq)]
 pub struct RentCard {
 	pub id: usize,
-	value: u8,
-	available_colors: MultiColor,
-	selected_color: Option<CardColor>,
+	pub value: u8,
+	pub available_colors: MultiColor,
+	pub selected_color: Option<CardColor>,
 }
 
 impl RentCard {
@@ -27,6 +29,26 @@ impl RentCard {
 
 	fn set_color(&mut self, color: CardColor) {
 		self.selected_color = Some(color);
+	}
+
+	pub fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		// Check if any of the colors on the card is present in the properties played by the player.
+		// If yes, then report as playable.
+		if self
+			.available_colors
+			.get()
+			.iter()
+			.any(|color| properties.exists(color))
+		{
+			return Ok(());
+		}
+
+		// The player didn't own any property of any color on the card,
+		// report with an appropriate error message.
+		Err(NotPlayable(format!(
+			"You need to own at least one property colored in any of {}.",
+			self.available_colors
+		)))
 	}
 
 	pub fn play(mut self, properties: &PropertySets) {
@@ -59,36 +81,6 @@ impl RentCard {
 
 		// TODO Ask all players for rent. If it's an all colored rent card, target a single player
 		// for grabbing the rent.
-	}
-}
-
-impl Card for RentCard {
-	fn id(&self) -> usize {
-		self.id
-	}
-
-	fn value(&self) -> u8 {
-		self.value
-	}
-
-	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
-		// Check if any of the colors on the card is present in the properties played by the player.
-		// If yes, then report as playable.
-		if self
-			.available_colors
-			.get()
-			.iter()
-			.any(|color| properties.exists(color))
-		{
-			return Ok(());
-		}
-
-		// The player didn't own any property of any color on the card,
-		// report with an appropriate error message.
-		Err(NotPlayable(format!(
-			"You need to own at least one property colored in any of {}.",
-			self.available_colors
-		)))
 	}
 }
 

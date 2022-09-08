@@ -17,19 +17,21 @@ pub enum PropertyCardKind {
 impl Card for PropertyCardKind {
 	fn id(&self) -> usize {
 		match self {
-			Self::Single(c) => c.id(),
-			Self::Wild(c) => c.id(),
+			Self::Single(c) => c.id,
+			Self::Wild(c) => c.id,
 		}
 	}
 
 	fn value(&self) -> u8 {
 		match self {
 			Self::Single(c) => c.value(),
-			Self::Wild(c) => c.value(),
+			Self::Wild(c) => c.value,
 		}
 	}
+}
 
-	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
+impl PropertyCardKind {
+	pub fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
 		Ok(())
 	}
 }

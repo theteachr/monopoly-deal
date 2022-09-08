@@ -28,6 +28,17 @@ impl PropertyCard {
 	pub fn play(self, current_player: &mut CurrentPlayer) {
 		current_player.assets.add_property(self.into());
 	}
+
+	pub fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+		if properties.is_complete_set(self.color) {
+			return Err(NotPlayable(format!(
+				"{} is already a complete set.",
+				self.color
+			)));
+		}
+
+		Ok(())
+	}
 }
 
 impl Card for PropertyCard {
@@ -37,17 +48,6 @@ impl Card for PropertyCard {
 
 	fn id(&self) -> usize {
 		self.id
-	}
-
-	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
-		if properties.is_complete_set(self.color) {
-			return Err(NotPlayable(format!(
-				"{} is already a complete set.",
-				self.color
-			)));
-		}
-
-		Ok(())
 	}
 }
 

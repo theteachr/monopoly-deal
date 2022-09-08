@@ -2,21 +2,19 @@ use std::{cmp::PartialEq, fmt, hash::Hash};
 
 use super::{PropertyCardKind, PropertySets};
 use crate::cards::Card;
+use derive_card::Card;
 use crate::color::{colored_text, CardColor, MultiColor};
 use crate::common::print_read_index;
 use crate::entities::CurrentPlayer;
 use crate::errors::NotPlayable;
 
-/// Represents a property wild card.
-#[derive(Debug, Hash, Eq, PartialEq)]
+#[derive(Debug, Card, Hash, Eq, PartialEq)]
 pub struct PropertyWildCard {
 	pub id: usize,
 	/// Represents the money the card will amount to when paid as rent.
 	pub value: u8,
-
 	/// Holds all the colors on the card.
 	pub available_colors: MultiColor,
-
 	/// Represents the current color of the card.
 	pub selected_color: Option<CardColor>,
 }
@@ -54,18 +52,8 @@ impl PropertyWildCard {
 	fn is_playable_with(&self, color: CardColor, properties: &PropertySets) -> bool {
 		!properties.is_complete_set(color)
 	}
-}
 
-impl Card for PropertyWildCard {
-	fn id(&self) -> usize {
-		self.id
-	}
-
-	fn value(&self) -> u8 {
-		self.value
-	}
-
-	fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
+	pub fn is_playable(&self, properties: &PropertySets) -> Result<(), NotPlayable> {
 		// Get available colors as a vector as we want to be able to index (user's input) into it and set the color.
 		let colors = self
 			.available_colors
