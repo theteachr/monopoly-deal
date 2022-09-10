@@ -5,17 +5,22 @@ use crate::{
 
 use std::fmt::Debug;
 
+#[derive(Debug)]
+pub enum GameRunningState {
+	Running,
+	Over,
+}
+
 /// Represents the main game object.
 #[derive(Debug)]
 pub struct Game {
 	/// Represents the deck of cards.
 	pub deck: Deck,
-
 	/// Used to hold action cards and those the players choose to discard when excess.
 	pub discard_deck: Deck,
-
 	/// Holds all players with the assets they play.
 	pub table: Table,
+	pub state: GameRunningState,
 }
 
 impl Default for Game {
@@ -38,6 +43,7 @@ impl Default for Game {
 			deck: draw_pile,
 			discard_deck: discard_pile,
 			table: Table::new(players),
+			state: GameRunningState::Running,
 		}
 	}
 }
@@ -80,6 +86,10 @@ impl Game {
 		}
 
 		(player, assets)
+	}
+
+	pub fn is_running(&self) -> bool {
+		matches!(self.state, GameRunningState::Running)
 	}
 }
 
