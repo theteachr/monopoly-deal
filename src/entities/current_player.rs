@@ -60,8 +60,13 @@ impl CurrentPlayer {
 			// Read the input from the user.
 			let user_input = input("> ");
 			// Let the player signal a `Pass` by just pressing the enter or the return key.
+			if user_input.is_empty() {
+				return PlayerAction::Pass;
+			}
+			// Let the user enter one of the following to perform the corresponding action.
+			// * 'p' -> play a card
+			// * 'r' -> rearrange cards
 			match user_input.as_str() {
-				s if s.is_empty() => break PlayerAction::Pass,
 				"p" => break PlayerAction::Play(self.player.choose_card_from_hand()),
 				_ => eprintln!("Unknown command"),
 			}
