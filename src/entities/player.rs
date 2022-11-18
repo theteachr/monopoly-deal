@@ -4,12 +4,10 @@ use crate::deck::{Deck, DrawCount};
 /// Represents a player.
 #[derive(Debug)]
 pub struct Player {
-	/// ???
+	/// Uniquely identifies a player object.
 	pub id: usize,
-
 	/// Holds the name of the the player.
 	pub name: String,
-
 	/// Contains cards the player is holding in their hand.
 	hand: CardSet<CardKind>,
 }

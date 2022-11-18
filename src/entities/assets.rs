@@ -11,7 +11,6 @@ use crate::common::input;
 pub struct Assets {
 	/// Holds cards played as money.
 	pub bank: CardSet<BankableCardKind>,
-
 	/// Holds all property cards played by the player.
 	pub property_sets: PropertySets,
 }
@@ -116,10 +115,8 @@ pub fn choose_card(assets: &Assets) -> PaidWith {
 		match (assets.bank.len(), assets.property_sets.colors().len()) {
 			// Bank is empty, the user HAS to choose a property card.
 			(0, _) => break AssetCardChoice::Property,
-
-			// No property cards, the use HAS to choose a banked card.
+			// No property cards, the user HAS to choose a banked card.
 			(_, 0) => break AssetCardChoice::Bank,
-
 			// Both are non empty, do nothing here, let the user enter what they want to play.
 			_ => {}
 		};

@@ -8,7 +8,6 @@ pub(crate) fn ask_for_rent(amount: u8, from_assets: &mut Assets) -> Vec<PaidCard
 	// Initialize the amount of value received.
 	let mut paid = 0u8;
 	let mut paid_cards = Vec::new();
-
 	// If `amount` is not payable by `from_assets`, transfer all cards from it to
 	// `to_assets`.
 	if !from_assets.can_pay(amount) {

@@ -53,14 +53,11 @@ impl Game {
 	pub fn play(&mut self) {
 		// Get the next player and their assets.
 		let (mut player, assets) = self.table.turn();
-
 		// Make the player draw cards from the deck.
 		player.draw(&mut self.deck);
-
 		// Get the updated player and their assets, along with the set of cards
 		// that they chose to discard.
 		let (player, assets) = self.handle_turn(CurrentPlayer::new(player, assets));
-
 		// Put the player back into the queue.
 		self.table.update(player, assets);
 	}

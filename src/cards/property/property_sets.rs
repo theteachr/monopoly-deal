@@ -13,7 +13,6 @@ pub struct PropertySets {
 	/// A map from color to set of cards, where the value holds all cards of
 	/// that color.
 	properties: HashMap<CardColor, CardSet<PropertyCardKind>>,
-
 	/// A list of colors that are complete sets.
 	completed_colors: Vec<CardColor>,
 }
@@ -42,7 +41,6 @@ impl PropertySets {
 			.entry(color)
 			.or_insert_with(CardSet::new)
 			.add(card);
-
 		// Get the number of cards for a complete set for the `color`. If it equals the current count,
 		// add the color to `completed_colors` to indicate the completion of the set.
 		if self.properties[&color].len() == num_cards_for_complete_set(color) {

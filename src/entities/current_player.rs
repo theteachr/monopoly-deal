@@ -7,11 +7,8 @@ use crate::errors::Failed;
 pub enum PlayerAction {
 	/// Holds the the card that the player chose to play.
 	Play(usize),
-
-	/// FIXME
 	#[allow(dead_code)]
 	Rearrange,
-
 	/// Marks the end of the turn.
 	Pass,
 }
@@ -20,10 +17,8 @@ pub enum PlayerAction {
 pub struct CurrentPlayer {
 	/// Represents the player playing the turn.
 	pub player: Player,
-
 	/// Represents the cards played by the player playing the turn.
 	pub assets: Assets,
-
 	/// Represents the number of cards played by the player in the turn.
 	pub num_cards_played: u8,
 }
@@ -50,16 +45,13 @@ impl CurrentPlayer {
 		if self.num_cards_played == 3 {
 			return PlayerAction::Pass;
 		}
-
 		// Show the name of the player, along with the assets they own (property and money).
 		println!(
 			"\n<<< Assets of {} >>>\n\n{}\n",
 			self.player.name, self.assets
 		);
-
 		// Show total money in the bank.
 		println!("Total Bank Value: {}", self.assets.bank_value());
-
 		// Show total value of all the properties.
 		println!("Total Asset Value: {}", self.assets.total_property_value());
 
@@ -67,7 +59,6 @@ impl CurrentPlayer {
 			// Show the player's hand.
 			// Read the input from the user.
 			let user_input = input("> ");
-
 			// Let the player signal a `Pass` by just pressing the enter or the return key.
 			match user_input.as_str() {
 				s if s.is_empty() => break PlayerAction::Pass,
@@ -107,7 +98,6 @@ impl CurrentPlayer {
 		// Get the number of cards that need to be discarded.
 		let mut to_be_discarded = self.player.num_cards_in_hand().saturating_sub(7);
 		let mut discarded = Vec::new();
-
 		// Until the number of cards need to be discarded is > 0,
 		// ask the player to enter the index of the card they want to discard,
 		// and add the card into the discard pile.
