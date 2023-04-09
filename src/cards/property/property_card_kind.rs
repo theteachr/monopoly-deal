@@ -7,29 +7,29 @@ use crate::errors::NotPlayable;
 /// Represents the type of a property card.
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub enum PropertyCardKind {
-	/// Holds a mono colored card.
-	Single(PropertyCard),
+    /// Holds a mono colored card.
+    Single(PropertyCard),
 
-	/// Holds a multi colored card.
-	Wild(PropertyWildCard),
+    /// Holds a multi colored card.
+    Wild(PropertyWildCard),
 }
 
 impl Card for PropertyCardKind {
-	fn id(&self) -> usize {
-		match self {
-			Self::Single(c) => c.id(),
-			Self::Wild(c) => c.id(),
-		}
-	}
+    fn id(&self) -> usize {
+        match self {
+            Self::Single(c) => c.id(),
+            Self::Wild(c) => c.id(),
+        }
+    }
 
-	fn value(&self) -> u8 {
-		match self {
-			Self::Single(c) => c.value(),
-			Self::Wild(c) => c.value(),
-		}
-	}
+    fn value(&self) -> u8 {
+        match self {
+            Self::Single(c) => c.value(),
+            Self::Wild(c) => c.value(),
+        }
+    }
 
-	fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
-		Ok(())
-	}
+    fn is_playable(&self, _: &PropertySets) -> Result<(), NotPlayable> {
+        Ok(())
+    }
 }

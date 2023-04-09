@@ -4,16 +4,16 @@ use std::{collections::HashSet, fmt, hash::Hash};
 #[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 #[repr(u8)]
 pub enum CardColor {
-	Black,
-	Blue,
-	Brown,
-	Green,
-	Magenta,
-	Orange,
-	Red,
-	SkyBlue,
-	Turquoise,
-	Yellow,
+    Black,
+    Blue,
+    Brown,
+    Green,
+    Magenta,
+    Orange,
+    Red,
+    SkyBlue,
+    Turquoise,
+    Yellow,
 }
 
 /// Represents a color as a three tuple holding R G B values.
@@ -21,30 +21,30 @@ type Color = (u8, u8, u8);
 
 /// Store RGB values of all colors.
 const RGB_TRIPLES: [Color; 10] = [
-	(0, 0, 0),       // Black
-	(10, 147, 150),  // Blue
-	(150, 75, 0),    // Brown
-	(83, 221, 108),  // Green
-	(214, 122, 177), // Magenta
-	(255, 120, 79),  // Orange
-	(232, 49, 81),   // Red
-	(132, 218, 235), // SkyBlue
-	(148, 210, 189), // Turquoise
-	(244, 233, 0),   // Yellow
+    (0, 0, 0),       // Black
+    (10, 147, 150),  // Blue
+    (150, 75, 0),    // Brown
+    (83, 221, 108),  // Green
+    (214, 122, 177), // Magenta
+    (255, 120, 79),  // Orange
+    (232, 49, 81),   // Red
+    (132, 218, 235), // SkyBlue
+    (148, 210, 189), // Turquoise
+    (244, 233, 0),   // Yellow
 ];
 
 /// Store all the color variants in an array.
 pub const COLORS: [CardColor; 10] = [
-	CardColor::Black,
-	CardColor::Blue,
-	CardColor::Brown,
-	CardColor::Green,
-	CardColor::Magenta,
-	CardColor::Orange,
-	CardColor::Red,
-	CardColor::SkyBlue,
-	CardColor::Turquoise,
-	CardColor::Yellow,
+    CardColor::Black,
+    CardColor::Blue,
+    CardColor::Brown,
+    CardColor::Green,
+    CardColor::Magenta,
+    CardColor::Orange,
+    CardColor::Red,
+    CardColor::SkyBlue,
+    CardColor::Turquoise,
+    CardColor::Yellow,
 ];
 
 pub const BLOCK: &str = "⬤";
@@ -57,49 +57,49 @@ pub const BLOCK: &str = "⬤";
 /// A `PropertyWildCard`.
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
 pub enum MultiColor {
-	/// Represents the colors of a dual colored card.
-	Two(CardColor, CardColor),
+    /// Represents the colors of a dual colored card.
+    Two(CardColor, CardColor),
 
-	/// Represents a wild colored card, that can be played as any color.
-	All,
+    /// Represents a wild colored card, that can be played as any color.
+    All,
 }
 
 impl MultiColor {
-	pub fn get(&self) -> HashSet<CardColor> {
-		match self {
-			Self::Two(c, d) => vec![*c, *d].into_iter().collect(),
-			Self::All => COLORS.iter().copied().collect(),
-		}
-	}
+    pub fn get(&self) -> HashSet<CardColor> {
+        match self {
+            Self::Two(c, d) => vec![*c, *d].into_iter().collect(),
+            Self::All => COLORS.iter().copied().collect(),
+        }
+    }
 }
 
 impl CardColor {
-	/// Returns the R G B value corresponding to the `CardColor`.
-	pub fn to_rgb(self) -> Color {
-		RGB_TRIPLES[self as usize]
-	}
+    /// Returns the R G B value corresponding to the `CardColor`.
+    pub fn to_rgb(self) -> Color {
+        RGB_TRIPLES[self as usize]
+    }
 }
 
 impl fmt::Display for MultiColor {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		self.get()
-			.iter()
-			.map(|&color| colored_text(BLOCK, color))
-			.collect::<Vec<String>>()
-			.join(" ")
-			.fmt(f)
-	}
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.get()
+            .iter()
+            .map(|&color| colored_text(BLOCK, color))
+            .collect::<Vec<String>>()
+            .join(" ")
+            .fmt(f)
+    }
 }
 
 impl fmt::Display for CardColor {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		colored_text(BLOCK, *self).fmt(f)
-	}
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        colored_text(BLOCK, *self).fmt(f)
+    }
 }
 
 /// Returns `text` colored in `color` with terminal escape sequences.
 pub fn colored_text(text: &'static str, color: CardColor) -> String {
-	let (r, g, b) = color.to_rgb();
+    let (r, g, b) = color.to_rgb();
 
-	format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text)
+    format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text)
 }

@@ -9,9 +9,9 @@ mod game;
 use crate::game::Game;
 
 fn main() {
-	let mut game = Game::default();
+    let mut game = Game::default();
 
-	while game.is_running() {
-		game.play();
-	}
+    while game.is_running() {
+        game.play();
+    }
 }
